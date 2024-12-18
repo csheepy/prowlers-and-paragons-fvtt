@@ -1,0 +1,79 @@
+{
+  "PROWLERS_AND_PARAGONS": {
+    "Ability": {
+      "Agi": { "long": "Agility", "abbr": "agi" },
+      "Int": { "long": "Intellect", "abbr": "int" },
+      "Mgt": { "long": "Might", "abbr": "mgt" },
+      "Per": { "long": "Perception", "abbr": "per" },
+      "Tgh": { "long": "Toughness", "abbr": "tgh" },
+      "Wil": { "long": "Willpower", "abbr": "wil" }
+    },
+    "Talent": {
+      "academics": "Academics",
+      "charm": "Charm",
+      "command": "Command",
+      "covert": "Covert",
+      "investigation": "Investigation",
+      "medicine": "Medicine",
+      "professional": "Professional",
+      "science": "Science",
+      "streetwise": "Streetwise",
+      "survival": "Survival",
+      "technology": "Technology",
+      "vehicles": "Vehicles"
+    },
+    "SheetLabels": {
+      "Actor": "ProwlersParagons Actor Sheet",
+      "Item": "ProwlersParagons Item Sheet"
+    },
+    "Item": {
+      "Spell": {
+        "SpellLVL": "Level {level} Spells",
+        "AddLVL": "Add LVL {level}"
+      },
+      "Power": {
+        "power_rank_type": {
+          "power": "Power",
+          "baseline": "Baseline",
+          "default": "Default",
+          "special": "Special"
+        },
+        "source": {
+          "magic": "Magic",
+          "innate": "Innate",
+          "super": "Super",
+          "tech": "Tech",
+          "trained": "Trained"
+        },
+        "range": {
+          "self": "Self",
+          "touch": "Touch",
+          "ranged": "Ranged",
+          "zone": "Zone",
+          "special": "Special"
+        }
+      }
+    },
+    "Effect": {
+      "Source": "Source",
+      "Toggle": "Toggle Effect",
+      "Temporary": "Temporary Effects",
+      "Passive": "Passive Effects",
+      "Inactive": "Inactive Effects"
+    }
+  },
+
+  "TYPES": {
+    "Actor": {
+      "character": "Character",
+      "npc": "NPC",
+      "minion": "Minion"
+    },
+    "Item": {
+      "item": "Item",
+      "feature": "Feature",
+      "spell": "Spell",
+      "power": "Power"
+    }
+  }
+}

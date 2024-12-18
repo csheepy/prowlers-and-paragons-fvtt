@@ -1,0 +1,78 @@
+<form class='{{cssClass}}' autocomplete='off'>
+  <header class='sheet-header'>
+    <img
+      class='profile-img'
+      src='{{item.img}}'
+      data-edit='img'
+      title='{{item.name}}'
+    />
+    <div class='header-fields'>
+      <h1 class='charname'><input
+          name='name'
+          type='text'
+          value='{{item.name}}'
+          placeholder='Name'
+        /></h1>
+    </div>
+  </header>
+
+  {{! Sheet Tab Navigation }}
+  <nav class='sheet-tabs tabs' data-group='primary'>
+    <a class='item' data-tab='description'>Description</a>
+    <a class='item' data-tab='attributes'>Attributes</a>
+  </nav>
+
+  {{! Sheet Body }}
+  <section class='sheet-body'>
+
+    {{! Description Tab }}
+    <div class='tab' data-group='primary' data-tab='description'>
+      {{! Editors must receive enriched text data from getData to properly handle rolls }}
+      {{editor
+        enrichedDescription
+        target='system.description'
+        engine='prosemirror'
+        button=true
+        editable=editable
+      }}
+    </div>
+
+    {{! Attributes Tab }}
+    <div class='tab attributes' data-group='primary' data-tab='attributes'>
+      {{! As you add new fields, add them in here! }}
+      <div class='resource'>
+        <label class='resource-label'>Rank</label>
+        <input
+          type='text'
+          name='system.rank'
+          value='{{system.rank}}'
+          data-dtype='Number'
+        />
+        <select name='system.rank_type'>
+        {{selectOptions power_rank_types selected=system.rank_type localize=true}}
+        </select>
+      </div>
+    <div class='resource'>
+        <label class='resource-label'>Source</label>
+        <select name='system.source'>
+        {{selectOptions power_sources selected=system.source localize=true}}
+        </select>
+    </div>
+    <div class='resource'>
+        <label class='resource-label'>Range</label>
+        <select name='system.range'>
+        {{selectOptions power_ranges selected=system.range localize=true}}
+    </select>
+    </div>
+        <div class='resource'>
+        <label class='resource-label'>Cost Per Rank</label>
+         <input
+          type='text'
+          name='system.cost'
+          value='{{system.cost}}'
+          data-dtype='Number'
+        />
+    </div>
+    </div>
+  </section>
+</form>
