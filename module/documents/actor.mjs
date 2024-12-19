@@ -66,4 +66,58 @@ export class ProwlersParagonsActor extends Actor {
     return result;
   }
 
+  increaseAllAbilities(n) {
+    for (const key in this.system.abilities) {
+      const newValue = this.system.abilities[key].value + n
+      this.update({ [`system.abilities.${key}.value`]: newValue})
+    }
+  }
+
+  increaseAllTalents(n) {
+    for (const key in this.system.talents) {
+      const newValue = this.system.talents[key].value + n
+      this.update({ [`system.talents.${key}.value`]: newValue})
+    }
+  }
+
+  async clearPackage() {
+    if (this.system.package_applied === 'hero') {
+      this.increaseAllAbilities(-3)
+      this.increaseAllTalents(-2)
+    }
+    if (this.system.package_applied === 'superhero') {
+      this.increaseAllAbilities(-3)
+      this.increaseAllTalents(-3)
+    }
+    if (this.system.package_applied === 'civilian') {
+      this.increaseAllAbilities(-2)
+      this.increaseAllTalents(-2)
+    }
+    return this.update({'system.package_applied': ''})
+  }
+  async applyPackage(pp) {
+    if (this.system.package_applied.length > 0 && pp === 'clear') {
+      await this.clearPackage();
+      return true;
+    }
+
+    await this.clearPackage();
+    if (pp === 'hero') {
+      this.increaseAllAbilities(3)
+      this.increaseAllTalents(2)
+      this.update({'system.package_applied': 'hero'})
+    }
+    if (pp === 'superhero') {
+      this.increaseAllAbilities(3)
+      this.increaseAllTalents(3)
+      this.update({'system.package_applied': 'superhero'})
+    }
+    if (pp === 'civilian') {
+      this.increaseAllAbilities(2)
+      this.increaseAllTalents(2)
+      this.update({'system.package_applied': 'civilian'})
+    }
+
+    return true
+  }
 }

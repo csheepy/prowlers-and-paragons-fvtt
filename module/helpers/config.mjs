@@ -13,6 +13,11 @@ PROWLERS_AND_PARAGONS.abilities = {
   willpower: 'PROWLERS_AND_PARAGONS.Ability.Wil.long',
 };
 
+PROWLERS_AND_PARAGONS.packages = {
+  civilian: 'PROWLERS_AND_PARAGONS.Packages.civilian',
+  hero: 'PROWLERS_AND_PARAGONS.Packages.hero',
+  superhero: 'PROWLERS_AND_PARAGONS.Packages.superhero',
+}
 PROWLERS_AND_PARAGONS.power_rank_types = {
   power: 'PROWLERS_AND_PARAGONS.Item.Power.power_rank_type.power',
   baseline: 'PROWLERS_AND_PARAGONS.Item.Power.power_rank_type.baseline',

@@ -60,9 +60,14 @@
       "Temporary": "Temporary Effects",
       "Passive": "Passive Effects",
       "Inactive": "Inactive Effects"
+    },
+    "Packages": {
+      "hero": "Hero",
+      "civilian": "Civilian",
+      "superhero": "Superhero",
+      "clear": "Clear Package"
     }
   },
-
   "TYPES": {
     "Actor": {
       "character": "Character",

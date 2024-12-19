@@ -83,7 +83,6 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       this.actor.allApplicableEffects()
     );
 
-    console.log(context)
     return context;
   }
 
@@ -185,6 +184,9 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Rollable abilities.
     html.on('click', '.rollable', this._onRoll.bind(this));
 
+    // Apply Package
+    html.on('click', '.apply-package', this._applyPackage.bind(this));
+
     // Drag events for macros.
     if (this.actor.isOwner) {
       let handler = (ev) => this._onDragStart(ev);
@@ -223,55 +225,6 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     return await Item.create(itemData, { parent: this.actor });
   }
 
-  rollMacro() {
-    // Make a javascript dialog box
-let do_roll = false;
-let d = new Dialog({
-  title: "Rolling some D6",
-  content: `
-    <form>
-      <div class="form-group">
-        <label>D6 Quantity:</label>
-        <input type="number" min="1" step="1" name="inputField"></input>
-      </div>
-    </form>`,
-  buttons: {
-    roll: {
-     icon: '<i class="fas fa-check"></i>',
-     label: "Roll",
-     callback: () => do_roll = true
-    },
-    cancel: {
-      icon: '<i class="fas fa-times"></i>',
-      label: "Cancel",
-      callback: () => do_roll = false
-    }
-  },
-  default: "roll",
-  close: async html => {
-    if (!do_roll)
-        return
-    let num_dice = html.find('input[name=\'inputField\']').val();
-
-    // Piggyback off of the normal 'even' dice function that is close to what we want
-    let roll = new Roll(`${num_dice}d6even`);
-    await roll.evaluate();
-
-    // But overwrite the final roll total to reflect that 6's count as two successes
-    let successes = 0
-    for (let i=0; i<roll.dice[0].number; i++) {
-        if (roll.dice[0].values[i] == 2 || roll.dice[0].values[i] == 4)
-            successes++
-        if (roll.dice[0].values[i] == 6)
-            successes+=2
-    }
-    roll._total = successes
-    roll.toMessage()
-  }
-});
-d.render(true);
-  }
-
 
   /**
    * Handle clickable rolls.
@@ -292,15 +245,12 @@ d.render(true);
       }
     }
 
-    console.log(dataset)
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
       let label = dataset.label ? `${dataset.label}` : '';
 
-      console.log(`${dataset.roll}d6even`)
       let roll = new Roll(`(${dataset.roll})d6even`, this.actor.getRollData());
       const rr = await roll.evaluate();
-      console.log(rr)
 
       rr.terms[0].results.forEach(({result}) =>  {
         if (result === 6) {
@@ -316,4 +266,11 @@ d.render(true);
       return rr;
     }
   }
+
+  async _applyPackage(event) {
+    event.preventDefault();
+    const dataset = event.currentTarget.dataset
+    this.actor.applyPackage(dataset.package);
+  }
 }
+

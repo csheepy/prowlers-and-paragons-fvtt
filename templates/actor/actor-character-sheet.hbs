@@ -47,6 +47,7 @@
     <a class="item" data-tab="items">Items</a>
     <a class="item" data-tab="spells">Spells</a>
     <a class="item" data-tab="effects">Effects</a>
+    <a class="item" data-tab="package">Package</a>
   </nav>
 
   {{!-- Sheet Body --}}
@@ -95,6 +96,17 @@
     <div class="tab biography" data-group="primary" data-tab="description">
       {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
       {{editor enrichedBiography target="system.biography" engine="prosemirror" button=true editable=editable}}
+    </div>
+
+    {{!-- Package Tab --}}
+    <div class="tab package" data-group="primary" data-tab="package">
+      Close and reopen the sheet after applying a package.
+
+      Currently selected package: {{system.package_applied}}
+      <button class="apply-package flexlarge align-left" data-package="superhero">{{localize "PROWLERS_AND_PARAGONS.Packages.superhero"}}</button>
+      <button class="apply-package flexlarge align-left" data-package="hero">{{localize "PROWLERS_AND_PARAGONS.Packages.hero"}}</button>
+      <button class="apply-package flexlarge align-left" data-package="civilian">{{localize "PROWLERS_AND_PARAGONS.Packages.civilian"}}</button>
+      <button class="apply-package flexlarge align-left" data-package="clear">{{localize "PROWLERS_AND_PARAGONS.Packages.clear"}}</button>
     </div>
 
     {{!-- Owned Items Tab --}}
