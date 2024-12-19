@@ -104,19 +104,9 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
   _prepareItems(context) {
     // Initialize containers.
     const gear = [];
-    const features = [];
-    const spells = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-    };
+    const perks = [];
+    const flaws = [];
+    const powers = []
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
@@ -126,21 +116,24 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
         gear.push(i);
       }
       // Append to features.
-      else if (i.type === 'feature') {
-        features.push(i);
+      else if (i.type === 'perk') {
+        perks.push(i);
+      }
+      // Append to features.
+      else if (i.type === 'flaw') {
+        flaws.push(i);
       }
       // Append to spells.
-      else if (i.type === 'spell') {
-        if (i.system.spellLevel != undefined) {
-          spells[i.system.spellLevel].push(i);
-        }
+      else if (i.type === 'power') {
+        powers.push(i)
       }
     }
 
     // Assign and return
     context.gear = gear;
-    context.features = features;
-    context.spells = spells;
+    context.perks = perks;
+    context.flaws = flaws;
+    context.powers = powers;
   }
 
   /* -------------------------------------------- */
@@ -249,21 +242,14 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     if (dataset.roll) {
       let label = dataset.label ? `${dataset.label}` : '';
 
-      let roll = new Roll(`(${dataset.roll})d6even`, this.actor.getRollData());
-      const rr = await roll.evaluate();
+      let roll = new Roll(`(${dataset.roll})dp`, this.actor.getRollData());
 
-      rr.terms[0].results.forEach(({result}) =>  {
-        if (result === 6) {
-          rr._total++
-        }
-      })
-
-      rr.toMessage({
+      roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: label,
         rollMode: game.settings.get('core', 'rollMode'),
       });
-      return rr;
+      return roll;
     }
   }
 

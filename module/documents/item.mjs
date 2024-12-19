@@ -63,6 +63,35 @@ export class ProwlersParagonsItem extends Item {
     const rollMode = game.settings.get('core', 'rollMode');
     const label = `[${item.type}] ${item.name}`;
 
+    // power rolls
+    if(this.system.rank) {
+
+      console.log(this.system)
+      let num_dice = this.system.rank;
+      if (this.system.rank_type === 'default') {
+        num_dice = this.actor.system.abilities[this.system.connected_ability].value
+      }
+      if (this.system.rank_type === 'baseline') {
+        if (this.system.baseline_scaling_options.half_rank) {
+          num_dice += Math.round((this.actor.system.abilities[this.system.connected_ability].value)/2)
+        } else if (this.system.baseline_scaling_options.special) {
+          num_dice += this.system.baseline_scaling_options.special_value
+        } else {
+          num_dice += this.actor.system.abilities[this.system.connected_ability].value
+        }
+      }
+      const roll = new Roll(`(${num_dice})dp`, this.actor.getRollData());
+
+      roll.toMessage({
+        speaker: speaker,
+        rollMode: rollMode,
+        flavor: label,
+      });
+      return roll;
+
+      return roll
+    }
+
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {
       ChatMessage.create({

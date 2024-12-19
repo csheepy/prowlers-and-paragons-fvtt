@@ -9,7 +9,7 @@ import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { PROWLERS_AND_PARAGONS } from './helpers/config.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
-
+import { ProwlersDie } from './dice/prowlers-die.mjs';
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
@@ -54,8 +54,8 @@ Hooks.once('init', function () {
     power: models.ProwlersParagonsPower
   }
 
-  Roll.CHAT_TEMPLATE = 'systems/prowlers-and-paragons/templates/prowlers-dice-result.hbs'
-  Roll.TOOLTIP_TEMPLATE = 'systems/prowlers-and-paragons/templates/prowlers-tooltip.hbs'
+  CONFIG.Dice.terms[ProwlersDie.DENOMINATION] = ProwlersDie;
+
   // Active Effects are never copied to the Actor,
   // but will still apply to the Actor from within the Item
   // if the transfer property on the Active Effect is true.
@@ -84,6 +84,10 @@ Hooks.once('init', function () {
 // If you need to add Handlebars helpers, here is a useful example:
 Handlebars.registerHelper('toLowerCase', function (str) {
   return str.toLowerCase();
+});
+
+Handlebars.registerHelper('needsConnectedAbility', function (power) {
+  return (power.rank_type === 'default' || power.rank_type === 'baseline');
 });
 
 /* -------------------------------------------- */

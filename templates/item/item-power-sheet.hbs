@@ -51,6 +51,21 @@
         <select name='system.rank_type'>
         {{selectOptions power_rank_types selected=system.rank_type localize=true}}
         </select>
+        {{#if (needsConnectedAbility system)}}
+          <select name='system.connected_ability'>
+           {{selectOptions abilities selected=system.connected_ability localize=true}}
+          </select>
+          <input type="checkbox" name='system.baseline_scaling_options.half_rank' {{checked system.baseline_scaling_options.half_rank}}>Half Scaling</input>
+          <input type="checkbox" name='system.baseline_scaling_options.special' {{checked system.baseline_scaling_options.special}}>Special Base Value</input>
+          {{#if system.baseline_scaling_options.special}}
+            <input
+              type='text'
+              name='system.baseline_scaling_options.special_value'
+              value='{{system.baseline_scaling_options.special_value}}'
+              data-dtype='Number'
+            />
+          {{/if}}
+        {{/if}}
       </div>
     <div class='resource'>
         <label class='resource-label'>Source</label>
