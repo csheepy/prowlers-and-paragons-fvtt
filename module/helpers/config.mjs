@@ -17,6 +17,7 @@ PROWLERS_AND_PARAGONS.packages = {
   civilian: 'PROWLERS_AND_PARAGONS.Packages.civilian',
   hero: 'PROWLERS_AND_PARAGONS.Packages.hero',
   superhero: 'PROWLERS_AND_PARAGONS.Packages.superhero',
+  clear: 'PROWLERS_AND_PARAGONS.Packages.clear'
 }
 PROWLERS_AND_PARAGONS.power_rank_types = {
   power: 'PROWLERS_AND_PARAGONS.Item.Power.power_rank_type.power',

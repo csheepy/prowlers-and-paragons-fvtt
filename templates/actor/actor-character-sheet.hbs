@@ -100,9 +100,7 @@
 
     {{!-- Package Tab --}}
     <div class="tab package" data-group="primary" data-tab="package">
-      Close and reopen the sheet after applying a package.
-
-      Currently selected package: {{system.package_applied}}
+      <h3>Currently selected package: {{localize (lookup @root.config.packages system.package_applied)}}</h3>
       <button class="apply-package flexlarge align-left" data-package="superhero">{{localize "PROWLERS_AND_PARAGONS.Packages.superhero"}}</button>
       <button class="apply-package flexlarge align-left" data-package="hero">{{localize "PROWLERS_AND_PARAGONS.Packages.hero"}}</button>
       <button class="apply-package flexlarge align-left" data-package="civilian">{{localize "PROWLERS_AND_PARAGONS.Packages.civilian"}}</button>
