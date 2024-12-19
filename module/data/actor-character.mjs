@@ -36,13 +36,6 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
   prepareDerivedData() {
     // TODO derive: Health, Edge, Resolve, hero points spent (from package + sum of other stuff)
 
-    // Loop through ability scores, and add their modifiers to our sheet output.
-    // for (const key in this.abilities) {
-    //   // Calculate the modifier using d20 rules.
-    //   this.abilities[key].mod = Math.floor((this.abilities[key].value - 10) / 2);
-    //   // Handle ability label localization.
-    //   this.abilities[key].label = game.i18n.localize(CONFIG.PROWLERS_AND_PARAGONS.abilities[key]) ?? key;
-    // }
   }
 
   getRollData() {

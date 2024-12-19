@@ -27,6 +27,29 @@ export class ProwlersParagonsActor extends Actor {
    */
   prepareDerivedData() {
     const actorData = this;
+
+    actorData.derived_power_ranks = {}
+
+    actorData.items.contents.filter(i => i.type === 'power').forEach(power => {
+      console.log(power)
+      let rr = power.system.rank
+
+      if (power.system.rank_type === 'default') {
+        rr = actorData.system.abilities[power.system.connected_ability].value
+      }
+      if (power.system.rank_type === 'baseline') {
+        if (power.system.baseline_scaling_options.half_rank) {
+          rr += Math.round((actorData.system.abilities[power.system.connected_ability].value)/2)
+        } else if (power.system.baseline_scaling_options.special) {
+          rr += power.system.baseline_scaling_options.special_value
+        } else {
+          rr += actorData.system.abilities[power.system.connected_ability].value
+        }
+      }
+
+      actorData.derived_power_ranks[power.name] = rr
+    });
+
     const flags = actorData.flags.prowlersandparagons || {};
   }
 

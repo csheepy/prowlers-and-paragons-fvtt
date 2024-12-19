@@ -45,7 +45,13 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Add the actor's data to context.data for easier access, as well as flags.
     context.system = actorData.system;
     context.flags = actorData.flags;
+    Handlebars.registerHelper('getDerivedPowerRank', function (power) {
+      return actorData.derived_power_ranks[power];
+    });
 
+    Handlebars.registerHelper('isDefaultPower', function (power) {
+      return power.system.rank_type === 'default';
+    });
     // Adding a pointer to CONFIG.PROWLERS_AND_PARAGONS
     context.config = CONFIG.PROWLERS_AND_PARAGONS;
 
@@ -125,7 +131,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       }
       // Append to spells.
       else if (i.type === 'power') {
-        powers.push(i)
+        powers.push(i);
       }
     }
 
@@ -229,6 +235,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const dataset = element.dataset;
 
+    console.log(game.user.targets)
     // Handle item rolls.
     if (dataset.rollType) {
       if (dataset.rollType == 'item') {

@@ -1,7 +1,8 @@
 <ol class='items-list'>
     <li class='item flexrow items-header'>
     <div class='item-name'>{{localize 'Name'}}</div>
-    <div class='item-formula'>{{localize 'Rank'}}</div>
+    <div class='item-formula'>{{localize 'Purchased Rank'}}</div>
+    <div class='item-formula'>{{localize 'Total Rank'}}</div>
     <div class='item-controls'>
       <a
         class='item-control item-create'
@@ -26,7 +27,8 @@
           </div>
           <h4>{{item.name}}</h4>
         </div>
-        <div class='item-formula item-prop'>{{item.system.rank}}</div>
+        <div class='item-formula item-prop'>{{ifThen (isDefaultPower item) '-' item.system.rank }}</div>
+        <div class='item-formula item-prop'>{{ifThen (isDefaultPower item) '-' (getDerivedPowerRank item.name)}}</div>
         <div class='item-controls'>
           <a
             class='item-control item-edit'

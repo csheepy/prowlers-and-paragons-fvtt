@@ -79,7 +79,7 @@
         {{selectOptions power_ranges selected=system.range localize=true}}
     </select>
     </div>
-        <div class='resource'>
+    <div class='resource'>
         <label class='resource-label'>Cost Per Rank</label>
          <input
           type='text'
@@ -87,7 +87,10 @@
           value='{{system.cost}}'
           data-dtype='Number'
         />
-    </div>
+    {{!-- </div>
+        <div class='resource'>
+        <label class='resource-label'>Actual Rank {{derived_power_ranks[]}}</label>
+    </div> --}}
     </div>
   </section>
 </form>
