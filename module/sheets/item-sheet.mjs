@@ -14,6 +14,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
       classes: ['prowlers-and-paragons', 'sheet', 'item'],
       width: 520,
       height: 480,
+      dragDrop: [{dropSelector: null, dragSelector: null}],
       tabs: [
         {
           navSelector: '.sheet-tabs',
@@ -75,6 +76,9 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     context.power_rank_types = CONFIG.PROWLERS_AND_PARAGONS.power_rank_types
     context.power_sources = CONFIG.PROWLERS_AND_PARAGONS.power_sources
     context.power_ranges = CONFIG.PROWLERS_AND_PARAGONS.power_ranges
+    context.pro_con_choices = {
+                              pro: 'Pro',
+                              con: 'Con'}
 
     return context;
   }
@@ -94,5 +98,79 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     html.on('click', '.effect-control', (ev) =>
       onManageActiveEffect(ev, this.item)
     );
+  }
+
+  getDataFromDropEvent(event) {
+    try {
+      return JSON.parse(event.dataTransfer?.getData('text/plain'));
+    } catch (err) {
+      const pdfRef = event.dataTransfer?.getData('text/html');
+      if (pdfRef) {
+        return getHTMLLink(pdfRef);
+      } else {
+        const uriRef = event.dataTransfer?.getData('text/uri-list');
+        if (uriRef) {
+          return ({
+            type: "html",
+            href: uriRef,
+            label: "Weblink"
+          });
+        }
+        throw new Error(game.i18n.localize("TWODSIX.Errors.DropFailedWith").replace("_ERROR_MSG_", err));
+      }
+    }
+  }
+  
+  async getItemDataFromDropData(dropData) {
+    let item;
+
+    item = await fromUuid(dropData.uuid);  //NOTE THIS MAY NEED TO BE CHANGED TO fromUuidSync  ****
+  
+    if (!item) {
+      throw new Error(game.i18n.localize("TWODSIX.Errors.CouldNotFindItem").replace("_ITEM_ID_", dropData.uuid));
+    }
+    //handle drop from compendium
+    if (item.pack) {
+      const pack = game.packs.get(item.pack);
+      item = await pack?.getDocument(item._id);
+    }
+    const itemCopy = foundry.utils.duplicate(item);
+    return itemCopy;
+  }
+  
+  /** @override */
+  _canDragDrop() {
+    //console.log("got to drop check", selector);
+    return this.isEditable && this.item.isOwner;
+  }
+
+   /** @override */
+  async _onDrop(event) {
+    event.preventDefault();
+    const dropdata = this.getDataFromDropEvent(event)
+    const draggedItem = await this.getItemDataFromDropData(dropdata)
+
+    if (this.item.type === 'power' && draggedItem.type === 'procon') { // add effect mirroring the dropped procon
+      console.log('noice')
+      console.log(this)
+      this.item.createEmbeddedDocuments('ActiveEffect',[
+        {
+        name: draggedItem.name,
+        description: draggedItem.system.description,
+        transfer: false,
+        changes: [
+          {key: 'cost_flat',
+          value: draggedItem.system.cost_flat,
+          mode: 2},
+          {key: 'cost_per_rank',
+          value: draggedItem.system.cost_per_rank,
+          mode: 2},
+          {key: 'kind',
+          value: draggedItem.system.kind,
+          mode: 0}
+        ]
+      }])
+    }
+   
   }
 }

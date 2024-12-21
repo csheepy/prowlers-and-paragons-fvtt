@@ -78,7 +78,8 @@
       "item": "Item",
       "feature": "Feature",
       "spell": "Spell",
-      "power": "Power"
+      "power": "Power",
+      "procon": "Pro/Con"
     }
   }
 }

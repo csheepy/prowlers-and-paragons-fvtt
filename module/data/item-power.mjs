@@ -1,4 +1,5 @@
 import ProwlersParagonsItemBase from "./base-item.mjs";
+import {ProwlersParagonsItem} from "../documents/item.mjs"
 
 export default class ProwlersParagonsPower extends ProwlersParagonsItemBase {
 
@@ -13,7 +14,6 @@ export default class ProwlersParagonsPower extends ProwlersParagonsItemBase {
     schema.source = new fields.StringField({ choices: CONFIG.PROWLERS_AND_PARAGONS.power_sources});
     schema.range = new fields.StringField({ choices: CONFIG.PROWLERS_AND_PARAGONS.power_ranges});
     schema.cost = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0, min: 0});
-    // schema.modifiers = new fields.EmbeddedCollectionField() // pros and cons
 
     return schema;
   }
