@@ -52,7 +52,9 @@ Hooks.once('init', function () {
     feature: models.ProwlersParagonsFeature,
     spell: models.ProwlersParagonsSpell,
     power: models.ProwlersParagonsPower,
-    procon: models.ProwlersParagonsProCon
+    procon: models.ProwlersParagonsProCon,
+    perk: models.ProwlersParagonsPerk,
+    flaw: models.ProwlersParagonsFlaw
   }
 
   CONFIG.Dice.terms[ProwlersDie.DENOMINATION] = ProwlersDie;

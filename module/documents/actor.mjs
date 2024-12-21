@@ -31,7 +31,6 @@ export class ProwlersParagonsActor extends Actor {
     actorData.derived_power_ranks = {}
 
     actorData.items.contents.filter(i => i.type === 'power').forEach(power => {
-      console.log(power)
       let rr = power.system.rank
 
       if (power.system.rank_type === 'default') {

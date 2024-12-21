@@ -151,8 +151,6 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     const draggedItem = await this.getItemDataFromDropData(dropdata)
 
     if (this.item.type === 'power' && draggedItem.type === 'procon') { // add effect mirroring the dropped procon
-      console.log('noice')
-      console.log(this)
       this.item.createEmbeddedDocuments('ActiveEffect',[
         {
         name: draggedItem.name,

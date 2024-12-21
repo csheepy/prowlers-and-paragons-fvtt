@@ -11,3 +11,6 @@ export {default as ProwlersParagonsFeature} from "./item-feature.mjs";
 export {default as ProwlersParagonsSpell} from "./item-spell.mjs";
 export {default as ProwlersParagonsPower} from "./item-power.mjs";
 export {default as ProwlersParagonsProCon} from "./item-procon.mjs";
+export {default as ProwlersParagonsPerk} from "./item-perk.mjs";
+export {default as ProwlersParagonsFlaw} from "./item-perk.mjs";
+

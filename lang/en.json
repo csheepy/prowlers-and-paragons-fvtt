@@ -79,7 +79,9 @@
       "feature": "Feature",
       "spell": "Spell",
       "power": "Power",
-      "procon": "Pro/Con"
+      "procon": "Pro/Con",
+      "perk": "Perk",
+      "flaw": "Flaw"
     }
   }
 }

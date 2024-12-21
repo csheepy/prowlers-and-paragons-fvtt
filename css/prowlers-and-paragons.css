@@ -363,3 +363,7 @@
 .prowlers-and-paragons .effects .item .effect-controls {
   border: none;
 }
+
+.prowlers-and-paragons .top-spacing {
+  margin-top: 10px;
+}

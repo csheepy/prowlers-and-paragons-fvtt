@@ -112,7 +112,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     const gear = [];
     const perks = [];
     const flaws = [];
-    const powers = []
+    const powers = [];
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
@@ -235,7 +235,6 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const dataset = element.dataset;
 
-    console.log(game.user.targets)
     // Handle item rolls.
     if (dataset.rollType) {
       if (dataset.rollType == 'item') {

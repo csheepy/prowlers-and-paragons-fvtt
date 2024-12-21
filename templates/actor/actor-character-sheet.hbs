@@ -43,10 +43,9 @@
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
     <a class="item" data-tab="features">Features</a>
-    <a class="item" data-tab="description">Description</a>
-    <a class="item" data-tab="items">Items</a>
+    <a class="item" data-tab="biography">Biography</a>
+    <a class="item" data-tab="items">Gear</a>
     <a class="item" data-tab="powers">Powers</a>
-    <a class="item" data-tab="effects">Effects</a>
     <a class="item" data-tab="package">Package</a>
   </nav>
 
@@ -93,8 +92,13 @@
     </div>
 
     {{!-- Biography Tab --}}
-    <div class="tab biography" data-group="primary" data-tab="description">
+    <div class="tab biography" data-group="primary" data-tab="biography">
       {{!-- Editors must receive enriched text data from getData to properly handle rolls --}}
+      <h3>Perks</h3>
+      {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-perks.hbs"}}
+      <h3>Flaws</h3>
+      {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-flaws.hbs"}}
+      <h3 class="top-spacing">Biography</h3>
       {{editor enrichedBiography target="system.biography" engine="prosemirror" button=true editable=editable}}
     </div>
 
@@ -108,7 +112,7 @@
     </div>
 
     {{!-- Owned Items Tab --}}
-    <div class="tab items" data-group="primary" data-tab="items">
+    <div class="tab gear" data-group="primary" data-tab="gear">
        {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-items.hbs"}}
     </div>
 
@@ -116,11 +120,5 @@
     <div class="tab powers" data-group="primary" data-tab="powers">
       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-powers.hbs"}}
     </div>
-
-    {{!-- Active Effects Tab --}}
-    <div class="tab effects flexcol" data-group="primary" data-tab="effects">
-      {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-effects.hbs"}}
-    </div>
-
   </section>
 </form>
