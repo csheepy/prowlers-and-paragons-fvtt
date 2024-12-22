@@ -93,6 +93,10 @@ Handlebars.registerHelper('needsConnectedAbility', function (power) {
   return (power.rank_type === 'default' || power.rank_type === 'baseline');
 });
 
+Handlebars.registerHelper('needsBaselineOptions', function (power) {
+  return (power.rank_type === 'baseline');
+});
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */

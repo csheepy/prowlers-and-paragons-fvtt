@@ -61,6 +61,8 @@
           <select name='system.connected_ability'>
            {{selectOptions abilities selected=system.connected_ability localize=true}}
           </select>
+        {{/if}}
+        {{#if (needsBaselineOptions system)}}
           <input type="checkbox" name='system.baseline_scaling_options.half_rank' {{checked system.baseline_scaling_options.half_rank}}>Half Scaling</input>
           <input type="checkbox" name='system.baseline_scaling_options.special' {{checked system.baseline_scaling_options.special}}>Special Base Value</input>
           {{#if system.baseline_scaling_options.special}}
