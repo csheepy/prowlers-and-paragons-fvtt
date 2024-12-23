@@ -48,7 +48,6 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
         data[k] = foundry.utils.deepClone(v);
       }
     }
-
     // data.lvl = this.attributes.level.value;
 
     return data

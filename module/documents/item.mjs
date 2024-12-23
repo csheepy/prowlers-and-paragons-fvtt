@@ -76,6 +76,33 @@ export class ProwlersParagonsItem extends Item {
 
       return roll
     }
+    // weapon roll
+    if(this.system.weapon_bonus) {
+      const ma = this.actor.derived_power_ranks['Martial Arts'] ?? 0
+
+      const ts = [
+      {trait: 'Martial Arts', val: ma},
+      {trait: 'Might', val: this.actor.system.abilities.might.value},
+      {trait: 'Agility', val: this.actor.system.abilities.agility.value}
+    ]
+      const highest = ts.reduce((max, obj) => {
+        return obj.val > max.val ? obj : max; // Compare 'val' property
+      }, ts[0]);
+
+
+      const gear_limited_bonus = Math.min(6, highest.val) + this.system.weapon_bonus
+
+      const roll = new Roll(`(${gear_limited_bonus})dp`, this.actor.getRollData());
+
+      roll.toMessage({
+        speaker: speaker,
+        rollMode: rollMode,
+        flavor: `[${item.type}] ${item.name} (${highest.trait})`,
+      });
+      return roll;
+
+      return roll
+    }
 
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {

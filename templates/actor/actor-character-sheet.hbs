@@ -44,8 +44,8 @@
     {{!-- Default tab is specified in actor-sheet.mjs --}}
     <a class="item" data-tab="features">Features</a>
     <a class="item" data-tab="biography">Biography</a>
-    <a class="item" data-tab="items">Gear</a>
     <a class="item" data-tab="powers">Powers</a>
+    <a class="item" data-tab="gear">Gear</a>
     <a class="item" data-tab="package">Package</a>
   </nav>
 
@@ -85,7 +85,8 @@
         {{!-- For the main features list, span the right two columns --}}
         <section class="main grid-span-2">
           {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          {{ "systems/prowlers-and-paragons/templates/actor/parts/actor-features.hbs"}}
+          TODO - make an abbreviated version of powers and gear and use this as kind of a play tab
+          {{!-- {{ "systems/prowlers-and-paragons/templates/actor/parts/actor-powers.hbs"}} --}}
         </section>
 
       </section>
@@ -111,9 +112,9 @@
       <button class="apply-package flexlarge align-left" data-package="clear">{{localize "PROWLERS_AND_PARAGONS.Packages.clear"}}</button>
     </div>
 
-    {{!-- Owned Items Tab --}}
+    {{!-- Gear Tab --}}
     <div class="tab gear" data-group="primary" data-tab="gear">
-       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-items.hbs"}}
+       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-gear.hbs"}}
     </div>
 
     {{!-- Owned Spells Tab --}}

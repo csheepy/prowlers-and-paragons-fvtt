@@ -9,10 +9,13 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/prowlers-and-paragons/templates/actor/parts/actor-features.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-perks.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-flaws.hbs',
-    'systems/prowlers-and-paragons/templates/actor/parts/actor-items.hbs',
+    'systems/prowlers-and-paragons/templates/actor/parts/actor-gear.hbs',
+    'systems/prowlers-and-paragons/templates/actor/parts/actor-weapons.hbs',
+    'systems/prowlers-and-paragons/templates/actor/parts/actor-armor.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-powers.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-effects.hbs',
     // Item partials
     'systems/prowlers-and-paragons/templates/item/parts/item-effects.hbs',
+    
   ]);
 };

@@ -3,6 +3,6 @@
     "types": ["character", "npc", "minion"]
   },
   "Item": {
-    "types": ["item", "feature", "spell", "power", "procon", "perk", "flaw"]
+    "types": ["item", "feature", "spell", "power", "procon", "perk", "flaw", "weapon", "armor"]
   }
 }

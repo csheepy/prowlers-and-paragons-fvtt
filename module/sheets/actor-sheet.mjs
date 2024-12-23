@@ -113,6 +113,8 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     const perks = [];
     const flaws = [];
     const powers = [];
+    const armor = []
+    const weapons = []
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
@@ -133,6 +135,14 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       else if (i.type === 'power') {
         powers.push(i);
       }
+      // Append to weapons.
+      if (i.type === 'weapon') {
+        weapons.push(i);
+      }
+      // Append to armor.
+      if (i.type === 'armor') {
+        armor.push(i);
+      }
     }
 
     // Assign and return
@@ -140,6 +150,8 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     context.perks = perks;
     context.flaws = flaws;
     context.powers = powers;
+    context.weapons = weapons;
+    context.armor = armor;
   }
 
   /* -------------------------------------------- */
@@ -237,7 +249,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
 
     // Handle item rolls.
     if (dataset.rollType) {
-      if (dataset.rollType == 'item') {
+      if (dataset.rollType == 'weapon' || dataset.rollType == 'armor') {
         const itemId = element.closest('.item').dataset.itemId;
         const item = this.actor.items.get(itemId);
         if (item) return item.roll();

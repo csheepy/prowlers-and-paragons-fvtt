@@ -81,7 +81,9 @@
       "power": "Power",
       "procon": "Pro/Con",
       "perk": "Perk",
-      "flaw": "Flaw"
+      "flaw": "Flaw",
+      "weapon": "Weapon",
+      "armor": "Armor"
     }
   }
 }

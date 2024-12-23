@@ -43,8 +43,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     // Retrieve base data structure.
     const context = super.getData();
 
-    // Use a safe clone of the item data for further operations.
-    const itemData = this.document.toPlainObject();
+    const itemData = this.document;
 
     // Enrich description info for display
     // Enrichment turns text like `[[/r 1d20]]` into buttons
