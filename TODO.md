@@ -8,6 +8,9 @@ calculate hero points
 gear
     - weapons have a WEAPON_BONUS
         weapon_bonus added to might/Martial arts/Agility 
+        offensive rolls: melee - might or martial arts
+                         ranged - agility
+        defensive rolls: melee - agility or martial arts
     - armor has an ARMOR_BONUS
         grants the Armor power at (Toughness or Armor) + armor_bonus
 
