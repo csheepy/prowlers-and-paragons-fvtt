@@ -3,7 +3,7 @@
  * @extends {Item}
  */
 
-import { ProwlersRoll, WeaponRoll } from "../dice/prowlers-roll.mjs";
+import { ArmorRoll, ProwlersRoll, WeaponRoll } from "../dice/prowlers-roll.mjs";
 
 export class ProwlersParagonsItem extends Item {
   /**
@@ -58,7 +58,6 @@ export class ProwlersParagonsItem extends Item {
       flavor: label,
       speaker,
       rollMode,
-      foo: 'bar',
       type: this.name,
       num_dice: this.actor.derived_power_ranks[this.name]
     }
@@ -68,16 +67,10 @@ export class ProwlersParagonsItem extends Item {
   async rollWeapon({speaker, rollMode, label}) {
     const maVal = this.actor.derived_power_ranks['Martial Arts'] ?? 0
 
-    const ma = {'Martial Arts': maVal}
-    const might = {'Might': this.actor.system.abilities.might.value}
-    const agility = {'Agility': this.actor.system.abilities.agility.value}
-    
-
     const options = {
       flavor: label,
       speaker,
       rollMode,
-      foo: 'bar',
       type: this.name,
       weapon_traits: {ma: maVal, might: this.actor.system.abilities.might.value, agility: this.actor.system.abilities.agility.value},
       ranged: this.system.ranged,
@@ -86,8 +79,19 @@ export class ProwlersParagonsItem extends Item {
     return WeaponRoll.rollDialog(options);
   }
 
-  rollArmor() {
+  rollArmor({speaker, rollMode, label}) {
+    const armVal = this.actor.derived_power_ranks['Armor'] ?? 0
 
+    const options = {
+      flavor: label,
+      speaker,
+      rollMode,
+      type: this.name,
+      armor_traits: {toughness: this.actor.system.abilities.toughness.value, armor: armVal },
+      ranged: this.system.ranged,
+      armor_bonus: this.system.armor_bonus
+    }
+    return ArmorRoll.rollDialog(options);
   }
 
   /**
@@ -112,6 +116,9 @@ export class ProwlersParagonsItem extends Item {
       return this.rollWeapon({speaker, rollMode, label})
     }
 
+    if(this.system.armor_bonus) {
+      return this.rollArmor({speaker, rollMode, label})
+    }
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {
       ChatMessage.create({

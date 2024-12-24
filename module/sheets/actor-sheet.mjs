@@ -292,6 +292,20 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       }
       return ProwlersRoll.rollDialog(options);
     }
+
+    // NPC Threat rolls
+    if (dataset.threat) {
+      let label = dataset.label ? `${dataset.label}` : '';
+      const speaker = ChatMessage.getSpeaker({ actor: this.actor })
+      const options = {
+        flavor: label,
+        speaker,
+        rollMode: game.settings.get('core', 'rollMode'),
+        type: dataset.label,
+        num_dice: parseInt(dataset.threat)
+      }
+      return ProwlersRoll.rollDialog(options);
+    }
   }
 
   async _applyPackage(event) {
