@@ -100,7 +100,7 @@ export class WeaponRoll extends ProwlersRoll {
         return {
         formula: isPrivate ? "???" : this._formula,
         // flavor: isPrivate ? null : flavor ?? this.options.flavor,
-        type: isPrivate ? null : `${this.options.type} (${this.options.weapon_traits[0].trait})`,
+        type: isPrivate ? null : `${this.options.type}`,
         foo: this.options.foo,
         user: game.user.id,
         tooltip: isPrivate ? "" : await this.getTooltip(),
@@ -113,22 +113,39 @@ export class WeaponRoll extends ProwlersRoll {
     static GEAR_LIMIT = 6; // TODO put this in a setting
 
     static initialNumberOfDice(options) {
-        return Math.min(this.GEAR_LIMIT, options.weapon_traits[0].val) + options.weapon_bonus
+        return Math.min(this.GEAR_LIMIT, options.trait_rank) + options.weapon_bonus
     }
     
     static async rollDialog(options = {}) {
-        const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-trait.hbs'
+        const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-weapon.hbs'
         const data = {
           modifier: 0,
           difficulty: 'easy',
           rollDifficulties: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties,
           type: options.type,
+          chosen_action_type: 'attacking',
+          ranged: options.ranged,
+          attackingMeleeTraits: {ma: `Martial Arts (${options.weapon_traits.ma})`, might: `Might (${options.weapon_traits.might})`}, //options.weapon_traits.offMelee,
+          defendingMeleeTraits: {ma: `Martial Arts (${options.weapon_traits.ma})`, agility: `Agility (${options.weapon_traits.agility})`},
+          rangedTraits: {agility:  `Agility (${options.weapon_traits.agility})`},
+          trait: '',
+          action_choices: {attacking: 'Attacking', defending: 'Defending'}   
         }
-    
+
+        Handlebars.registerHelper('attacking', function (chosen_action) {
+          if (chosen_action === 'attacking') {
+            return true
+          }
+        });
+        Handlebars.registerHelper('defending', function (chosen_action) {
+          if (chosen_action === 'defending') {
+            return true
+          }
+        });
         const html = await renderTemplate(template, data);
-        const dd = this.initialNumberOfDice(options);
+
         let d = new Dialog({
-          title: `Rolling ${options.type} (${options.weapon_traits[0].trait})`,
+          title: `Rolling ${options.type}`,
           content: html,
           buttons: {
            one: {
@@ -138,7 +155,8 @@ export class WeaponRoll extends ProwlersRoll {
                 const modifier =  parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
                 options.difficulty = buttonHtml.find('[name="difficulty"]').val()
                 options.difficulty_number = parseInt(buttonHtml.find('[name="difficulty-number"]').val() ,10)
-                const total_dice_number = dd + modifier
+                options.trait_rank = options.weapon_traits[buttonHtml.find('[name="trait"]').val()]
+                const total_dice_number = this.initialNumberOfDice(options) + modifier
                 const roll = new this(`(${total_dice_number})dp`, {}, options );
                 roll.toMessage({
                     speaker: options.speaker,

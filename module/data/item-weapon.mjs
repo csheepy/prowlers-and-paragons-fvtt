@@ -8,6 +8,7 @@ export default class ProwlersParagonsWeapon extends ProwlersParagonsItemBase {
     const schema = super.defineSchema();
 
     schema.weapon_bonus = new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
+    schema.ranged = new fields.BooleanField({initial: false})
 
     return schema;
   }

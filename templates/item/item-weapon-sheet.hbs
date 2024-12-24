@@ -49,7 +49,14 @@
                 value='{{system.weapon_bonus}}'
                 data-dtype='Number'
                 />
-       </div>
+        </div>
+        <div class='resource'>
+          <input
+              type='checkbox'
+              name='system.ranged'
+              {{checked system.ranged}}
+          >Ranged</input>
+        </div>
     </div>
   </section>
 </form>

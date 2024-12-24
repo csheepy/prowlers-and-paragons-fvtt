@@ -1,0 +1,63 @@
+<form>
+  <fieldset>
+    <fieldset>
+      <legend>Connected Ability / Power</legend>
+      {{#if ranged}}
+         <select name="trait">
+           {{selectOptions rangedTraits selected=trait}}
+         </select>
+      {{else}}
+            {{radioBoxes "Attacking/Defending" action_choices checked=chosen_action_type}}
+            <select name="trait">
+              {{selectOptions attackingMeleeTraits selected=trait}}
+            </select>
+      {{/if}}
+    </fieldset>
+  <legend>{{localize "PROWLERS_AND_PARAGONS.Roll.RollDetails"}}</legend>
+    <div>
+      <label>{{localize "PROWLERS_AND_PARAGONS.Roll.Difficulty"}}
+        <select name="difficulty" onchange="updateDifficultyNumber(this)">
+          {{selectOptions rollDifficulties selected=difficulty localize=true}}
+        </select>
+        <input type="number" name="difficulty-number" value="{{modifier}}" placeholder="0" onClick="this.select();" style="width: 8ch;"/>
+      </label>
+    </div>
+    <br>
+    <div>
+      <label>{{localize "PROWLERS_AND_PARAGONS.Roll.Modifiers"}}
+        <input type="number" name="modifier" value="{{modifier}}" placeholder="0" onClick="this.select();" style="width: 8ch;"/>
+      </label>
+    </div>
+  </fieldset>
+  <br>
+</form>
+
+<script >
+{
+  const traitSelect = this.document.getElementsByName('trait')[0]
+  function handleRadioChange(event) {
+    if (event.target.value === 'attacking') {
+      traitSelect.innerHTML = '{{selectOptions attackingMeleeTraits selected=trait}}'
+    }
+    if (event.target.value === 'defending') {
+      traitSelect.innerHTML = '{{selectOptions defendingMeleeTraits selected=trait}}'
+    } 
+  }
+
+    const radioButtons = this.document.getElementsByName("Attacking/Defending");
+
+    radioButtons.forEach(radio => {
+      radio.addEventListener("change", handleRadioChange);
+    });
+
+
+  function updateDifficultyNumber(selectElement) {
+    const selectedOption = selectElement.value;
+    const numberInput = selectElement.closest('label').querySelector('input[name="difficulty-number"]');
+    if (numberInput) {
+      // Set the input value based on the selected option
+      numberInput.value = CONFIG.PROWLERS_AND_PARAGONS.roll_difficulty_values[selectedOption] || 0; // Default to 0 if no match
+    }
+  }
+}
+</script>

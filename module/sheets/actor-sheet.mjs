@@ -250,7 +250,6 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const dataset = element.dataset;
 
-    console.log(dataset)
     // Handle item rolls.
     if (dataset.rollType) {
         const itemId = element.closest('.item').dataset.itemId;

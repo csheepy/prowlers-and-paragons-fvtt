@@ -66,14 +66,12 @@ export class ProwlersParagonsItem extends Item {
   }
 
   async rollWeapon({speaker, rollMode, label}) {
-    const ma = this.actor.derived_power_ranks['Martial Arts'] ?? 0
+    const maVal = this.actor.derived_power_ranks['Martial Arts'] ?? 0
 
-    const ts = [
-    {trait: 'Martial Arts', val: ma},
-    {trait: 'Might', val: this.actor.system.abilities.might.value},
-    {trait: 'Agility', val: this.actor.system.abilities.agility.value}
-  ]
-    ts.sort((a, b) => b.val - a.val);
+    const ma = {'Martial Arts': maVal}
+    const might = {'Might': this.actor.system.abilities.might.value}
+    const agility = {'Agility': this.actor.system.abilities.agility.value}
+    
 
     const options = {
       flavor: label,
@@ -81,7 +79,8 @@ export class ProwlersParagonsItem extends Item {
       rollMode,
       foo: 'bar',
       type: this.name,
-      weapon_traits: ts,
+      weapon_traits: {ma: maVal, might: this.actor.system.abilities.might.value, agility: this.actor.system.abilities.agility.value},
+      ranged: this.system.ranged,
       weapon_bonus: this.system.weapon_bonus
     }
     return WeaponRoll.rollDialog(options);

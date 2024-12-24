@@ -77,8 +77,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     context.power_ranges = CONFIG.PROWLERS_AND_PARAGONS.power_ranges
     context.pro_con_choices = {
                               pro: 'Pro',
-                              con: 'Con'}
-
+                              con: 'Con'}                
     return context;
   }
 
