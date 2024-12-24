@@ -5,7 +5,7 @@ gear
 - armor has an ARMOR_BONUS
     - grants the Armor power at (Toughness or Armor) + armor_bonus
 
-initiative based on Edge
+minion group attack
 
 
 calculate hero points
