@@ -367,3 +367,13 @@
 .prowlers-and-paragons .top-spacing {
   margin-top: 10px;
 }
+
+.prowlers-and-paragons .spent-hero-points {
+  font-weight: bold;
+  margin-top: auto;
+}
+
+.prowlers-and-paragons .actor-middle-column {
+display: flex;
+flex-direction: column;
+}

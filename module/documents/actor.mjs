@@ -18,18 +18,11 @@ export class ProwlersParagonsActor extends Actor {
     // documents or derived data.
   }
 
-  /**
-   * @override
-   * Augment the actor source data with additional dynamic data that isn't 
-   * handled by the actor's DataModel. Data calculated in this step should be
-   * available both inside and outside of character sheets (such as if an actor
-   * is queried and has a roll executed directly from it).
-   */
-  prepareDerivedData() {
+
+  derivePowerRanks() {
     const actorData = this;
 
-    actorData.derived_power_ranks = {}
-
+    const derived_power_ranks = {}
     actorData.items.contents.filter(i => i.type === 'power').forEach(power => {
       let rr = power.system.rank
 
@@ -46,9 +39,75 @@ export class ProwlersParagonsActor extends Actor {
         }
       }
 
-      actorData.derived_power_ranks[power.name] = rr
+      derived_power_ranks[power.name] = rr
     });
 
+    return derived_power_ranks
+  }
+
+  calculateSpentPoints() {
+    const actorData = this;
+
+    let pointsSpent = 0;
+
+    const calculateTrait = (trait, adjustment) => {
+      for (const [key, {value}] of Object.entries(actorData.system[trait])) {
+        const adjustedValue = value - adjustment
+        if (adjustedValue > 0) {
+          pointsSpent += adjustedValue
+        }
+      }
+    }
+
+    if (actorData.system.package_applied === 'superhero') {
+      pointsSpent += 50
+      
+      calculateTrait('abilities', 3)
+      calculateTrait('talents', 3)
+    }
+
+    if (actorData.system.package_applied === 'hero') {
+      pointsSpent += 40
+
+      calculateTrait('abilities', 3)
+      calculateTrait('talents', 2)
+    }
+
+    if (actorData.system.package_applied === 'civilian') {
+      pointsSpent += 35
+
+      calculateTrait('abilities', 2)
+      calculateTrait('talents', 2)
+    }
+
+    actorData.items.contents.filter(i => i.type === 'perk').forEach(perk => {
+      pointsSpent += perk.system.cost;
+    })
+
+
+    // add powers cost
+    actorData.items.contents.filter(i => i.type === 'power').forEach(power => {
+      pointsSpent += (power.system.rank * power.system.cost)
+        })
+      
+    return pointsSpent
+  }
+  /**
+   * @override
+   * Augment the actor source data with additional dynamic data that isn't 
+   * handled by the actor's DataModel. Data calculated in this step should be
+   * available both inside and outside of character sheets (such as if an actor
+   * is queried and has a roll executed directly from it).
+   */
+  prepareDerivedData() {
+    const actorData = this;
+
+    actorData.derived_power_ranks = this.derivePowerRanks();
+
+
+
+
+    actorData.spentHeroPoints = this.calculateSpentPoints();
     const flags = actorData.flags.prowlersandparagons || {};
   }
 
