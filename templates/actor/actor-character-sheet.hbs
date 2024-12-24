@@ -65,7 +65,7 @@
             <h3>Abilities</h3>
             {{#each system.abilities as |ability key|}}
             <div class="ability flexrow flex-group-center">
-              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="@abilities.{{key}}.value" data-label="{{localize (lookup @root.config.abilities key)}}">{{localize (lookup @root.config.abilities key)}}</label>
+              <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-kind="abilities" data-key="{{key}}" data-label="{{localize (lookup @root.config.abilities key)}}">{{localize (lookup @root.config.abilities key)}}</label>
               <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
             </div>
             {{/each}}
@@ -75,7 +75,7 @@
             <h3>Talents</h3>
             {{#each system.talents as |talent key|}}
             <div class="ability flexrow flex-group-center">
-              <label for="system.talents.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="@talents.{{key}}.value" data-label="{{localize (lookup @root.config.talents key)}}">{{localize (lookup @root.config.talents key)}}</label>
+              <label for="system.talents.{{key}}.value" class="resource-label rollable flexlarge align-left" data-kind="talents" data-key="{{key}}" data-label="{{localize (lookup @root.config.talents key)}}">{{localize (lookup @root.config.talents key)}}</label>
               <input type="text" name="system.talents.{{key}}.value" value="{{talent.value}}" data-dtype="Number"/>
             </div>
             {{/each}}

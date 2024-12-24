@@ -66,6 +66,34 @@
       "civilian": "Civilian",
       "superhero": "Superhero",
       "clear": "Clear Package"
+    },
+    "Roll": {
+      "RollDetails": "Roll Details",
+      "Difficulty": "Difficulty",
+      "TraitRolling": "Rolling",
+      "Modifiers": "Modifiers",
+      "Difficulties": {
+        "Easy": "Easy (0)",
+        "Average": "Average (1)",
+        "Hard": "Hard (2)",
+        "Daunting": "Daunting (3)",
+        "Brutal": "Brutal (4)",
+        "Inhuman": "Inhuman (5)",
+        "Superhuman": "Superhuman (6-8)",
+        "Legendary": "Legendary (9-11)",
+        "Godlike": "Godlike (12+)"
+      },
+      "DifficultiesForRollMessage": {
+        "Easy": "Easy ({level})",
+        "Average": "Average ({level})",
+        "Hard": "Hard ({level})",
+        "Daunting": "Daunting ({level})",
+        "Brutal": "Brutal ({level})",
+        "Inhuman": "Inhuman ({level})",
+        "Superhuman": "Superhuman ({level})",
+        "Legendary": "Legendary ({level})",
+        "Godlike": "Godlike ({level})"
+      }
     }
   },
   "TYPES": {

@@ -3,6 +3,7 @@ import {
   prepareActiveEffectCategories,
 } from '../helpers/effects.mjs';
 
+import { ProwlersRoll } from '../dice/prowlers-roll.mjs';
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -45,6 +46,8 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Add the actor's data to context.data for easier access, as well as flags.
     context.system = actorData.system;
     context.flags = actorData.flags;
+    context.rollDifficulties = CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties
+
     Handlebars.registerHelper('getDerivedPowerRank', function (power) {
       return actorData.derived_power_ranks[power];
     });
@@ -247,27 +250,26 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const dataset = element.dataset;
 
+    console.log(dataset)
     // Handle item rolls.
     if (dataset.rollType) {
-      if (dataset.rollType == 'weapon' || dataset.rollType == 'armor') {
         const itemId = element.closest('.item').dataset.itemId;
         const item = this.actor.items.get(itemId);
         if (item) return item.roll();
-      }
     }
 
     // Handle rolls that supply the formula directly.
-    if (dataset.roll) {
+    if (dataset.key) {
       let label = dataset.label ? `${dataset.label}` : '';
-
-      let roll = new Roll(`(${dataset.roll})dp`, this.actor.getRollData());
-
-      roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      const speaker = ChatMessage.getSpeaker({ actor: this.actor })
+      const options = {
         flavor: label,
+        speaker,
         rollMode: game.settings.get('core', 'rollMode'),
-      });
-      return roll;
+        type: dataset.label,
+        num_dice: this.actor.system[dataset.kind][dataset.key].value
+      }
+      return ProwlersRoll.rollDialog(options);
     }
   }
 

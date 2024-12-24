@@ -1,9 +1,13 @@
 <div class="dice-roll">
-    {{#if flavor}}
-    <div class="dice-flavor">{{flavor}}</div>
-    {{/if}}
+    <div class="part-flavor">{{type}}</div>
+    <div class="dice-flavor">Difficulty: {{difficulty}}</div>
+
     <div class="dice-result">
+        <div class="dice-formula">{{formula}}</div>
         {{{tooltip}}}
-        <h4 class="dice-total">{{total}}</h4>
+        <h4>
+            <section class="dice-total">{{total}}</section>
+            <section class="dice-total">Net Successes: {{netSuccess}}</section>
+        </h4>
     </div>
 </div>

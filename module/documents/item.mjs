@@ -2,6 +2,9 @@
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
  */
+
+import { ProwlersRoll, WeaponRoll } from "../dice/prowlers-roll.mjs";
+
 export class ProwlersParagonsItem extends Item {
   /**
    * Augment the basic Item data model with additional dynamic data.
@@ -50,6 +53,44 @@ export class ProwlersParagonsItem extends Item {
     return result;
   }
 
+  async rollPower({speaker, rollMode, label}) {
+    const options = {
+      flavor: label,
+      speaker,
+      rollMode,
+      foo: 'bar',
+      type: this.name,
+      num_dice: this.actor.derived_power_ranks[this.name]
+    }
+    return ProwlersRoll.rollDialog(options);
+  }
+
+  async rollWeapon({speaker, rollMode, label}) {
+    const ma = this.actor.derived_power_ranks['Martial Arts'] ?? 0
+
+    const ts = [
+    {trait: 'Martial Arts', val: ma},
+    {trait: 'Might', val: this.actor.system.abilities.might.value},
+    {trait: 'Agility', val: this.actor.system.abilities.agility.value}
+  ]
+    ts.sort((a, b) => b.val - a.val);
+
+    const options = {
+      flavor: label,
+      speaker,
+      rollMode,
+      foo: 'bar',
+      type: this.name,
+      weapon_traits: ts,
+      weapon_bonus: this.system.weapon_bonus
+    }
+    return WeaponRoll.rollDialog(options);
+  }
+
+  rollArmor() {
+
+  }
+
   /**
    * Handle clickable rolls.
    * @param {Event} event   The originating click event
@@ -63,45 +104,13 @@ export class ProwlersParagonsItem extends Item {
     const rollMode = game.settings.get('core', 'rollMode');
     const label = `[${item.type}] ${item.name}`;
 
-    // power rolls
+    // power/ability/talent rolls
     if(this.system.rank) {
-      const roll = new Roll(`(${this.actor.derived_power_ranks[item.name]})dp`, this.actor.getRollData());
-
-      roll.toMessage({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: label,
-      });
-      return roll;
-
-      return roll
+      return this.rollPower({speaker, rollMode, label})
     }
     // weapon roll
     if(this.system.weapon_bonus) {
-      const ma = this.actor.derived_power_ranks['Martial Arts'] ?? 0
-
-      const ts = [
-      {trait: 'Martial Arts', val: ma},
-      {trait: 'Might', val: this.actor.system.abilities.might.value},
-      {trait: 'Agility', val: this.actor.system.abilities.agility.value}
-    ]
-      const highest = ts.reduce((max, obj) => {
-        return obj.val > max.val ? obj : max; // Compare 'val' property
-      }, ts[0]);
-
-
-      const gear_limited_bonus = Math.min(6, highest.val) + this.system.weapon_bonus
-
-      const roll = new Roll(`(${gear_limited_bonus})dp`, this.actor.getRollData());
-
-      roll.toMessage({
-        speaker: speaker,
-        rollMode: rollMode,
-        flavor: `[${item.type}] ${item.name} (${highest.trait})`,
-      });
-      return roll;
-
-      return roll
+      return this.rollWeapon({speaker, rollMode, label})
     }
 
     // If there's no roll data, send a chat message.
@@ -117,17 +126,15 @@ export class ProwlersParagonsItem extends Item {
     else {
       // Retrieve roll data.
       const rollData = this.getRollData();
-
-      // Invoke the roll and submit it to chat.
-      const roll = new Roll(rollData.formula, rollData.actor);
-      // If you need to store the value first, uncomment the next line.
-      // const result = await roll.evaluate();
-      roll.toMessage({
-        speaker: speaker,
-        rollMode: rollMode,
+      const options = {
         flavor: label,
-      });
-      return roll;
+        speaker,
+        rollMode,
+        foo: 'bar',
+        type: this.name,
+        num_dice: rollData.formula
+      }
+      return ProwlersRoll.rollDialog(options);
     }
   }
 }

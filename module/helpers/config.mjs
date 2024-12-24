@@ -26,6 +26,40 @@ PROWLERS_AND_PARAGONS.power_rank_types = {
   special: 'PROWLERS_AND_PARAGONS.Item.Power.power_rank_type.special'
 }
 
+PROWLERS_AND_PARAGONS.roll_difficulties = {
+  easy: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Easy",
+  average: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Average",
+  hard: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Hard",
+  daunting: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Daunting",
+  brutal: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Brutal",
+  inhuman: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Inhuman",
+  superhuman: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Superhuman",
+  legendary: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Legendary",
+  godlike: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Godlike"
+}
+PROWLERS_AND_PARAGONS.roll_difficulties_leveled = {
+  easy: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Easy",
+  average: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Average",
+  hard: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Hard",
+  daunting: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Daunting",
+  brutal: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Brutal",
+  inhuman: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Inhuman",
+  superhuman: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Superhuman",
+  legendary: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Legendary",
+  godlike: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Godlike"
+}
+PROWLERS_AND_PARAGONS.roll_difficulty_values = {
+  easy: 0,
+  average: 1,
+  hard: 2,
+  daunting: 3,
+  brutal: 4,
+  inhuman: 5,
+  superhuman: 6,
+  legendary: 9,
+  godlike: 12
+}
+
 PROWLERS_AND_PARAGONS.power_sources = {
   magic: 'PROWLERS_AND_PARAGONS.Item.Power.source.magic',
   innate: 'PROWLERS_AND_PARAGONS.Item.Power.source.innate',

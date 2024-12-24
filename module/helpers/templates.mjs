@@ -16,6 +16,7 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/prowlers-and-paragons/templates/actor/parts/actor-effects.hbs',
     // Item partials
     'systems/prowlers-and-paragons/templates/item/parts/item-effects.hbs',
-    
+    // globalish
+    'systems/prowlers-and-paragons/templates/prowlers-roll-trait.hbs'
   ]);
 };
