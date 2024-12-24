@@ -1,24 +1,21 @@
 in rough order
 
-
-gear
-- armor has an ARMOR_BONUS
-    - grants the Armor power at (Toughness or Armor) + armor_bonus
-
+calculate hero points
 minion group attack
 
 
-calculate hero points
 
 
 vehicles
+headquarters
 
-point limits, gear limits
+point limits, gear limits as system setting values
 
 derived stuff like edge, health, resolve?
 
 right click roll to spend resolve for reroll
 right click roll to explode 6s [can happen for resolve or defining moment]
+opposed rolls - target something and make a roll pop up for them to defend/contest
 
 add biographical information - name, alias, team, motivation, quote, origin
 
