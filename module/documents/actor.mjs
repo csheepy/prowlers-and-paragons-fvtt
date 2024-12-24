@@ -88,7 +88,13 @@ export class ProwlersParagonsActor extends Actor {
     // add powers cost
     actorData.items.contents.filter(i => i.type === 'power').forEach(power => {
       pointsSpent += (power.system.rank * power.system.cost)
-        })
+
+      // pros and cons
+      power.effects.contents.forEach(effect => {
+        pointsSpent += parseInt(effect.changes.find((e) => e.key === 'cost_flat').value)
+        pointsSpent += parseInt(effect.changes.find((e) => e.key === 'cost_per_rank').value) * power.system.rank
+      })
+    })
       
     return pointsSpent
   }
