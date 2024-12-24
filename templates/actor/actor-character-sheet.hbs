@@ -27,13 +27,26 @@
           <div class="resource-content flexrow flex-center flex-between">
           <input disabled type="text" name="system.edge.value" value="{{system.edge.value}}" data-dtype="Number"/>
         </div>
+        </div>
 
-        {{!-- <div class="resource flex-group-center">
-          <label for="system.attributes.level.value" class="resource-label">Level</label>
+        <div class="resource flex-group-center">
+          <label for="system.resolve.value" class="resource-label">Resolve</label>
           <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.attributes.level.value" value="{{system.attributes.level.value}}" data-dtype="Number"/>
+
+          <div>
+          <input type="text" name="system.resolve.value" value="{{system.resolve.value}}" data-dtype="Number"/>
+          <label>Current</label>
           </div>
-        </div> --}}
+
+          <span> / </span>
+          <div>
+          <input type="text" name="system.resolve.starting" value="{{system.resolve.starting}}" data-dtype="Number"/>
+          <label>Starting</label>
+          <button class="reset-resolve">Reset to starting</button>
+          </div>
+
+          </div>
+        </div>
 
       </div>
     </div>

@@ -174,6 +174,10 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
+    html.on('click', '.reset-resolve', () => {
+      this.actor.update({'system.resolve.value': this.actor.system.resolve.starting})
+    });
+
     // Add Inventory Item
     html.on('click', '.item-create', this._onItemCreate.bind(this));
 
@@ -181,8 +185,26 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     html.on('click', '.item-delete', (ev) => {
       const li = $(ev.currentTarget).parents('.item');
       const item = this.actor.items.get(li.data('itemId'));
-      item.delete();
-      li.slideUp(200, () => this.render(false));
+
+      new Dialog({
+        title: 'Confirm',
+        content: 'Are you sure?',
+        buttons: {
+          del: {
+            label: `Delete ${item.name}`,
+            icon: '<i class="fas fa-trash"></i>',
+            callback: () => {
+              item.delete()
+              li.slideUp(200, () => this.render(false));
+            }
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: 'Cancel'
+          }
+        }
+      }).render(true)
+      
     });
 
     // Active Effect management

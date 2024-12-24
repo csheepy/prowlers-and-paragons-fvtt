@@ -59,7 +59,7 @@ export class ProwlersRoll extends Roll {
           content: html,
           buttons: {
            one: {
-            icon: '<i class="fas fa-check"></i>',
+            icon: '<i class="fas fa-dice"></i>',
             label: "Roll",
             callback: (buttonHtml) => {
               const modifier =  parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
@@ -149,7 +149,7 @@ export class WeaponRoll extends ProwlersRoll {
           content: html,
           buttons: {
            one: {
-            icon: '<i class="fas fa-check"></i>',
+            icon: '<i class="fas fa-dice"></i>',
             label: "Roll",
             callback: (buttonHtml) => {
                 const modifier =  parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
