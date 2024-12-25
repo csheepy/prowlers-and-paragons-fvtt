@@ -57,7 +57,7 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="features">Features</a>
+    <a class="item" data-tab="features">Play</a>
     <a class="item" data-tab="biography">Biography</a>
     <a class="item" data-tab="powers">Powers</a>
     <a class="item" data-tab="gear">Gear</a>
@@ -100,7 +100,10 @@
         {{!-- For the main features list, span the right two columns --}}
         <section class="main grid-span-2">
           {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          TODO - make an abbreviated version of powers and gear and use this as kind of a play tab
+          <h3>Powers</h3>
+          {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-powers-play.hbs"}}
+          <h3>Gear</h3>
+          {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-gear-play.hbs"}}
           {{!-- {{ "systems/prowlers-and-paragons/templates/actor/parts/actor-powers.hbs"}} --}}
         </section>
 

@@ -1,7 +1,5 @@
 in rough order
 
-point limits as system setting value
-
 minion group attack
 
 vehicles

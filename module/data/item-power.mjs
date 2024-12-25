@@ -7,7 +7,7 @@ export default class ProwlersParagonsPower extends ProwlersParagonsItemBase {
     const fields = foundry.data.fields;
     const schema = super.defineSchema();
 
-    schema.rank = new fields.NumberField({ required: false, nullable: false, integer: true, initial: 0, min: 0});
+    schema.rank = new fields.NumberField({ required: false, nullable: false, integer: true, initial: 1, min: 1});
     schema.rank_type = new fields.StringField({ choices: CONFIG.PROWLERS_AND_PARAGONS.power_rank_types});
     schema.connected_ability = new fields.StringField({ required: false, nullable: true }); // for baseline and default types
     schema.baseline_scaling_options = new fields.ObjectField(); // half_scaling, exact_override
