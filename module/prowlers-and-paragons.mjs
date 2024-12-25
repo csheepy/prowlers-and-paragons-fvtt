@@ -31,6 +31,14 @@ Hooks.once('init', function () {
     type: Number,
     default: 6,
   })
+  game.settings.register('prowlers-and-paragons', 'heroPointBudget', {
+    name: 'Starting Hero Points',
+    hint: 'How many Hero Points are allowed for character creation',
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 125,
+  })
   // Add custom constants for configuration.
   CONFIG.PROWLERS_AND_PARAGONS = PROWLERS_AND_PARAGONS;
 
