@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+      "checkJs": true
+    },
+    "include": ["prowlers-and-paragons.mjs", "foundry/client/**/*.js", "foundry/**/*.mjs"],
+  }

@@ -87,10 +87,9 @@ export class ProwlersRoll extends Roll {
 }
 
 export class WeaponRoll extends ProwlersRoll {
-    static GEAR_LIMIT = 6; // TODO put this in a setting
-
     static initialNumberOfDice(options) {
-        return Math.min(this.GEAR_LIMIT, options.trait_rank) + options.weapon_bonus
+        const gearLimit = game.settings.get('prowlers-and-paragons', 'gearLimit');
+        return Math.min(gearLimit, options.trait_rank) + options.weapon_bonus
     }
     
     static async rollDialog(options = {}) {
@@ -146,10 +145,9 @@ export class WeaponRoll extends ProwlersRoll {
 }
 
 export class ArmorRoll extends ProwlersRoll {
-  static GEAR_LIMIT = 6; // TODO put this in a setting
-
   static initialNumberOfDice(options) {
-      return Math.min(this.GEAR_LIMIT, options.trait_rank) + options.armor_bonus
+      const gearLimit = game.settings.get('prowlers-and-paragons', 'gearLimit');
+      return Math.min(gearLimit, options.trait_rank) + options.armor_bonus
   }
   
   static async rollDialog(options = {}) {

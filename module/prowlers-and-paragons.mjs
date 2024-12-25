@@ -23,6 +23,14 @@ Hooks.once('init', function () {
     rollItemMacro,
   };
 
+  game.settings.register('prowlers-and-paragons', 'gearLimit', {
+    name: 'Gear Limit',
+    hint: 'Set the gear limit for your world',
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 6,
+  })
   // Add custom constants for configuration.
   CONFIG.PROWLERS_AND_PARAGONS = PROWLERS_AND_PARAGONS;
 
@@ -55,7 +63,7 @@ Hooks.once('init', function () {
     procon: models.ProwlersParagonsProCon,
     perk: models.ProwlersParagonsPerk,
     flaw: models.ProwlersParagonsFlaw,
-    weapon: models.ProwlerParagonsWeapon,
+    weapon: models.ProwlersParagonsWeapon,
     armor: models.ProwlersParagonsArmor
   }
 
