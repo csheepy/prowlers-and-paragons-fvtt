@@ -1,6 +1,6 @@
 in rough order
 
-point limits, gear limits as system setting values
+point limits as system setting value
 
 minion group attack
 
