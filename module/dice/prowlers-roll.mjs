@@ -104,7 +104,7 @@ export class ProwlersRoll extends Roll {
 
           await clonedDie.explode('x')
           await clonedDie.evaluate()
-          this.terms[0] = clonedDie;
+          this.terms[i] = clonedDie;
         }
       };
   
