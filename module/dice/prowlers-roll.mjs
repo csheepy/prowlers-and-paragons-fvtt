@@ -1,3 +1,5 @@
+import { ProwlersDie } from "./prowlers-die.mjs";
+
 export class ProwlersRoll extends Roll {
     static CHAT_TEMPLATE = "systems/prowlers-and-paragons/templates/prowlers-dice-result.hbs";
     static TOOLTIP_TEMPLATE = "systems/prowlers-and-paragons/templates/prowlers-tooltip.hbs"
@@ -84,6 +86,33 @@ export class ProwlersRoll extends Roll {
           d.render(true)
         })); 
       }
+
+    async explode() {
+      for (let i = 0; i < this.terms.length; i++) {
+        const term = this.terms[i];
+
+        if (term instanceof ProwlersDie) {
+
+          const clonedDie = new ProwlersDie({
+            faces: term.faces,
+            number: term.number,
+            modifiers: term.modifiers,
+            options: term.options,
+          });
+
+          clonedDie.results = structuredClone(term.results);
+
+          await clonedDie.explode('x')
+          await clonedDie.evaluate()
+          this.terms[0] = clonedDie;
+        }
+      };
+  
+      // Reevaluate the roll's total based on updated terms
+      this._total = this._evaluateTotal();
+  
+      return this.toMessage();
+    }
 }
 
 export class WeaponRoll extends ProwlersRoll {

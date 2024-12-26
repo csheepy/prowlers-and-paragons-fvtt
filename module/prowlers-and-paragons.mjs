@@ -10,6 +10,7 @@ import { PROWLERS_AND_PARAGONS } from './helpers/config.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 import { ProwlersDie } from './dice/prowlers-die.mjs';
+import { runDiceHooks } from './dice/hooks.mjs';
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
@@ -23,6 +24,7 @@ Hooks.once('init', function () {
     rollItemMacro,
   };
 
+  runDiceHooks();
   game.settings.register('prowlers-and-paragons', 'gearLimit', {
     name: 'Gear Limit',
     hint: 'Set the gear limit for your world',

@@ -8,28 +8,21 @@ export class ProwlersDie extends Die {
       static DENOMINATION = "p";
     
       async evaluate() {
-        this.modifiers = ["even"];
+        this.modifiers = ['even']
     
         await super.evaluate();
 
         return this;
       }
     
-      get total() {
-        if (!this._evaluated) return null;
+      // count 6s as *twice as even*
+      countEven(modifier) {
+        for ( let r of this.results ) {
+          r.success = ( (r.result % 2) === 0 );
+          r.count = r.success ? 1 : 0;
 
-        let t = 0;
-
-        this.results.forEach(({result}) =>  {
-            if (result%2 === 0) {
-                t++
-            }
-            if (result === 6) {
-                t++
-            }
-          })
-
-        return t;
+          r.count = ((r.result % 6) === 0) ? 2 : r.count;
+        }
       }
 
 }
