@@ -1,6 +1,6 @@
 {
   "name": "prowlers-and-paragons",
-  "version": "2.0.0",
+  "version": "0.1.0",
   "description": "CSS compiler for the ProwlersParagons system",
   "scripts": {
     "build": "sass src/scss/prowlers-and-paragons.scss css/prowlers-and-paragons.css --style=expanded --no-source-map",
@@ -9,7 +9,7 @@
   "browserslist": [
     "last 3 versions"
   ],
-  "author": "Asacolips",
+  "author": "DoomyDoom",
   "license": "MIT",
   "private": true,
   "devDependencies": {
