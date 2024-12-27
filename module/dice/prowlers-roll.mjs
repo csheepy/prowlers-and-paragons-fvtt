@@ -68,7 +68,6 @@ export class ProwlersRoll extends Roll {
             options.difficulty_number = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
             const total_dice_number = this.initialNumberOfDice(options) + modifier
             const roll = new this(`(${total_dice_number})dp`, {}, options);
-            console.log(roll)
             roll.toMessage({
               speaker: options.speaker,
               // flavor: options.flavor,

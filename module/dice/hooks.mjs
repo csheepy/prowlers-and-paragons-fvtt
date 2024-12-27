@@ -37,8 +37,7 @@ export const runDiceHooks = () => {
             const roll = message.rolls[0];
       
             if (roll) {
-                console.log(roll)
-              const exploded = await roll.explode();
+              await roll.explode();
             }
           },
         });

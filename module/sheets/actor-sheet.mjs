@@ -266,7 +266,6 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       system: data,
     };
     // Remove the type from the dataset since it's in the itemData.type prop.
-    console.log(itemData)
     delete itemData.system['type'];
 
     // Finally, create the item!
