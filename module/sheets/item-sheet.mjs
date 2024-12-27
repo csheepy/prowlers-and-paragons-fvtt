@@ -14,7 +14,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
       classes: ['prowlers-and-paragons', 'sheet', 'item'],
       width: 520,
       height: 480,
-      dragDrop: [{dropSelector: null, dragSelector: null}],
+      dragDrop: [{ dropSelector: null, dragSelector: null }],
       tabs: [
         {
           navSelector: '.sheet-tabs',
@@ -76,8 +76,13 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     context.power_sources = CONFIG.PROWLERS_AND_PARAGONS.power_sources
     context.power_ranges = CONFIG.PROWLERS_AND_PARAGONS.power_ranges
     context.pro_con_choices = {
-                              pro: 'Pro',
-                              con: 'Con'}                
+      pro: 'Pro',
+      con: 'Con'
+    }
+    context.featureFor = {
+      vehicle: 'Vehicle',
+      hq: 'HQ'
+    }
     return context;
   }
 
@@ -118,12 +123,12 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
       }
     }
   }
-  
+
   async getItemDataFromDropData(dropData) {
     let item;
 
     item = await fromUuid(dropData.uuid);  //NOTE THIS MAY NEED TO BE CHANGED TO fromUuidSync  ****
-  
+
     if (!item) {
       throw new Error(game.i18n.localize("TWODSIX.Errors.CouldNotFindItem").replace("_ITEM_ID_", dropData.uuid));
     }
@@ -135,38 +140,44 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     const itemCopy = foundry.utils.duplicate(item);
     return itemCopy;
   }
-  
+
   /** @override */
   _canDragDrop() {
     //console.log("got to drop check", selector);
     return this.isEditable && this.item.isOwner;
   }
 
-   /** @override */
+  /** @override */
   async _onDrop(event) {
     event.preventDefault();
     const dropdata = this.getDataFromDropEvent(event)
     const draggedItem = await this.getItemDataFromDropData(dropdata)
 
     if (this.item.type === 'power' && draggedItem.type === 'procon') { // add effect mirroring the dropped procon
-      this.item.createEmbeddedDocuments('ActiveEffect',[
+      this.item.createEmbeddedDocuments('ActiveEffect', [
         {
-        name: draggedItem.name,
-        description: draggedItem.system.description,
-        transfer: false,
-        changes: [
-          {key: 'cost_flat',
-          value: draggedItem.system.cost_flat,
-          mode: 2},
-          {key: 'cost_per_rank',
-          value: draggedItem.system.cost_per_rank,
-          mode: 2},
-          {key: 'kind',
-          value: draggedItem.system.kind,
-          mode: 0}
-        ]
-      }])
+          name: draggedItem.name,
+          description: draggedItem.system.description,
+          transfer: false,
+          changes: [
+            {
+              key: 'cost_flat',
+              value: draggedItem.system.cost_flat,
+              mode: 2
+            },
+            {
+              key: 'cost_per_rank',
+              value: draggedItem.system.cost_per_rank,
+              mode: 2
+            },
+            {
+              key: 'kind',
+              value: draggedItem.system.kind,
+              mode: 0
+            }
+          ]
+        }])
     }
-   
+
   }
 }

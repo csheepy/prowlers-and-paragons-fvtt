@@ -1,10 +1,15 @@
 in rough order
 
-minion group attack
-
+## core stuff
 vehicles
+
 headquarters
 
+add biographical information - name, alias, team, motivation, quote, origin
+
+
+## nice stuff
+minion group attack
 
 derived stuff like edge, health, resolve?
 
@@ -12,7 +17,6 @@ resolve spend menu?
 
 opposed rolls - target something and make a roll pop up for them to defend/contest
 
-add biographical information - name, alias, team, motivation, quote, origin
 
 make sure everything is localised
 

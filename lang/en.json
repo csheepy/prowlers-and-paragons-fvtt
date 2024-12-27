@@ -100,7 +100,8 @@
     "Actor": {
       "character": "Character",
       "npc": "NPC",
-      "minion": "Minion"
+      "minion": "Minion",
+      "vehicle": "Vehicle"
     },
     "Item": {
       "item": "Item",

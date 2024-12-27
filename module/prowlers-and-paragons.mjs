@@ -62,7 +62,8 @@ Hooks.once('init', function () {
   CONFIG.Actor.dataModels = {
     character: models.ProwlersParagonsCharacter,
     npc: models.ProwlersParagonsNPC,
-    minion: models.ProwlersParagonsMinion
+    minion: models.ProwlersParagonsMinion,
+    vehicle: models.ProwlersParagonsVehicle
   }
   CONFIG.Item.documentClass = ProwlersParagonsItem;
   CONFIG.Item.dataModels = {

@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["character", "npc", "minion"]
+    "types": ["character", "npc", "minion", "vehicle"]
   },
   "Item": {
     "types": ["item", "feature", "spell", "power", "procon", "perk", "flaw", "weapon", "armor"]

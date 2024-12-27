@@ -65,6 +65,10 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       this._prepareCharacterData(context);
     }
 
+    if (actorData.type == 'vehicle') {
+      this._prepareItems(context);
+    }
+
     // Prepare NPC data and items.
     if (actorData.type == 'npc') {
       this._prepareItems(context);
@@ -119,6 +123,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     const powers = [];
     const armor = []
     const weapons = []
+    const features = [];
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
@@ -147,6 +152,10 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       if (i.type === 'armor') {
         armor.push(i);
       }
+      // Append to features.
+      if (i.type === 'feature') {
+        features.push(i);
+      }
     }
 
     // Assign and return
@@ -156,6 +165,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     context.powers = powers;
     context.weapons = weapons;
     context.armor = armor;
+    context.features = features;
   }
 
   /* -------------------------------------------- */
@@ -176,7 +186,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     if (!this.isEditable) return;
 
     html.on('click', '.reset-resolve', () => {
-      this.actor.update({'system.resolve.value': this.actor.system.resolve.starting})
+      this.actor.update({ 'system.resolve.value': this.actor.system.resolve.starting })
     });
 
     // Add Inventory Item
@@ -205,7 +215,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
           }
         }
       }).render(true)
-      
+
     });
 
     // Active Effect management
@@ -256,6 +266,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       system: data,
     };
     // Remove the type from the dataset since it's in the itemData.type prop.
+    console.log(itemData)
     delete itemData.system['type'];
 
     // Finally, create the item!
@@ -275,12 +286,12 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
 
     // Handle item rolls.
     if (dataset.rollType) {
-        const itemId = element.closest('.item').dataset.itemId;
-        const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
+      const itemId = element.closest('.item').dataset.itemId;
+      const item = this.actor.items.get(itemId);
+      if (item) return item.roll();
     }
 
-    // Handle rolls that supply the formula directly.
+    // Handle nested ability / talent / etc rolls
     if (dataset.key) {
       let label = dataset.label ? `${dataset.label}` : '';
       const speaker = ChatMessage.getSpeaker({ actor: this.actor })
@@ -289,7 +300,21 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
         speaker,
         rollMode: game.settings.get('core', 'rollMode'),
         type: dataset.label,
-        num_dice: this.actor.system[dataset.kind][dataset.key].value
+        num_dice: this.actor.system[dataset.kind][dataset.key].value ?? this.actor.system[dataset.kind][dataset.key]
+      }
+      return ProwlersRoll.rollDialog(options);
+    }
+
+    // Handle un-nested rolls on actors
+    if (dataset.trait) {
+      let label = dataset.label ? `${dataset.label}` : '';
+      const speaker = ChatMessage.getSpeaker({ actor: this.actor })
+      const options = {
+        flavor: label,
+        speaker,
+        rollMode: game.settings.get('core', 'rollMode'),
+        type: dataset.label,
+        num_dice: this.actor.system[dataset.trait]
       }
       return ProwlersRoll.rollDialog(options);
     }
