@@ -1,10 +1,6 @@
 in rough order
 
 ## core stuff
-vehicles
-
-headquarters
-
 add biographical information - name, alias, team, motivation, quote, origin
 
 
