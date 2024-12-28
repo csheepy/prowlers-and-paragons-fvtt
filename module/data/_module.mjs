@@ -2,8 +2,9 @@
 export {default as ProwlersParagonsActorBase} from "./base-actor.mjs";
 export {default as ProwlersParagonsCharacter} from "./actor-character.mjs";
 export {default as ProwlersParagonsNPC} from "./actor-npc.mjs";
-export {default as ProwlersParagonsMinion} from './actor-minion.mjs'
-export {default as ProwlersParagonsVehicle} from './actor-vehicle.mjs'
+export {default as ProwlersParagonsMinion} from './actor-minion.mjs';
+export {default as ProwlersParagonsVehicle} from './actor-vehicle.mjs';
+export {default as ProwlersParagonsHQ} from './actor-hq.mjs';
 
 // Export Items
 export {default as ProwlersParagonsItemBase} from "./base-item.mjs";

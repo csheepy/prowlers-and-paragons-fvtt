@@ -65,7 +65,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       this._prepareCharacterData(context);
     }
 
-    if (actorData.type == 'vehicle') {
+    if (actorData.type == 'vehicle' || actorData.type == 'hq') {
       this._prepareItems(context);
     }
 
@@ -266,6 +266,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       system: data,
     };
     // Remove the type from the dataset since it's in the itemData.type prop.
+    console.log(itemData)
     delete itemData.system['type'];
 
     // Finally, create the item!

@@ -6,7 +6,6 @@
 export const preloadHandlebarsTemplates = async function () {
   return loadTemplates([
     // Actor partials.
-    'systems/prowlers-and-paragons/templates/actor/parts/actor-features.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-perks.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-flaws.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-gear.hbs',
@@ -17,6 +16,7 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/prowlers-and-paragons/templates/actor/parts/actor-powers-play.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-gear-play.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-vehicle-features.hbs',
+    'systems/prowlers-and-paragons/templates/actor/parts/actor-hq-features.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-vehicle-traits.hbs',
     // Item partials
     'systems/prowlers-and-paragons/templates/item/parts/item-effects.hbs',

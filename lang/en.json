@@ -101,7 +101,8 @@
       "character": "Character",
       "npc": "NPC",
       "minion": "Minion",
-      "vehicle": "Vehicle"
+      "vehicle": "Vehicle",
+      "hq": "Headquarters"
     },
     "Item": {
       "item": "Item",
