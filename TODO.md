@@ -1,7 +1,7 @@
 in rough order
 
 ## will do
-add biographical information - name, alias, team, motivation, quote, origin
+add biographical information - alias, team, motivation, quote, origin
 
 auto calculate edge
 

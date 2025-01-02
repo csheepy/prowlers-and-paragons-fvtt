@@ -43,8 +43,10 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     const twAvg = (this.abilities.toughness.value + this.abilities.willpower.value) / 2
     const newMaxHealth = Math.max(tmAvg, twAvg)
 
-    if (newMaxHealth !== this.health.max) {
-      this.health.value = Math.round((this.health.value / this.health.max) * newMaxHealth)
+    if (newMaxHealth > this.health.max) {
+      this.health.value += (newMaxHealth - this.health.max)
+    } else {
+      this.health.value = Math.min(this.health.value, newMaxHealth)
     }
     this.health.max = newMaxHealth
   }
