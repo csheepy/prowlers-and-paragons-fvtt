@@ -35,6 +35,18 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
       value: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
       starting: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
     });
+
+    schema.biography = new fields.SchemaField({
+      misc: new fields.StringField({ required: true, blank: true }),
+      alias: new fields.StringField({ required: true, blank: true }),
+      description: new fields.StringField({ required: true, blank: true }),
+      motivation: new fields.StringField({ required: true, blank: true }),
+      quote: new fields.StringField({ required: true, blank: true }),
+      connections: new fields.StringField({ required: true, blank: true }),
+      details: new fields.StringField({ required: true, blank: true }),
+      origin: new fields.StringField({ required: true, blank: true })
+    })
+
     return schema;
   }
 
@@ -57,7 +69,7 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     // Copy the ability scores to the top level, so that rolls can use
     // formulas like `@str.mod + 4`.
     if (this.abilities) {
-      for (let [k,v] of Object.entries(this.abilities)) {
+      for (let [k, v] of Object.entries(this.abilities)) {
         data[k] = foundry.utils.deepClone(v);
       }
     }

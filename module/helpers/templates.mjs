@@ -8,6 +8,7 @@ export const preloadHandlebarsTemplates = async function () {
     // Actor partials.
     'systems/prowlers-and-paragons/templates/actor/parts/actor-perks.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-flaws.hbs',
+    'systems/prowlers-and-paragons/templates/actor/parts/actor-biography.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-gear.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-weapons.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-armor.hbs',

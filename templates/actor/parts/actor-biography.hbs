@@ -1,0 +1,25 @@
+<div class="biography">
+    <label for="system.biography.alias" class="">Alias</label>
+    <input type="text" name="system.biography.alias" value="{{system.biography.alias}}" data-dtype="String"/>
+
+
+    <label for="system.biography.motivation" class="">Motivation</label>
+    <input type="text" name="system.biography.motivation" value="{{system.biography.motivation}}" data-dtype="String"/>
+
+    <label for="system.biography.quote" class="">Quote</label>
+    <input type="text" name="system.biography.quote" value="{{system.biography.quote}}" data-dtype="String"/>
+
+    <label for="system.biography.description" class="">Description</label>
+    {{editor system.biography.description target="system.biography.description" engine="prosemirror" button=true editable=editable}}
+
+    <label for="system.biography.connections" class="">Connections</label>
+    {{editor system.biography.connections target="system.biography.connections" engine="prosemirror" button=true editable=editable}}
+
+    <label for="system.biography.details" class="">Details</label>
+    {{editor system.biography.details target="system.biography.details" engine="prosemirror" button=true editable=editable}}
+
+    <label for="system.biography.origin" class="">Origin</label>
+    {{editor system.biography.origin target="system.biography.origin" engine="prosemirror" button=true editable=editable}}
+
+    {{log this}}
+</div>

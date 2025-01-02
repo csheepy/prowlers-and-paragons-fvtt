@@ -1,13 +1,13 @@
 in rough order
 
 ## will do
-add biographical information - alias, team, motivation, quote, origin
-
 auto calculate edge
 
 opposed rolls - click button on roll to select a skill/ability/takebt to use in opposition
 
 minion group attack
+
+get all the powers perks and flaws into foundry
 
 ## might do
 
