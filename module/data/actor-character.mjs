@@ -51,8 +51,10 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
   }
 
   prepareDerivedData() {
-    const tmAvg = (this.abilities.toughness.value + this.abilities.might.value) / 2
-    const twAvg = (this.abilities.toughness.value + this.abilities.willpower.value) / 2
+
+    // max health
+    const tmAvg = Math.ceil((this.abilities.toughness.value + this.abilities.might.value) / 2)
+    const twAvg = Math.ceil((this.abilities.toughness.value + this.abilities.willpower.value) / 2)
     const newMaxHealth = Math.max(tmAvg, twAvg)
 
     if (newMaxHealth > this.health.max) {
@@ -61,6 +63,27 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
       this.health.value = Math.min(this.health.value, newMaxHealth)
     }
     this.health.max = newMaxHealth
+
+
+    // edge
+
+    //danger sense substitutes for perception
+    const dangerSense = this.parent.items.find(p => p.name === 'Danger Sense')
+    const per = (dangerSense?.system.rank ?? 0) + this.abilities.perception.value
+    this.edge.value = per + Math.max(this.abilities.agility.value, this.abilities.intellect.value)
+
+    // lightning reflexes adds 6
+    const lightningReflexes = this.parent.items.find(p => p.name === 'Lightning Reflexes')
+    if (lightningReflexes) {
+      this.edge.value += 6;
+    }
+
+    // super-speed substitutes its rank * 3
+    const superSpeed = this.parent.items.find(p => p.name === 'Super Speed')
+    if (superSpeed) {
+      this.edge.value = Math.max(this.edge.value,superSpeed.system.rank * 3)
+    }
+
   }
 
   getRollData() {
