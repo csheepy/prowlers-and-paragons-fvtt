@@ -243,6 +243,14 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
         li.addEventListener('dragstart', handler, false);
       });
     }
+
+    html.on('change', '.power-toggle', (ev) => {
+      const li = $(ev.currentTarget).parents('.item');
+      const item = this.actor.items.get(li.data('itemId'));
+      const isChecked = ev.currentTarget.checked;
+
+      item.update({ "system.toggleActive": isChecked });
+    })
   }
 
   /**
@@ -266,7 +274,6 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       system: data,
     };
     // Remove the type from the dataset since it's in the itemData.type prop.
-    console.log(itemData)
     delete itemData.system['type'];
 
     // Finally, create the item!

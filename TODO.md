@@ -1,17 +1,18 @@
 in rough order
 
-## core stuff
+## will do
 add biographical information - name, alias, team, motivation, quote, origin
 
+auto calculate edge
 
-## nice stuff
+opposed rolls - click button on roll to select a skill/ability/takebt to use in opposition
+
 minion group attack
 
-derived stuff like edge, health, resolve?
+## might do
 
 resolve spend menu?
 
-opposed rolls - target something and make a roll pop up for them to defend/contest
 
 
 make sure everything is localised

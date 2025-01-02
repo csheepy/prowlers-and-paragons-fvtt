@@ -14,6 +14,8 @@ export default class ProwlersParagonsPower extends ProwlersParagonsItemBase {
     schema.source = new fields.StringField({ choices: CONFIG.PROWLERS_AND_PARAGONS.power_sources});
     schema.range = new fields.StringField({ choices: CONFIG.PROWLERS_AND_PARAGONS.power_ranges});
     schema.cost = new fields.NumberField({ required: true, nullable: false, integer: false, initial: 0, min: 0});
+    schema.toggleable = new fields.BooleanField({initial: false})
+    schema.toggleActive = new fields.BooleanField({initial: false})
 
     return schema;
   }

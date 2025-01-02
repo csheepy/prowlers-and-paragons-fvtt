@@ -144,3 +144,15 @@ export class ProwlersParagonsItem extends Item {
     }
   }
 }
+
+Hooks.on("updateItem", (item, changes, options, userId) => {
+  // Check if a toggleable power has been toggled
+  if (changes?.system?.toggleActive !== undefined) {
+    const newValue = changes.system.toggleActive;
+    const activeEffects = item.effects.filter(effect => effect.transfer === true);  // effects from the power that affect the sheet
+
+    activeEffects.forEach(effect => {
+        effect.update({disabled: !newValue})
+    });
+  }
+});

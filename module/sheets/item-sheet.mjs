@@ -163,12 +163,12 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
             {
               key: 'cost_flat',
               value: draggedItem.system.cost_flat,
-              mode: 2
+              mode: 0
             },
             {
               key: 'cost_per_rank',
               value: draggedItem.system.cost_per_rank,
-              mode: 2
+              mode: 0
             },
             {
               key: 'kind',

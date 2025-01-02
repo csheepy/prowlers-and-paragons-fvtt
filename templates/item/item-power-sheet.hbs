@@ -95,12 +95,10 @@
           value='{{system.cost}}'
           data-dtype='Number'
         />
-    {{!-- </div>
-        <div class='resource'>
-        <label class='resource-label'>Actual Rank {{derived_power_ranks[]}}</label>
-    </div> --}}
     </div>
-
-
+    <div class='resource'>
+        <label class='resource-label'>Toggleable</label>
+        <input type="checkbox" name='system.toggleable' {{checked system.toggleable}}></input>
+    </div>
   </section>
 </form>

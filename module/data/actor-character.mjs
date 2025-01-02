@@ -39,8 +39,14 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
   }
 
   prepareDerivedData() {
-    // TODO derive: Health, Edge, Resolve, hero points spent (from package + sum of other stuff)
+    const tmAvg = (this.abilities.toughness.value + this.abilities.might.value) / 2
+    const twAvg = (this.abilities.toughness.value + this.abilities.willpower.value) / 2
+    const newMaxHealth = Math.max(tmAvg, twAvg)
 
+    if (newMaxHealth !== this.health.max) {
+      this.health.value = Math.round((this.health.value / this.health.max) * newMaxHealth)
+    }
+    this.health.max = newMaxHealth
   }
 
   getRollData() {

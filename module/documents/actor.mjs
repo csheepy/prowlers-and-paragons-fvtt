@@ -51,7 +51,7 @@ export class ProwlersParagonsActor extends Actor {
     let pointsSpent = 0;
 
     const calculateTrait = (trait, adjustment) => {
-      for (const [key, {value}] of Object.entries(actorData.system[trait])) {
+      for (const [key, {value}] of Object.entries(actorData.system._source[trait])) { // use _source to get values unmodified by effects
         const adjustedValue = value - adjustment
         if (adjustedValue > 0) {
           pointsSpent += adjustedValue
@@ -91,8 +91,8 @@ export class ProwlersParagonsActor extends Actor {
 
       // pros and cons
       power.effects.contents.forEach(effect => {
-        pointsSpent += parseInt(effect.changes.find((e) => e.key === 'cost_flat').value)
-        pointsSpent += parseInt(effect.changes.find((e) => e.key === 'cost_per_rank').value) * power.system.rank
+        pointsSpent += parseInt(effect.changes.find((e) => e.key === 'cost_flat')?.value ?? 0)
+        pointsSpent += parseInt(effect.changes.find((e) => e.key === 'cost_per_rank')?.value ?? 0) * power.system.rank
       })
     })
       
