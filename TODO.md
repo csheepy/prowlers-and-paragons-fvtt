@@ -1,5 +1,5 @@
 ## will do
-opposed rolls - click button on roll to select a skill/ability/talent to use in opposition
+opposed rolls - add gear
 
 get all the powers perks and flaws into foundry
 
