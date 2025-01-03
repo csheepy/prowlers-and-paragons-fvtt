@@ -301,44 +301,17 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Handle nested ability / talent / etc rolls
     if (dataset.key) {
       let label = dataset.label ? `${dataset.label}` : '';
-      const speaker = ChatMessage.getSpeaker({ actor: this.actor })
       const options = {
         flavor: label,
-        speaker,
         rollMode: game.settings.get('core', 'rollMode'),
-        type: dataset.label,
-        num_dice: this.actor.system[dataset.kind][dataset.key].value ?? this.actor.system[dataset.kind][dataset.key]
+        type: dataset.label
       }
-      return ProwlersRoll.rollDialog(options);
-    }
-
-    // Handle un-nested rolls on actors
-    if (dataset.trait) {
-      let label = dataset.label ? `${dataset.label}` : '';
-      const speaker = ChatMessage.getSpeaker({ actor: this.actor })
-      const options = {
-        flavor: label,
-        speaker,
-        rollMode: game.settings.get('core', 'rollMode'),
-        type: dataset.label,
-        num_dice: this.actor.system[dataset.trait]
-      }
-      return ProwlersRoll.rollDialog(options);
+      return this.actor.roll(dataset.key, options)
     }
 
     // NPC Threat rolls
     if (dataset.threat) {
-      const minionGroupBonus = 2 + (dataset.count >= 3) * 2 + (dataset.count >= 6) * 2 + (dataset.count >= 9) * 2;
-      const speaker = ChatMessage.getSpeaker({ actor: this.actor })
-      const options = {
-        flavor: 'Threat',
-        speaker,
-        rollMode: game.settings.get('core', 'rollMode'),
-        type: `Threat ${dataset.threat} (group of ${dataset.count})`,
-        count: dataset.count,
-        num_dice: parseInt(dataset.threat) + minionGroupBonus
-      }
-      return ProwlersRoll.rollDialog(options);
+      return this.actor.threatRoll({})
     }
   }
 

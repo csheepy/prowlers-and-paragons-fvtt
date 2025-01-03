@@ -420,3 +420,7 @@
 .prowlers-and-paragons .prosemirror .editor-container .editor-content {
   position: relative
 }
+
+.opposed-roll {
+  order: 3
+}

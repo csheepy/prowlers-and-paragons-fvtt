@@ -35,8 +35,9 @@ PROWLERS_AND_PARAGONS.roll_difficulties = {
   inhuman: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Inhuman",
   superhuman: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Superhuman",
   legendary: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Legendary",
-  godlike: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Godlike"
+  godlike: "PROWLERS_AND_PARAGONS.Roll.Difficulties.Godlike",
 }
+
 PROWLERS_AND_PARAGONS.roll_difficulties_leveled = {
   easy: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Easy",
   average: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Average",
@@ -46,7 +47,8 @@ PROWLERS_AND_PARAGONS.roll_difficulties_leveled = {
   inhuman: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Inhuman",
   superhuman: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Superhuman",
   legendary: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Legendary",
-  godlike: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Godlike"
+  godlike: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Godlike",
+  opposed: "PROWLERS_AND_PARAGONS.Roll.DifficultiesForRollMessage.Opposed"
 }
 PROWLERS_AND_PARAGONS.roll_difficulty_values = {
   easy: 0,

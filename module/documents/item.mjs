@@ -53,15 +53,16 @@ export class ProwlersParagonsItem extends Item {
     return result;
   }
 
-  async rollPower({speaker, rollMode, label}) {
-    const options = {
+  async rollPower({speaker, rollMode, label, options}) {
+    const powerOptions = {
       flavor: label,
       speaker,
       rollMode,
       type: this.name,
-      num_dice: this.actor.derived_power_ranks[this.name]
+      num_dice: this.actor.derived_power_ranks[this.name],
+      ...options
     }
-    return ProwlersRoll.rollDialog(options);
+    return ProwlersRoll.rollDialog(powerOptions);
   }
 
   async rollWeapon({speaker, rollMode, label}) {
@@ -99,7 +100,7 @@ export class ProwlersParagonsItem extends Item {
    * @param {Event} event   The originating click event
    * @private
    */
-  async roll() {
+  async roll(options) {
     const item = this;
 
     // Initialize chat data.
@@ -109,15 +110,15 @@ export class ProwlersParagonsItem extends Item {
 
     // power/ability/talent rolls
     if(this.system.rank) {
-      return this.rollPower({speaker, rollMode, label})
+      return this.rollPower({speaker, rollMode, label, options})
     }
     // weapon roll
     if(this.system.weapon_bonus) {
-      return this.rollWeapon({speaker, rollMode, label})
+      return this.rollWeapon({speaker, rollMode, label, options})
     }
 
     if(this.system.armor_bonus) {
-      return this.rollArmor({speaker, rollMode, label})
+      return this.rollArmor({speaker, rollMode, label, options})
     }
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {

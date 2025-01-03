@@ -2,6 +2,9 @@
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
  */
+
+import { ProwlersRoll } from "../dice/prowlers-roll.mjs";
+
 export class ProwlersParagonsActor extends Actor {
   /** @override */
   prepareData() {
@@ -18,6 +21,23 @@ export class ProwlersParagonsActor extends Actor {
     // documents or derived data.
   }
 
+
+  traitsForSelection() {
+    if (this.system.threat) {
+      return {threat: {'threat:threat': 'Threat'}} // threat
+    }
+    const abilities = Object.fromEntries(
+      Object.entries(CONFIG.PROWLERS_AND_PARAGONS.abilities).map(([key, value]) => [`ability:${key}`, value])
+    );
+    const talents = Object.fromEntries(
+      Object.entries(CONFIG.PROWLERS_AND_PARAGONS.talents).map(([key, value]) => [`talent:${key}`, value])
+    );
+
+
+    const powers = Object.fromEntries(this.items.contents.filter((p) => p.type === 'power').map(p => {return [`power:${p.id}`, p.name]}))
+
+    return {abilities, talents, powers}
+  }
 
   derivePowerRanks() {
     const actorData = this;
@@ -202,5 +222,34 @@ export class ProwlersParagonsActor extends Actor {
     }
 
     return true
+  }
+
+  async roll(trait, options) {
+    const pathArray = trait.split('.');
+    const val = pathArray.reduce((acc, key) => acc && acc[key], this);
+
+
+    options.num_dice = val;
+    options.rollMode = game.settings.get('core', 'rollMode');
+    options.speaker = ChatMessage.getSpeaker({ actor: this })
+
+    return ProwlersRoll.rollDialog(options);
+  }
+
+  async threatRoll(options) {
+    if (!this.system.threat) { return };
+
+    options.num_dice = this.system.threat;
+
+    const minionGroupBonus = 2 + (this.system.count >= 3) * 2 + (this.system.count >= 6) * 2 + (this.system.count >= 9) * 2;
+    options.num_dice += minionGroupBonus;
+  
+    options.speaker = ChatMessage.getSpeaker({ actor: this });
+    options.type = `Threat ${this.system.threat} (group of ${this.system.count})`;
+    options.rollMode = game.settings.get('core', 'rollMode');
+    options.flavor = game.i18n.localize('PROWLERS_AND_PARAGONS.Threat')
+
+
+    return ProwlersRoll.rollDialog(options);
   }
 }

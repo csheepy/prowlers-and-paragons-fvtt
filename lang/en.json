@@ -92,9 +92,11 @@
         "Inhuman": "Inhuman ({level})",
         "Superhuman": "Superhuman ({level})",
         "Legendary": "Legendary ({level})",
-        "Godlike": "Godlike ({level})"
+        "Godlike": "Godlike ({level})",
+        "Opposed": "Opposed ({level})"
       }
-    }
+    },
+    "Threat": "Threat"
   },
   "TYPES": {
     "Actor": {
