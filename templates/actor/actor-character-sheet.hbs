@@ -62,6 +62,7 @@
     <a class="item" data-tab="powers">Powers</a>
     <a class="item" data-tab="gear">Gear</a>
     <a class="item" data-tab="package">Package</a>
+    <a class="item" data-tab="options">options</a>
   </nav>
 
   {{!-- Sheet Body --}}
@@ -135,9 +136,14 @@
        {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-gear.hbs"}}
     </div>
 
-    {{!-- Owned Spells Tab --}}
+    {{!-- Owned Powers Tab --}}
     <div class="tab powers" data-group="primary" data-tab="powers">
       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-powers.hbs"}}
+    </div>
+
+        {{!-- Options Tab --}}
+    <div class="tab options" data-group="primary" data-tab="options">
+      {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-options.hbs"}}
     </div>
   </section>
 </form>

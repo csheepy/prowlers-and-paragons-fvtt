@@ -47,23 +47,28 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
       origin: new fields.StringField({ required: true, blank: true })
     })
 
+    schema.healthOverride = new fields.BooleanField({initial: false}) // special shenanigans for villains or whatever
+    schema.halveHealth = new fields.BooleanField({initial: false}) // for foes
+
     return schema;
   }
 
   prepareDerivedData() {
 
     // max health
-    const tmAvg = Math.ceil((this.abilities.toughness.value + this.abilities.might.value) / 2)
-    const twAvg = Math.ceil((this.abilities.toughness.value + this.abilities.willpower.value) / 2)
-    const newMaxHealth = Math.max(tmAvg, twAvg)
+    if (!this.healthOverride) {
+      const tmAvg = Math.ceil((this.abilities.toughness.value + this.abilities.might.value) / 2)
+      const twAvg = Math.ceil((this.abilities.toughness.value + this.abilities.willpower.value) / 2)
+      const newMaxHealth = Math.ceil(Math.max(tmAvg, twAvg) * (this.halveHealth ? 0.5 : 1))
+  
+      if (newMaxHealth > this.health.max) {
+        this.health.value += (newMaxHealth - this.health.max)
+      } else {
+        this.health.value = Math.min(this.health.value, newMaxHealth)
+      }
 
-    if (newMaxHealth > this.health.max) {
-      this.health.value += (newMaxHealth - this.health.max)
-    } else {
-      this.health.value = Math.min(this.health.value, newMaxHealth)
+      this.health.max = newMaxHealth
     }
-    this.health.max = newMaxHealth
-
 
     // edge
 

@@ -77,7 +77,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Enrich biography info for display
     // Enrichment turns text like `[[/r 1d20]]` into buttons
     context.enrichedBiography = await TextEditor.enrichHTML(
-      this.actor.system.biography.misc,
+      this.actor.system.biography,
       {
         // Whether to show secret blocks in the finished html
         secrets: this.document.isOwner,
