@@ -328,14 +328,15 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
 
     // NPC Threat rolls
     if (dataset.threat) {
-      let label = dataset.label ? `${dataset.label}` : '';
+      const minionGroupBonus = 2 + (dataset.count >= 3) * 2 + (dataset.count >= 6) * 2 + (dataset.count >= 9) * 2;
       const speaker = ChatMessage.getSpeaker({ actor: this.actor })
       const options = {
-        flavor: label,
+        flavor: 'Threat',
         speaker,
         rollMode: game.settings.get('core', 'rollMode'),
-        type: dataset.label,
-        num_dice: parseInt(dataset.threat)
+        type: `Threat ${dataset.threat} (group of ${dataset.count})`,
+        count: dataset.count,
+        num_dice: parseInt(dataset.threat) + minionGroupBonus
       }
       return ProwlersRoll.rollDialog(options);
     }
