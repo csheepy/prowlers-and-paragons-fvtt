@@ -65,13 +65,21 @@ export const runDiceHooks = () => {
 
 
     const template = 'systems/prowlers-and-paragons/templates/opposed-roll-trait-select.hbs'
+    const showGear = () => {
+      if (traits.gear?.weapons) {
+        return Object.keys(traits.gear.weapons).length > 0
+      }
+      if (traits.gear?.armor) {
+        return Object.keys(traits.gear.armor).length > 0
+      }
+    }
     const data = {
       abilities: traits.abilities,
       talents: traits.talents,
       powers: traits.powers,
       threat: traits.threat,
       gear: traits.gear,
-      showGear: (Object.keys(traits.gear.weapons).length > 0 || Object.keys(traits.gear.armor).length > 0) ? true : false,
+      showGear: showGear(),
       chosen: ''
     }
 
@@ -108,6 +116,8 @@ export const runDiceHooks = () => {
       } else if (type === 'item') {
         const item = controlledCharacter.items.get(id)
         item.roll(options)
+      }  else if (type === 'threat') {
+        controlledCharacter.threatRoll(options) // todo add offense: true, minions opposed being offense more likely?
       }
     }
   }
