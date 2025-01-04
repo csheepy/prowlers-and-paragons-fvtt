@@ -45,6 +45,9 @@ export class ProwlersRoll extends Roll {
     if (options.halveToughness) {
       return Math.round(options.num_dice / 2);
     }
+    if (options.offense) { // minion group bonus
+      return options.num_dice + 2 + (options.count >= 3) * 2 + (options.count >= 6) * 2 + (options.count >= 9) * 2;
+    }
     return options.num_dice;
   }
 
@@ -65,6 +68,12 @@ export class ProwlersRoll extends Roll {
       data.toughness = true
       data.halveToughness = true
     }
+
+    // show an option to apply the minion group attack bonus
+    if (options.offense !== undefined) {
+      data.showMinionOffense = true;
+      data.offense = options.offense
+    }
   
     const html = await renderTemplate(template, data);
     let d = new Dialog({
@@ -82,6 +91,7 @@ export class ProwlersRoll extends Roll {
             }
 
             options.halveToughness = buttonHtml.find('[name="halveToughness"]').is(":checked")
+            options.offense = buttonHtml.find('[name="offense"]').is(":checked")
 
             const total_dice_number = this.initialNumberOfDice(options) + modifier
             const roll = new this(`(${total_dice_number})dp`, {}, options);

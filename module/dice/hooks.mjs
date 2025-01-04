@@ -106,7 +106,7 @@ export const runDiceHooks = () => {
     }
 
     const [type, id] = selectedTrait.split(':')
-    if (!!id) { // todo add gear
+    if (!!id) {
       if (type === 'ability') {
         options.type = game.i18n.localize(traits.abilities[selectedTrait])
         controlledCharacter.roll(`system.abilities.${id}.value`, options)
@@ -117,7 +117,8 @@ export const runDiceHooks = () => {
         const item = controlledCharacter.items.get(id)
         item.roll(options)
       }  else if (type === 'threat') {
-        controlledCharacter.threatRoll(options) // todo add offense: true, minions opposed being offense more likely?
+        options.offense = true
+        controlledCharacter.threatRoll(options)
       }
     }
   }

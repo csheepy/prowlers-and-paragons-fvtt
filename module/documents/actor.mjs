@@ -242,14 +242,12 @@ export class ProwlersParagonsActor extends Actor {
     if (!this.system.threat) { return };
 
     options.num_dice = this.system.threat;
-
-    const minionGroupBonus = 2 + (this.system.count >= 3) * 2 + (this.system.count >= 6) * 2 + (this.system.count >= 9) * 2;
-    options.num_dice += minionGroupBonus;
-  
+    options.count = this.system.count
     options.speaker = ChatMessage.getSpeaker({ actor: this });
     options.type = `Threat ${this.system.threat} (group of ${this.system.count})`;
     options.rollMode = game.settings.get('core', 'rollMode');
-    options.flavor = game.i18n.localize('PROWLERS_AND_PARAGONS.Threat')
+    options.flavor = game.i18n.localize('PROWLERS_AND_PARAGONS.Threat');
+    options.offense = options.offense ?? false;
 
 
     return ProwlersRoll.rollDialog(options);

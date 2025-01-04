@@ -311,7 +311,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
 
     // NPC Threat rolls
     if (dataset.threat) {
-      return this.actor.threatRoll({}) //todo add offense: false, minions initiating roll more likely to be defense
+      return this.actor.threatRoll({})
     }
   }
 

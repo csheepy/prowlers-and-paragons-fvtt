@@ -95,7 +95,8 @@
         "Godlike": "Godlike ({level})",
         "Opposed": "Opposed ({level})"
       },
-      "HalveToughness": "Halve Toughness (defense against lethal damage)"
+      "HalveToughness": "Halve Toughness (defense against lethal damage)",
+      "MinionOffense": "Offensive roll (add minion group bonus)"
     },
     "Threat": "Threat"
   },

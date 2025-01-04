@@ -7,6 +7,12 @@
         <input type="number" name="modifier" value="{{modifier}}" placeholder="0" onClick="this.select();"
           style="width: 8ch;" />
       </label>
+      {{#if showMinionOffense}}
+      <br>
+      <input type='checkbox' name='offense' {{checked offense}}> 
+      {{localize "PROWLERS_AND_PARAGONS.Roll.MinionOffense"}}
+      </input>
+      {{/if}}
       {{#if toughness}}
       <br>
       <input type='checkbox' name='halveToughness' {{checked halveToughness}}> 
