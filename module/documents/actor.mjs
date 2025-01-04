@@ -34,9 +34,11 @@ export class ProwlersParagonsActor extends Actor {
     );
 
 
-    const powers = Object.fromEntries(this.items.contents.filter((p) => p.type === 'power').map(p => {return [`power:${p.id}`, p.name]}))
+    const powers = Object.fromEntries(this.items.contents.filter((p) => p.type === 'power').map(p => {return [`item:${p.id}`, p.name]}))
 
-    return {abilities, talents, powers}
+    const weapons = Object.fromEntries(this.items.contents.filter((p) => p.type === 'weapon').map(p => {return [`item:${p.id}`, p.name]}))
+    const armor = Object.fromEntries(this.items.contents.filter((p) => p.type === 'armor').map(p => {return [`item:${p.id}`, p.name]}))
+    return {abilities, talents, powers, gear: {weapons, armor}}
   }
 
   derivePowerRanks() {

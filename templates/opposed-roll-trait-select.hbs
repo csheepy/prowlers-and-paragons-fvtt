@@ -1,11 +1,17 @@
 <div class="grid grid-3col">
   {{log this}}
   {{#if threat}}
-    {{radioBoxes "trait" threat checked=chosen localize=true}}
+  {{radioBoxes "trait" threat checked=chosen localize=true}}
   {{else}}
   <div>
     <b>Abilities</b>
     {{radioBoxes "trait" abilities checked=chosen localize=true}}
+    {{#if showGear}}
+    <br>
+    <b>Gear</b>
+    {{radioBoxes "trait" gear.weapons checked=chosen localize=true}}
+    {{radioBoxes "trait" gear.armor checked=chosen localize=true}}
+    {{/if}}
   </div>
   <div>
     <b>Talents</b>
