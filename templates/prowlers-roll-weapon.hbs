@@ -13,15 +13,7 @@
             </select>
       {{/if}}
     </fieldset>
-  <legend>{{localize "PROWLERS_AND_PARAGONS.Roll.RollDetails"}}</legend>
-    <div>
-      <label>{{localize "PROWLERS_AND_PARAGONS.Roll.Difficulty"}}
-        <select name="difficulty" onchange="updateDifficultyNumber(this)">
-          {{selectOptions rollDifficulties selected=difficulty localize=true}}
-        </select>
-        <input type="number" name="difficulty-number" value="{{modifier}}" placeholder="0" onClick="this.select();" style="width: 8ch;"/>
-      </label>
-    </div>
+    {{> "systems/prowlers-and-paragons/templates/roll/parts/difficulty-section.hbs"}}
     <br>
     <div>
       <label>{{localize "PROWLERS_AND_PARAGONS.Roll.Modifiers"}}

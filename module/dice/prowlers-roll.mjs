@@ -142,8 +142,11 @@ export class WeaponRoll extends ProwlersRoll {
     const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-weapon.hbs'
     const data = {
       modifier: 0,
-      difficulty: 'easy',
+      preselectedDifficulty: options.difficulty ? true : false,
+      difficulty: options.difficulty ?? 'easy',
+      difficultyNumber: options.difficultyNumber ?? 0,
       rollDifficulties: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties,
+      rollDifficultiesLeveled: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled,
       type: options.type,
       chosen_action_type: 'attacking',
       ranged: options.ranged,
@@ -154,6 +157,7 @@ export class WeaponRoll extends ProwlersRoll {
       action_choices: { attacking: 'Attacking', defending: 'Defending' }
     }
 
+    // debugger
     const html = await renderTemplate(template, data);
 
     let d = new Dialog({
@@ -165,8 +169,10 @@ export class WeaponRoll extends ProwlersRoll {
           label: "Roll",
           callback: (buttonHtml) => {
             const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
-            options.difficulty = buttonHtml.find('[name="difficulty"]').val()
-            options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+            if (!options.difficulty) {
+              options.difficulty = buttonHtml.find('[name="difficulty"]').val()
+              options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+            }
             options.trait_rank = options.weapon_traits[buttonHtml.find('[name="trait"]').val()]
             const total_dice_number = this.initialNumberOfDice(options) + modifier
             const roll = new this(`(${total_dice_number})dp`, {}, options);
@@ -200,8 +206,11 @@ export class ArmorRoll extends ProwlersRoll {
     const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-armor.hbs'
     const data = {
       modifier: 0,
-      difficulty: 'easy',
+      difficulty: options.difficulty ?? 'easy',
+      difficultyNumber: options.difficultyNumber ?? 0,
+      preselectedDifficulty: options.difficulty ? true : false,
       rollDifficulties: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties,
+      rollDifficultiesLeveled: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled,
       type: options.type,
       chosen_action_type: 'attacking',
       ranged: options.ranged,
@@ -221,8 +230,10 @@ export class ArmorRoll extends ProwlersRoll {
           label: "Roll",
           callback: (buttonHtml) => {
             const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
-            options.difficulty = buttonHtml.find('[name="difficulty"]').val()
-            options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+            if (!options.difficulty) {
+              options.difficulty = buttonHtml.find('[name="difficulty"]').val()
+              options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+            }
             options.trait_rank = options.armor_traits[buttonHtml.find('[name="trait"]').val()]
             const total_dice_number = this.initialNumberOfDice(options) + modifier
             const roll = new this(`(${total_dice_number})dp`, {}, options);

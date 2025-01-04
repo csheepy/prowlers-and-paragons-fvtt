@@ -65,34 +65,36 @@ export class ProwlersParagonsItem extends Item {
     return ProwlersRoll.rollDialog(powerOptions);
   }
 
-  async rollWeapon({speaker, rollMode, label}) {
+  async rollWeapon({speaker, rollMode, label, options}) {
     const maVal = this.actor.derived_power_ranks['Martial Arts'] ?? 0
 
-    const options = {
+    const weaponOptions = {
       flavor: label,
       speaker,
       rollMode,
       type: this.name,
       weapon_traits: {ma: maVal, might: this.actor.system.abilities.might.value, agility: this.actor.system.abilities.agility.value},
       ranged: this.system.ranged,
-      weapon_bonus: this.system.weapon_bonus
+      weapon_bonus: this.system.weapon_bonus,
+      ...options
     }
-    return WeaponRoll.rollDialog(options);
+    return WeaponRoll.rollDialog(weaponOptions);
   }
 
-  rollArmor({speaker, rollMode, label}) {
+  rollArmor({speaker, rollMode, label, options}) {
     const armVal = this.actor.derived_power_ranks['Armor'] ?? 0
 
-    const options = {
+    const armorOptions = {
       flavor: label,
       speaker,
       rollMode,
       type: this.name,
       armor_traits: {toughness: this.actor.system.abilities.toughness.value, armor: armVal },
       ranged: this.system.ranged,
-      armor_bonus: this.system.armor_bonus
+      armor_bonus: this.system.armor_bonus,
+      ...options
     }
-    return ArmorRoll.rollDialog(options);
+    return ArmorRoll.rollDialog(armorOptions);
   }
 
   /**

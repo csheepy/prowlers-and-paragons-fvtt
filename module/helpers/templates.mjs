@@ -23,6 +23,7 @@ export const preloadHandlebarsTemplates = async function () {
     // Item partials
     'systems/prowlers-and-paragons/templates/item/parts/item-effects.hbs',
     // globalish
-    'systems/prowlers-and-paragons/templates/prowlers-roll-trait.hbs'
+    'systems/prowlers-and-paragons/templates/prowlers-roll-trait.hbs',
+    'systems/prowlers-and-paragons/templates/roll/parts/difficulty-section.hbs'
   ]);
 };
