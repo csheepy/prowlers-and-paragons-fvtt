@@ -42,7 +42,10 @@ export class ProwlersRoll extends Roll {
 
 
   static initialNumberOfDice(options) {
-    return options.num_dice
+    if (options.halveToughness) {
+      return Math.round(options.num_dice / 2);
+    }
+    return options.num_dice;
   }
 
   static async rollDialog(options = {}) {
@@ -57,6 +60,12 @@ export class ProwlersRoll extends Roll {
       type: options.type,
     }
 
+    // show an option to halve toughness
+    if (options.type === game.i18n.localize(CONFIG.PROWLERS_AND_PARAGONS.abilities.toughness)) {
+      data.toughness = true
+      data.halveToughness = true
+    }
+  
     const html = await renderTemplate(template, data);
     let d = new Dialog({
       title: `Rolling ${options.type}`,
@@ -71,6 +80,8 @@ export class ProwlersRoll extends Roll {
               options.difficulty = buttonHtml.find('[name="difficulty"]').val()
               options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
             }
+
+            options.halveToughness = buttonHtml.find('[name="halveToughness"]').is(":checked")
 
             const total_dice_number = this.initialNumberOfDice(options) + modifier
             const roll = new this(`(${total_dice_number})dp`, {}, options);

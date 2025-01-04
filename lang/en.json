@@ -94,7 +94,8 @@
         "Legendary": "Legendary ({level})",
         "Godlike": "Godlike ({level})",
         "Opposed": "Opposed ({level})"
-      }
+      },
+      "HalveToughness": "Halve Toughness (defense against lethal damage)"
     },
     "Threat": "Threat"
   },

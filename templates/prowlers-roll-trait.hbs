@@ -1,25 +1,33 @@
 <form>
   <fieldset>
-  <legend>{{localize "PROWLERS_AND_PARAGONS.Roll.RollDetails"}}</legend>
-  {{#if preselectedDifficulty}}
+    <legend>{{localize "PROWLERS_AND_PARAGONS.Roll.RollDetails"}}</legend>
+    {{#if preselectedDifficulty}}
     {{localize (lookup rollDifficultiesLeveled difficulty) level=difficultyNumber}}
     <br>
-  {{else}}
+    {{else}}
     <div>
       <label>{{localize "PROWLERS_AND_PARAGONS.Roll.Difficulty"}}
         <select name="difficulty" onchange="updateDifficultyNumber(this)">
           {{selectOptions rollDifficulties selected=difficulty localize=true}}
         </select>
-        <input type="number" name="difficulty-number" value="{{modifier}}" placeholder="0" onClick="this.select();" style="width: 8ch;"/>
+        <input type="number" name="difficulty-number" value="{{modifier}}" placeholder="0" onClick="this.select();"
+          style="width: 8ch;" />
       </label>
     </div>
-  {{/if}}
+    {{/if}}
 
     <br>
     <div>
       <label>{{localize "PROWLERS_AND_PARAGONS.Roll.Modifiers"}}
-        <input type="number" name="modifier" value="{{modifier}}" placeholder="0" onClick="this.select();" style="width: 8ch;"/>
+        <input type="number" name="modifier" value="{{modifier}}" placeholder="0" onClick="this.select();"
+          style="width: 8ch;" />
       </label>
+      {{#if toughness}}
+      <br>
+      <input type='checkbox' name='halveToughness' {{checked halveToughness}}> 
+      {{localize "PROWLERS_AND_PARAGONS.Roll.HalveToughness"}}
+      </input>
+      {{/if}}
     </div>
   </fieldset>
   <br>
