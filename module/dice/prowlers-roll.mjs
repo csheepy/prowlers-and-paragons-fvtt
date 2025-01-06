@@ -74,44 +74,45 @@ export class ProwlersRoll extends Roll {
       data.showMinionOffense = true;
       data.offense = options.offense
     }
-  
+
     const html = await renderTemplate(template, data);
-    let d = new Dialog({
-      title: `Rolling ${options.type}`,
-      content: html,
-      buttons: {
-        one: {
-          icon: '<i class="fas fa-dice"></i>',
-          label: "Roll",
-          callback: (buttonHtml) => {
-            const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
-            if (!options.difficulty) {
-              options.difficulty = buttonHtml.find('[name="difficulty"]').val()
-              options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+    return new Promise((resolve) => {
+      new Dialog({
+        title: `Rolling ${options.type}`,
+        content: html,
+        buttons: {
+          one: {
+            icon: '<i class="fas fa-dice"></i>',
+            label: "Roll",
+            callback: async (buttonHtml) => {
+              const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
+              if (!options.difficulty) {
+                options.difficulty = buttonHtml.find('[name="difficulty"]').val()
+                options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+              }
+
+              options.halveToughness = buttonHtml.find('[name="halveToughness"]').is(":checked")
+              options.offense = buttonHtml.find('[name="offense"]').is(":checked")
+
+              const total_dice_number = this.initialNumberOfDice(options) + modifier
+              const roll = new this(`(${total_dice_number})dp`, {}, options);
+              await roll.evaluate();
+              roll.toMessage({
+                speaker: options.speaker,
+                // flavor: options.flavor,
+                rollMode: options.rollMode
+              });
+              resolve(roll.total - options.difficultyNumber)
             }
-
-            options.halveToughness = buttonHtml.find('[name="halveToughness"]').is(":checked")
-            options.offense = buttonHtml.find('[name="offense"]').is(":checked")
-
-            const total_dice_number = this.initialNumberOfDice(options) + modifier
-            const roll = new this(`(${total_dice_number})dp`, {}, options);
-            roll.toMessage({
-              speaker: options.speaker,
-              // flavor: options.flavor,
-              rollMode: options.rollMode
-            });
+          },
+          two: {
+            icon: '<i class="fas fa-times"></i>',
+            label: "Cancel",
           }
         },
-        two: {
-          icon: '<i class="fas fa-times"></i>',
-          label: "Cancel",
-        }
-      },
-      default: "two",
-    });
-    return (new Promise(resolve => {
-      d.render(true)
-    }));
+        default: "two",
+      }).render(true);
+    })
   }
 
   async explode() {
@@ -170,39 +171,40 @@ export class WeaponRoll extends ProwlersRoll {
     // debugger
     const html = await renderTemplate(template, data);
 
-    let d = new Dialog({
-      title: `Rolling ${options.type}`,
-      content: html,
-      buttons: {
-        one: {
-          icon: '<i class="fas fa-dice"></i>',
-          label: "Roll",
-          callback: (buttonHtml) => {
-            const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
-            if (!options.difficulty) {
-              options.difficulty = buttonHtml.find('[name="difficulty"]').val()
-              options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+    return new Promise((resolve) => {
+      new Dialog({
+        title: `Rolling ${options.type}`,
+        content: html,
+        buttons: {
+          one: {
+            icon: '<i class="fas fa-dice"></i>',
+            label: "Roll",
+            callback: async (buttonHtml) => {
+              const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
+              if (!options.difficulty) {
+                options.difficulty = buttonHtml.find('[name="difficulty"]').val()
+                options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+              }
+              options.trait_rank = options.weapon_traits[buttonHtml.find('[name="trait"]').val()]
+              const total_dice_number = this.initialNumberOfDice(options) + modifier
+              const roll = new this(`(${total_dice_number})dp`, {}, options);
+              await roll.evaluate();
+              roll.toMessage({
+                speaker: options.speaker,
+                // flavor: options.flavor,
+                rollMode: options.rollMode
+              });
+              resolve(roll.total - options.difficultyNumber)
             }
-            options.trait_rank = options.weapon_traits[buttonHtml.find('[name="trait"]').val()]
-            const total_dice_number = this.initialNumberOfDice(options) + modifier
-            const roll = new this(`(${total_dice_number})dp`, {}, options);
-            roll.toMessage({
-              speaker: options.speaker,
-              // flavor: options.flavor,
-              rollMode: options.rollMode
-            });
+          },
+          two: {
+            icon: '<i class="fas fa-times"></i>',
+            label: "Cancel",
           }
         },
-        two: {
-          icon: '<i class="fas fa-times"></i>',
-          label: "Cancel",
-        }
-      },
-      default: "two",
-    });
-    return (new Promise(resolve => {
-      d.render(true)
-    }));
+        default: "two",
+      }).render(true);
+    })
   }
 }
 
@@ -231,39 +233,40 @@ export class ArmorRoll extends ProwlersRoll {
 
     const html = await renderTemplate(template, data);
 
-    let d = new Dialog({
-      title: `Rolling ${options.type}`,
-      content: html,
-      buttons: {
-        one: {
-          icon: '<i class="fas fa-dice"></i>',
-          label: "Roll",
-          callback: (buttonHtml) => {
-            const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
-            if (!options.difficulty) {
-              options.difficulty = buttonHtml.find('[name="difficulty"]').val()
-              options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+    return new Promise((resolve) => {
+      new Dialog({
+        title: `Rolling ${options.type}`,
+        content: html,
+        buttons: {
+          one: {
+            icon: '<i class="fas fa-dice"></i>',
+            label: "Roll",
+            callback: async (buttonHtml) => {
+              const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
+              if (!options.difficulty) {
+                options.difficulty = buttonHtml.find('[name="difficulty"]').val()
+                options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+              }
+              options.trait_rank = options.armor_traits[buttonHtml.find('[name="trait"]').val()]
+              const total_dice_number = this.initialNumberOfDice(options) + modifier
+              const roll = new this(`(${total_dice_number})dp`, {}, options);
+              await roll.evaluate();
+              roll.toMessage({
+                speaker: options.speaker,
+                // flavor: options.flavor,
+                rollMode: options.rollMode
+              });
+              resolve(roll.total - options.difficultyNumber)
             }
-            options.trait_rank = options.armor_traits[buttonHtml.find('[name="trait"]').val()]
-            const total_dice_number = this.initialNumberOfDice(options) + modifier
-            const roll = new this(`(${total_dice_number})dp`, {}, options);
-            roll.toMessage({
-              speaker: options.speaker,
-              // flavor: options.flavor,
-              rollMode: options.rollMode
-            });
+          },
+          two: {
+            icon: '<i class="fas fa-times"></i>',
+            label: "Cancel",
           }
         },
-        two: {
-          icon: '<i class="fas fa-times"></i>',
-          label: "Cancel",
-        }
-      },
-      default: "two",
-    });
-    return (new Promise(resolve => {
-      d.render(true)
-    }));
+        default: "two",
+      }).render(true)
+    })
   }
 }
 

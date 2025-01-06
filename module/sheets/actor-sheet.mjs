@@ -295,7 +295,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     if (dataset.rollType) {
       const itemId = element.closest('.item').dataset.itemId;
       const item = this.actor.items.get(itemId);
-      if (item) return item.roll();
+      if (item) return item.roll({doOpposedRoll: true});
     }
 
     // Handle nested ability / talent / etc rolls
@@ -304,6 +304,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       const options = {
         flavor: label,
         rollMode: game.settings.get('core', 'rollMode'),
+        doOpposedRoll: true,
         type: dataset.label
       }
       return this.actor.roll(dataset.key, options)

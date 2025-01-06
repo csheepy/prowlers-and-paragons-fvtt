@@ -102,7 +102,8 @@ export const runDiceHooks = () => {
     const options = {
       rollMode: game.settings.get('core', 'rollMode'),
       difficulty: 'opposed',
-      difficultyNumber: roll.total - roll.options.difficultyNumber
+      difficultyNumber: roll.total - roll.options.difficultyNumber,
+      doOpposedRoll: false
     }
 
     const [type, id] = selectedTrait.split(':')

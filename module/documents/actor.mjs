@@ -4,6 +4,8 @@
  */
 
 import { ProwlersRoll } from "../dice/prowlers-roll.mjs";
+import { socket } from "../prowlers-and-paragons.mjs";
+import { getActorsFromTargetedTokens } from '../helpers/tokens.mjs'
 
 export class ProwlersParagonsActor extends Actor {
   /** @override */
@@ -226,6 +228,69 @@ export class ProwlersParagonsActor extends Actor {
     return true
   }
 
+  // Alice calls roll() with target Bob. Alice calls targetRoll(). Alice sees a 'please hold' dialog
+  // Bob chooses a trait in the opposed roll dialog and rolls it.
+  // Alice's 'please hold' dialog closes. Alice's roll resolves.
+  async targetRoll() { // make the targeted actor roll something and return the result
+    const targetToken = [...game.user.targets][0];
+    const targetActor = targetToken.actor;
+
+    if (!targetActor) return;
+
+
+    let controllingUser;
+    // first, look for a user who controls the character
+    controllingUser = game.users.filter((user) => 
+    user.active && user.character?.id === targetActor.id
+    )[0];
+
+    // try to find a non-GM owner
+    if (!controllingUser) {
+      controllingUser = game.users.filter((user) => 
+      !user.isGM && targetActor.testUserPermission(user, "OWNER")
+      )[0];
+    }
+
+    // settle for the gm
+    if (!controllingUser) {
+      controllingUser = game.users.filter((user) => user.isGM)[0];
+    }
+
+    // if (!controllingUsers.length) return;
+
+    // Send the dialog creation request to the first controlling player
+    const targetPlayerId = controllingUser?.id
+    if (!targetPlayerId) return;
+
+
+    socket.executeAsUser("foo", targetPlayerId)
+
+    const template = 'systems/prowlers-and-paragons/templates/please-hold.hbs'
+
+    const html = await renderTemplate(template, {});
+
+    const holdPlease =  new foundry.applications.api.DialogV2({
+      window: {title:'Please Hold'},
+      content: html,
+      buttons:[
+        {
+          action: 'ok',
+          label: 'Ok',
+          default: true
+        }
+      ]
+    });
+
+    holdPlease.render({force: true});
+
+    
+    const difficulty = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id)
+    holdPlease.close();
+
+    console.log(difficulty)
+    return difficulty
+  }
+
   async roll(trait, options) {
     const pathArray = trait.split('.');
     const val = pathArray.reduce((acc, key) => acc && acc[key], this);
@@ -235,7 +300,15 @@ export class ProwlersParagonsActor extends Actor {
     options.rollMode = game.settings.get('core', 'rollMode');
     options.speaker = ChatMessage.getSpeaker({ actor: this })
 
-    return ProwlersRoll.rollDialog(options);
+    if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
+      const d = await this.targetRoll()
+      if(d !== undefined) {
+        options.difficulty = 'opposed'
+        options.difficultyNumber = d
+      }
+    }
+    const foo = await ProwlersRoll.rollDialog(options);
+    return foo
   }
 
   async threatRoll(options) {
