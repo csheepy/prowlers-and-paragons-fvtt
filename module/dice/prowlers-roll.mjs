@@ -8,7 +8,11 @@ export class ProwlersRoll extends Roll {
     CONFIG.Dice.rolls.push(this);
   }
 
-  constructor(formula = "1dp", data = {}, options = {}) {
+  constructor(formula, data = {}, options = {}) {
+    if (!formula) {
+      const total_dice_number = ProwlersRoll.initialNumberOfDice(options) + options.modifier
+      formula = `(${total_dice_number})dp`
+    }
     super(formula, data, options);
   }
 
@@ -51,9 +55,32 @@ export class ProwlersRoll extends Roll {
     return options.num_dice;
   }
 
-  static async rollDialog(options = {}) {
-    const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-trait.hbs'
-    const data = {
+
+  static addOptionsFromHtml(options, buttonHtml) {
+    options.modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
+    if (!options.difficulty) {
+      options.difficulty = buttonHtml.find('[name="difficulty"]').val()
+      options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
+    }
+
+    options.halveToughness = buttonHtml.find('[name="halveToughness"]').is(":checked")
+    options.offense = buttonHtml.find('[name="offense"]').is(":checked")
+
+    return options
+  }
+
+  static async resolveRollCallback(resolve, options) {
+    const roll = new this(undefined, undefined, options);
+    await roll.evaluate();
+    roll.toMessage({
+      speaker: options.speaker,
+      rollMode: options.rollMode
+    });
+    resolve(roll.total - options.difficultyNumber)
+  }
+
+  static rollDialogData(options) {
+    return {
       modifier: 0,
       preselectedDifficulty: options.difficulty ? true : false,
       difficulty: options.difficulty ?? 'easy',
@@ -62,6 +89,11 @@ export class ProwlersRoll extends Roll {
       rollDifficultiesLeveled: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled,
       type: options.type,
     }
+  }
+
+  static async rollDialog(options = {}) {
+    const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-trait.hbs'
+    const data = this.rollDialogData(options);
 
     // show an option to halve toughness
     if (options.type === game.i18n.localize(CONFIG.PROWLERS_AND_PARAGONS.abilities.toughness)) {
@@ -85,24 +117,9 @@ export class ProwlersRoll extends Roll {
             icon: '<i class="fas fa-dice"></i>',
             label: "Roll",
             callback: async (buttonHtml) => {
-              const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
-              if (!options.difficulty) {
-                options.difficulty = buttonHtml.find('[name="difficulty"]').val()
-                options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
-              }
+              options = this.addOptionsFromHtml(options, buttonHtml)
 
-              options.halveToughness = buttonHtml.find('[name="halveToughness"]').is(":checked")
-              options.offense = buttonHtml.find('[name="offense"]').is(":checked")
-
-              const total_dice_number = this.initialNumberOfDice(options) + modifier
-              const roll = new this(`(${total_dice_number})dp`, {}, options);
-              await roll.evaluate();
-              roll.toMessage({
-                speaker: options.speaker,
-                // flavor: options.flavor,
-                rollMode: options.rollMode
-              });
-              resolve(roll.total - options.difficultyNumber)
+              this.resolveRollCallback(resolve, options)
             }
           },
           two: {
@@ -144,31 +161,35 @@ export class ProwlersRoll extends Roll {
 }
 
 export class WeaponRoll extends ProwlersRoll {
+  constructor(formula, data = {}, options = {}) {
+    const total_dice_number = WeaponRoll.initialNumberOfDice(options)
+    formula = `(${total_dice_number})dp`
+    super(formula, data, options);
+  }
   static initialNumberOfDice(options) {
+    console.log(options)
     const gearLimit = game.settings.get('prowlers-and-paragons', 'gearLimit');
-    return Math.min(gearLimit, options.trait_rank) + options.weapon_bonus
+    return Math.min(gearLimit, options.trait_rank) + options.weapon_bonus + options.modifier
+  }
+
+  static rollDialogData(options) {
+    return {
+      ...super.rollDialogData(options), ...{
+        chosen_action_type: 'attacking',
+        ranged: options.ranged,
+        attackingMeleeTraits: { ma: `Martial Arts (${options.weapon_traits.ma})`, might: `Might (${options.weapon_traits.might})` },
+        defendingMeleeTraits: { ma: `Martial Arts (${options.weapon_traits.ma})`, agility: `Agility (${options.weapon_traits.agility})` },
+        rangedTraits: { agility: `Agility (${options.weapon_traits.agility})` },
+        trait: '',
+        action_choices: { attacking: 'Attacking', defending: 'Defending' }
+      }
+    }
   }
 
   static async rollDialog(options = {}) {
     const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-weapon.hbs'
-    const data = {
-      modifier: 0,
-      preselectedDifficulty: options.difficulty ? true : false,
-      difficulty: options.difficulty ?? 'easy',
-      difficultyNumber: options.difficultyNumber ?? 0,
-      rollDifficulties: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties,
-      rollDifficultiesLeveled: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled,
-      type: options.type,
-      chosen_action_type: 'attacking',
-      ranged: options.ranged,
-      attackingMeleeTraits: { ma: `Martial Arts (${options.weapon_traits.ma})`, might: `Might (${options.weapon_traits.might})` }, //options.weapon_traits.offMelee,
-      defendingMeleeTraits: { ma: `Martial Arts (${options.weapon_traits.ma})`, agility: `Agility (${options.weapon_traits.agility})` },
-      rangedTraits: { agility: `Agility (${options.weapon_traits.agility})` },
-      trait: '',
-      action_choices: { attacking: 'Attacking', defending: 'Defending' }
-    }
+    const data = this.rollDialogData(options);
 
-    // debugger
     const html = await renderTemplate(template, data);
 
     return new Promise((resolve) => {
@@ -180,21 +201,10 @@ export class WeaponRoll extends ProwlersRoll {
             icon: '<i class="fas fa-dice"></i>',
             label: "Roll",
             callback: async (buttonHtml) => {
-              const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
-              if (!options.difficulty) {
-                options.difficulty = buttonHtml.find('[name="difficulty"]').val()
-                options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
-              }
+              options = this.addOptionsFromHtml(options, buttonHtml)
               options.trait_rank = options.weapon_traits[buttonHtml.find('[name="trait"]').val()]
-              const total_dice_number = this.initialNumberOfDice(options) + modifier
-              const roll = new this(`(${total_dice_number})dp`, {}, options);
-              await roll.evaluate();
-              roll.toMessage({
-                speaker: options.speaker,
-                // flavor: options.flavor,
-                rollMode: options.rollMode
-              });
-              resolve(roll.total - options.difficultyNumber)
+
+              this.resolveRollCallback(resolve, options)
             }
           },
           two: {
@@ -209,27 +219,31 @@ export class WeaponRoll extends ProwlersRoll {
 }
 
 export class ArmorRoll extends ProwlersRoll {
+  constructor(formula, data = {}, options = {}) {
+    const total_dice_number = ArmorRoll.initialNumberOfDice(options)
+    formula = `(${total_dice_number})dp`
+    super(formula, data, options);
+  }
   static initialNumberOfDice(options) {
     const gearLimit = game.settings.get('prowlers-and-paragons', 'gearLimit');
     return Math.min(gearLimit, options.trait_rank) + options.armor_bonus
   }
 
+  static rollDialogData(options) {
+    return {
+      ...super.rollDialogData(options), ...{
+        chosen_action_type: 'attacking',
+        ranged: options.ranged,
+        armorTraits: { toughness: `Toughness (${options.armor_traits.toughness})`, armor: `Armor (${options.armor_traits.armor})` },
+        trait: (options.armor_traits.toughness > options.armor_traits.armor) ? 'toughness' : 'armor',
+        action_choices: { attacking: 'Attacking', defending: 'Defending' }
+        }
+    }
+  }
+
   static async rollDialog(options = {}) {
     const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-armor.hbs'
-    const data = {
-      modifier: 0,
-      difficulty: options.difficulty ?? 'easy',
-      difficultyNumber: options.difficultyNumber ?? 0,
-      preselectedDifficulty: options.difficulty ? true : false,
-      rollDifficulties: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties,
-      rollDifficultiesLeveled: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled,
-      type: options.type,
-      chosen_action_type: 'attacking',
-      ranged: options.ranged,
-      armorTraits: { toughness: `Toughness (${options.armor_traits.toughness})`, armor: `Armor (${options.armor_traits.armor})` },
-      trait: (options.armor_traits.toughness > options.armor_traits.armor) ? 'toughness' : 'armor',
-      action_choices: { attacking: 'Attacking', defending: 'Defending' }
-    }
+    const data = this.rollDialogData(options);
 
     const html = await renderTemplate(template, data);
 
@@ -242,21 +256,10 @@ export class ArmorRoll extends ProwlersRoll {
             icon: '<i class="fas fa-dice"></i>',
             label: "Roll",
             callback: async (buttonHtml) => {
-              const modifier = parseInt(buttonHtml.find('[name="modifier"]').val(), 10)
-              if (!options.difficulty) {
-                options.difficulty = buttonHtml.find('[name="difficulty"]').val()
-                options.difficultyNumber = parseInt(buttonHtml.find('[name="difficulty-number"]').val(), 10)
-              }
+              options = this.addOptionsFromHtml(options, buttonHtml)
               options.trait_rank = options.armor_traits[buttonHtml.find('[name="trait"]').val()]
-              const total_dice_number = this.initialNumberOfDice(options) + modifier
-              const roll = new this(`(${total_dice_number})dp`, {}, options);
-              await roll.evaluate();
-              roll.toMessage({
-                speaker: options.speaker,
-                // flavor: options.flavor,
-                rollMode: options.rollMode
-              });
-              resolve(roll.total - options.difficultyNumber)
+
+              this.resolveRollCallback(resolve, options)
             }
           },
           two: {
