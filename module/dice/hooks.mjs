@@ -44,6 +44,7 @@ export const runDiceHooks = () => {
     });
   });
 
+  // chat message button to oppose something that was already rolled
   const opposedRoll = async (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -130,4 +131,70 @@ export const runDiceHooks = () => {
   Hooks.on("renderChatPopout", (_app, html, _data) => {
     html.on("click", ".opposed-roll", opposedRoll);
   });
+}
+
+// called when a roll is made with a target selected. this function is called for the target before the original roll is resolved
+export const opposeRoll = async (targetActorId, originatingTraitName) => {
+  const targetActor = game.actors.get(targetActorId);
+
+  const traits = targetActor.traitsForSelection()
+  const template = 'systems/prowlers-and-paragons/templates/opposed-roll-trait-select.hbs'
+  const showGear = () => {
+    if (traits.gear?.weapons) {
+      return Object.keys(traits.gear.weapons).length > 0
+    }
+    if (traits.gear?.armor) {
+      return Object.keys(traits.gear.armor).length > 0
+    }
+  }
+  const data = {
+    abilities: traits.abilities,
+    talents: traits.talents,
+    powers: traits.powers,
+    threat: traits.threat,
+    gear: traits.gear,
+    rollingAgainst: originatingTraitName,
+    showGear: showGear(),
+    chosen: ''
+  }
+
+  const html = await renderTemplate(template, data);
+
+  let selectedTrait = '';
+  try {
+    selectedTrait = await foundry.applications.api.DialogV2.prompt({
+      window: { title: "Choose an option" },
+      content: html,
+      ok: {
+        label: "Make Choice",
+        callback: (event, button, dialog) => button.form.elements.trait.value
+      }
+    })
+  } catch {
+    return;
+  }
+
+  const options = {
+    rollMode: game.settings.get('core', 'rollMode'),
+    difficulty: 'opposed',
+    difficultyNumber: 0,
+    doOpposedRoll: false
+  }
+
+  const [type, id] = selectedTrait.split(':')
+  if (!!id) {
+    if (type === 'ability') {
+      options.type = game.i18n.localize(traits.abilities[selectedTrait])
+      return await targetActor.roll(`system.abilities.${id}.value`, options)
+    } else if (type === 'talent') {
+      options.type = game.i18n.localize(traits.talents[selectedTrait])
+      return await targetActor.roll(`system.talents.${id}.value`, options)
+    } else if (type === 'item') {
+      const item = targetActor.items.get(id)
+      return await item.roll(options)
+    }  else if (type === 'threat') {
+      options.offense = false
+      return await targetActor.threatRoll(options)
+    }
+  }
 }

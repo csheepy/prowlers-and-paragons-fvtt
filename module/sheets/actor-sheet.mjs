@@ -312,7 +312,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
 
     // NPC Threat rolls
     if (dataset.threat) {
-      return this.actor.threatRoll({})
+      return this.actor.threatRoll({offense: true, doOpposedRoll: true})
     }
   }
 

@@ -262,9 +262,6 @@ export class ProwlersParagonsActor extends Actor {
     const targetPlayerId = controllingUser?.id
     if (!targetPlayerId) return;
 
-
-    socket.executeAsUser("foo", targetPlayerId)
-
     const template = 'systems/prowlers-and-paragons/templates/please-hold.hbs'
 
     const html = await renderTemplate(template, {});
@@ -305,8 +302,7 @@ export class ProwlersParagonsActor extends Actor {
         options.difficultyNumber = d
       }
     }
-    const foo = await ProwlersRoll.rollDialog(options);
-    return foo
+    return await ProwlersRoll.rollDialog(options);
   }
 
   async threatRoll(options) {
@@ -320,6 +316,13 @@ export class ProwlersParagonsActor extends Actor {
     options.flavor = game.i18n.localize('PROWLERS_AND_PARAGONS.Threat');
     options.offense = options.offense ?? false;
 
+    if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
+      const d = await this.targetRoll(options.flavor)
+      if(d !== undefined) {
+        options.difficulty = 'opposed'
+        options.difficultyNumber = d
+      }
+    }
 
     return ProwlersRoll.rollDialog(options);
   }

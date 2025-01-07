@@ -10,88 +10,14 @@ import { PROWLERS_AND_PARAGONS } from './helpers/config.mjs';
 // Import DataModel classes
 import * as models from './data/_module.mjs';
 import { ProwlersDie } from './dice/prowlers-die.mjs';
-import { runDiceHooks } from './dice/hooks.mjs';
+import { runDiceHooks, opposeRoll } from './dice/hooks.mjs';
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
 export let socket
-function showHelloMessage(userName) {
-	console.log(`User ${userName} says hello!`);
-}
-
-function foo() {
-	console.log("Fooooo");
-	return 'foo';
-}
-const opposeRoll = async (targetActorId, originatingTraitName) => {
-  const targetActor = game.actors.get(targetActorId);
-
-  const traits = targetActor.traitsForSelection()
-  const template = 'systems/prowlers-and-paragons/templates/opposed-roll-trait-select.hbs'
-  const showGear = () => {
-    if (traits.gear?.weapons) {
-      return Object.keys(traits.gear.weapons).length > 0
-    }
-    if (traits.gear?.armor) {
-      return Object.keys(traits.gear.armor).length > 0
-    }
-  }
-  const data = {
-    abilities: traits.abilities,
-    talents: traits.talents,
-    powers: traits.powers,
-    threat: traits.threat,
-    gear: traits.gear,
-    rollingAgainst: originatingTraitName,
-    showGear: showGear(),
-    chosen: ''
-  }
-
-  const html = await renderTemplate(template, data);
-
-  let selectedTrait = '';
-  try {
-    selectedTrait = await foundry.applications.api.DialogV2.prompt({
-      window: { title: "Choose an option" },
-      content: html,
-      ok: {
-        label: "Make Choice",
-        callback: (event, button, dialog) => button.form.elements.trait.value
-      }
-    })
-  } catch {
-    return;
-  }
-
-  const options = {
-    rollMode: game.settings.get('core', 'rollMode'),
-    difficulty: 'opposed',
-    difficultyNumber: 0,
-    doOpposedRoll: false
-  }
-
-  const [type, id] = selectedTrait.split(':')
-  if (!!id) {
-    if (type === 'ability') {
-      options.type = game.i18n.localize(traits.abilities[selectedTrait])
-      return await targetActor.roll(`system.abilities.${id}.value`, options)
-    } else if (type === 'talent') {
-      options.type = game.i18n.localize(traits.talents[selectedTrait])
-      return await targetActor.roll(`system.talents.${id}.value`, options)
-    } else if (type === 'item') {
-      const item = targetActor.items.get(id)
-      return await item.roll(options)
-    }  else if (type === 'threat') {
-      options.offense = true
-      return await targetActor.threatRoll(options)
-    }
-  }
-}
 
 Hooks.once("socketlib.ready", () => {
 	socket = socketlib.registerSystem("prowlers-and-paragons");
-	socket.register("hello", showHelloMessage);
-	socket.register("foo", foo);
   socket.register("opposeRoll", opposeRoll);
 });
 
