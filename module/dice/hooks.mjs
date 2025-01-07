@@ -79,6 +79,7 @@ export const runDiceHooks = () => {
       powers: traits.powers,
       threat: traits.threat,
       gear: traits.gear,
+      rollingAgainst: roll.options.type,
       showGear: showGear(),
       chosen: ''
     }
@@ -110,16 +111,16 @@ export const runDiceHooks = () => {
     if (!!id) {
       if (type === 'ability') {
         options.type = game.i18n.localize(traits.abilities[selectedTrait])
-        controlledCharacter.roll(`system.abilities.${id}.value`, options)
+        return await controlledCharacter.roll(`system.abilities.${id}.value`, options)
       } else if (type === 'talent') {
         options.type = game.i18n.localize(traits.talents[selectedTrait])
-        controlledCharacter.roll(`system.talents.${id}.value`, options)
+        return await controlledCharacter.roll(`system.talents.${id}.value`, options)
       } else if (type === 'item') {
         const item = controlledCharacter.items.get(id)
-        item.roll(options)
+        return await item.roll(options)
       }  else if (type === 'threat') {
         options.offense = true
-        controlledCharacter.threatRoll(options)
+        return await controlledCharacter.threatRoll(options)
       }
     }
   }

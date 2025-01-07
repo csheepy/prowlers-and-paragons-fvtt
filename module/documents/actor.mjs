@@ -231,7 +231,7 @@ export class ProwlersParagonsActor extends Actor {
   // Alice calls roll() with target Bob. Alice calls targetRoll(). Alice sees a 'please hold' dialog
   // Bob chooses a trait in the opposed roll dialog and rolls it.
   // Alice's 'please hold' dialog closes. Alice's roll resolves.
-  async targetRoll() { // make the targeted actor roll something and return the result
+  async targetRoll(flavor) { // make the targeted actor roll something and return the result
     const targetToken = [...game.user.targets][0];
     const targetActor = targetToken.actor;
 
@@ -282,9 +282,7 @@ export class ProwlersParagonsActor extends Actor {
     });
 
     holdPlease.render({force: true});
-
-    
-    const difficulty = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id)
+    const difficulty = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id, flavor)
     holdPlease.close();
 
     console.log(difficulty)
@@ -301,7 +299,7 @@ export class ProwlersParagonsActor extends Actor {
     options.speaker = ChatMessage.getSpeaker({ actor: this })
 
     if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
-      const d = await this.targetRoll()
+      const d = await this.targetRoll(options.flavor)
       if(d !== undefined) {
         options.difficulty = 'opposed'
         options.difficultyNumber = d

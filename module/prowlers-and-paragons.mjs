@@ -23,7 +23,7 @@ function foo() {
 	console.log("Fooooo");
 	return 'foo';
 }
-const opposeRoll = async (targetActorId) => {
+const opposeRoll = async (targetActorId, originatingTraitName) => {
   const targetActor = game.actors.get(targetActorId);
 
   const traits = targetActor.traitsForSelection()
@@ -42,6 +42,7 @@ const opposeRoll = async (targetActorId) => {
     powers: traits.powers,
     threat: traits.threat,
     gear: traits.gear,
+    rollingAgainst: originatingTraitName,
     showGear: showGear(),
     chosen: ''
   }

@@ -113,7 +113,7 @@ export class ProwlersParagonsItem extends Item {
 
 
     if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
-      const d = await this.actor.targetRoll()
+      const d = await this.actor.targetRoll(this.name)
       if(d !== undefined) {
         options = {...options, ...{ difficulty: 'opposed', difficultyNumber: d}}
       }
