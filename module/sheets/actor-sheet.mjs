@@ -142,6 +142,11 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       }
       // Append to spells.
       else if (i.type === 'power') {
+        if (i.system.shortDescription && i.system.shortDescription.length > 0) {
+          i.displayName = `${i.name} (${i.system.shortDescription})`
+        } else {
+          i.displayName = i.name
+        }
         powers.push(i);
       }
       // Append to weapons.

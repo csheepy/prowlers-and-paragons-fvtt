@@ -71,6 +71,9 @@ export class ProwlersParagonsActor extends Actor {
 
   calculateSpentPoints() {
     const actorData = this;
+    if (actorData.type !== 'character') {
+      return;
+    }
 
     let pointsSpent = 0;
 
@@ -88,20 +91,19 @@ export class ProwlersParagonsActor extends Actor {
       
       calculateTrait('abilities', 3)
       calculateTrait('talents', 3)
-    }
-
-    if (actorData.system.package_applied === 'hero') {
+    } else if (actorData.system.package_applied === 'hero') {
       pointsSpent += 40
 
       calculateTrait('abilities', 3)
       calculateTrait('talents', 2)
-    }
-
-    if (actorData.system.package_applied === 'civilian') {
+    } else if (actorData.system.package_applied === 'civilian') {
       pointsSpent += 35
 
       calculateTrait('abilities', 2)
       calculateTrait('talents', 2)
+    } else {
+      calculateTrait('abilities', 0)
+      calculateTrait('talents', 0)
     }
 
     actorData.items.contents.filter(i => i.type === 'perk').forEach(perk => {

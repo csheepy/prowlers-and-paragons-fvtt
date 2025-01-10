@@ -165,5 +165,9 @@ Hooks.on("updateItem", (item, changes, options, userId) => {
     activeEffects.forEach(effect => {
         effect.update({disabled: !newValue})
     });
+
+    if (item.actor) {
+      item.actor.prepareDerivedData();
+    }
   }
 });

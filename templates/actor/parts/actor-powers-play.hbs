@@ -10,12 +10,12 @@
           <div class='item-image'>
             <a class='rollable' data-roll-type='power'><img
                 src='{{item.img}}'
-                title='{{item.name}}'
+                title='{{item.displayName}}'
                 width='24'
                 height='24'
               /></a>
           </div>
-          <h4>{{item.name}}</h4>
+          <h4>{{item.displayName}}</h4>
         </div>
         <div class='item-formula item-prop'>{{ifThen (isDefaultPower item) '-' (getDerivedPowerRank item.name)}}</div>
         {{#if item.system.toggleable}}
