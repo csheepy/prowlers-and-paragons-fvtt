@@ -3,6 +3,7 @@
     <div class='item-name'>{{localize 'Name'}}</div>
     <div class='item-formula'>{{localize 'Total Rank'}}</div>
     <div>{{localize 'Toggle'}}</div>
+    <div>{{localize 'Charges'}}</div>
   </li>
     {{#each powers as |item id|}}
       <li class='item flexrow' data-item-id='{{item._id}}'>
@@ -21,6 +22,19 @@
         {{#if item.system.toggleable}}
          <div class='item-prop'>
           <input class="power-toggle" type="checkbox" name='item.system.toggleActive' {{checked item.system.toggleActive}}></input>
+         </div>
+        {{else}}
+         <div></div>
+        {{/if}}
+        {{#if item.system.hasCharges}}
+         <div class='item-prop'>
+          <input
+          type='text'
+          name='item.system.charges.value'
+          class="currentCharges"
+          value='{{item.system.charges.value}}'
+          data-dtype='Number'
+        />
          </div>
         {{else}}
          <div></div>

@@ -18,6 +18,12 @@ export default class ProwlersParagonsPower extends ProwlersParagonsItemBase {
     schema.toggleActive = new fields.BooleanField({initial: false})
     schema.shortDescription = new fields.StringField({ required: false });
 
+    schema.hasCharges = new fields.BooleanField({initial: false})
+    schema.charges = new fields.SchemaField({
+      value: new fields.NumberField({ required: false, nullable: true, integer: true}),
+      max: new fields.NumberField({ required: false, nullable: true, integer: true})
+    });
+
     return schema;
   }
 }

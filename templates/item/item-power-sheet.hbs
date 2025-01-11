@@ -107,5 +107,27 @@
         <label class='resource-label'>Toggleable</label>
         <input type="checkbox" name='system.toggleable' {{checked system.toggleable}}></input>
     </div>
+        <div class='grid grid-2col' style="width:30%;">
+        <label class='resource-label'>Charges</label>
+        <input type="checkbox" name='system.hasCharges' {{checked system.hasCharges}}></input>
+        {{#if system.hasCharges}}
+        <label class='resource-label'>Current</label>
+          <input
+          type='text'
+          name='system.charges.value'
+          value='{{system.charges.value}}'
+          data-dtype='Number'
+          placeholder="Current number of charges"
+        />
+        <label class='resource-label'>Max</label>
+                  <input
+          type='text'
+          name='system.charges.max'
+          value='{{system.charges.max}}'
+          data-dtype='Number'
+          placeholder="Max number of charges"
+        />
+        {{/if}}
+    </div>
   </section>
 </form>

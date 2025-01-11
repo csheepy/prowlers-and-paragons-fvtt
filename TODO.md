@@ -1,8 +1,6 @@
 ## will do
 
-option to use full might score for gear attack
-
-maybe something for power charges?
+make sure item charges don't go over max + figure out where to put a reset charges button
 
 a gm screen for tracking adversity and awarding resolve
 
