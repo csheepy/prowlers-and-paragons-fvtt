@@ -7,16 +7,16 @@
   </li>
     {{#each powers as |item id|}}
       <li class='item flexrow' data-item-id='{{item._id}}'>
-        <div class='item-name flexrow'>
+        <div class='item-name flexrow rollable' data-roll-type='power'>
           <div class='item-image'>
-            <a class='rollable' data-roll-type='power'><img
+            <a ><img
                 src='{{item.img}}'
                 title='{{item.displayName}}'
                 width='24'
                 height='24'
               /></a>
           </div>
-          <h4>{{item.displayName}}</h4>
+          <label class="resource-label">{{item.displayName}}</label>
         </div>
         <div class='item-formula item-prop'>{{ifThen (isDefaultPower item) '-' (getDerivedPowerRank item.name)}}</div>
         {{#if item.system.toggleable}}
