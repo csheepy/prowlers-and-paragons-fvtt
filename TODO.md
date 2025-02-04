@@ -1,13 +1,23 @@
 ## will do
 
+roll results (narrative control and embelishment)
+
 make sure item charges don't go over max + figure out where to put a reset charges button
 
-a gm screen for tracking adversity and awarding resolve
+a gm screen for tracking adversity and awarding resolve - party matrix from gumshoe?
 
 get all the powers perks and flaws into foundry
 
 so much refactoring 
 
+add check to see if owner is connected for opposed rolls
+
+duplicate power names for stuff like blast are overlapping ranks for the total
+opposed rolls for vehicles
+show name of whose being targeted
+roll without a target
+
+make rollables look like buttons where something happens on mouseover to make it look clickable
 ## might do
 
 resolve spend menu?
