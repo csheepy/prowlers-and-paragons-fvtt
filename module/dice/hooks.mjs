@@ -105,7 +105,8 @@ export const runDiceHooks = () => {
       rollMode: game.settings.get('core', 'rollMode'),
       difficulty: 'opposed',
       difficultyNumber: roll.total - roll.options.difficultyNumber,
-      doOpposedRoll: false
+      doOpposedRoll: false,
+      originatingActorName: chatMessage.speaker.alias
     }
 
     const [type, id] = selectedTrait.split(':')
