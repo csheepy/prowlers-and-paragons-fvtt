@@ -16,7 +16,6 @@ duplicate power names for stuff like blast are overlapping ranks for the total
 opposed rolls for vehicles
 roll without a target
 
-make rollables look like buttons where something happens on mouseover to make it look clickable
 ## might do
 
 resolve spend menu?
