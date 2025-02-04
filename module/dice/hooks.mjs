@@ -134,7 +134,7 @@ export const runDiceHooks = () => {
 }
 
 // called when a roll is made with a target selected. this function is called for the target before the original roll is resolved
-export const opposeRoll = async (targetActorId, originatingTraitName) => {
+export const opposeRoll = async (targetActorId, originatingTraitName, originatingActorName) => {
   const targetActor = game.actors.get(targetActorId);
 
   const traits = targetActor.traitsForSelection()
@@ -178,7 +178,8 @@ export const opposeRoll = async (targetActorId, originatingTraitName) => {
     rollMode: game.settings.get('core', 'rollMode'),
     difficulty: 'opposed',
     difficultyNumber: 0,
-    doOpposedRoll: false
+    doOpposedRoll: false,
+    originatingActorName
   }
 
   const [type, id] = selectedTrait.split(':')

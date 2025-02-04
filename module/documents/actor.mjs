@@ -285,7 +285,7 @@ export class ProwlersParagonsActor extends Actor {
     });
 
     holdPlease.render({force: true});
-    const difficulty = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id, flavor)
+    const difficulty = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id, flavor, this.name)
     holdPlease.close();
 
     return difficulty

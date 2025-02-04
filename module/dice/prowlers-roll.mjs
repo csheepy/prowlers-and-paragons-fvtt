@@ -80,6 +80,17 @@ export class ProwlersRoll extends Roll {
   }
 
   static rollDialogData(options) {
+    let label = 'Roll';
+    if (options.originatingActorName) {
+      label = `Roll against ${options.originatingActorName}`
+    }
+    if (!options.originatingActorName && options.difficulty === 'opposed') {
+      const targetToken = [...game.user.targets][0];
+      const targetActor = targetToken.actor;
+      label = `Roll against ${targetActor.name}`
+    }
+
+
     return {
       modifier: 0,
       preselectedDifficulty: options.difficulty ? true : false,
@@ -88,6 +99,7 @@ export class ProwlersRoll extends Roll {
       rollDifficulties: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties,
       rollDifficultiesLeveled: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled,
       type: options.type,
+      label: label
     }
   }
 
@@ -115,7 +127,7 @@ export class ProwlersRoll extends Roll {
         buttons: {
           one: {
             icon: '<i class="fas fa-dice"></i>',
-            label: "Roll",
+            label: data.label,
             callback: async (buttonHtml) => {
               options = this.addOptionsFromHtml(options, buttonHtml)
 
@@ -198,7 +210,7 @@ export class WeaponRoll extends ProwlersRoll {
         buttons: {
           one: {
             icon: '<i class="fas fa-dice"></i>',
-            label: "Roll",
+            label: data.label,
             callback: async (buttonHtml) => {
               options = this.addOptionsFromHtml(options, buttonHtml)
               options.trait_rank = options.weapon_traits[buttonHtml.find('[name="trait"]').val()]
@@ -253,7 +265,7 @@ export class ArmorRoll extends ProwlersRoll {
         buttons: {
           one: {
             icon: '<i class="fas fa-dice"></i>',
-            label: "Roll",
+            label: data.label,
             callback: async (buttonHtml) => {
               options = this.addOptionsFromHtml(options, buttonHtml)
               options.trait_rank = options.armor_traits[buttonHtml.find('[name="trait"]').val()]
