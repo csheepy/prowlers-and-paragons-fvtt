@@ -167,7 +167,6 @@ export class WeaponRoll extends ProwlersRoll {
     super(formula, data, options);
   }
   static initialNumberOfDice(options) {
-    console.log(options)
     const gearLimit = game.settings.get('prowlers-and-paragons', 'gearLimit');
     return Math.min(gearLimit, options.trait_rank) + options.weapon_bonus + options.modifier
   }
