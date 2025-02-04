@@ -116,6 +116,8 @@ export class ProwlersParagonsItem extends Item {
       const d = await this.actor.targetRoll(this.name)
       if(d !== undefined) {
         options = {...options, ...{ difficulty: 'opposed', difficultyNumber: d}}
+      } else {
+          return;
       }
     }
     // power/ability/talent rolls

@@ -238,6 +238,10 @@ export class ProwlersParagonsActor extends Actor {
     const targetActor = targetToken.actor;
 
     if (!targetActor) return;
+    if (targetActor.id === this.id) {
+      ui.notifications.warn("You cannot target yourself!");
+      return undefined
+    }
 
 
     let controllingUser;
@@ -284,7 +288,6 @@ export class ProwlersParagonsActor extends Actor {
     const difficulty = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id, flavor)
     holdPlease.close();
 
-    console.log(difficulty)
     return difficulty
   }
 
@@ -302,6 +305,8 @@ export class ProwlersParagonsActor extends Actor {
       if(d !== undefined) {
         options.difficulty = 'opposed'
         options.difficultyNumber = d
+      } else {
+        return;
       }
     }
     return await ProwlersRoll.rollDialog(options);
@@ -323,6 +328,8 @@ export class ProwlersParagonsActor extends Actor {
       if(d !== undefined) {
         options.difficulty = 'opposed'
         options.difficultyNumber = d
+      } else {
+        return;
       }
     }
 
