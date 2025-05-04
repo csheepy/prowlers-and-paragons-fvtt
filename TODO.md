@@ -1,9 +1,5 @@
 ## will do
 
-add check to see if owner is connected for opposed rolls
-
-duplicate power names for stuff like blast are overlapping ranks for the total
-
 roll without a target
 
 ## might do

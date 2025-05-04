@@ -83,7 +83,7 @@ export class ProwlersParagonsActor extends Actor {
         }
       }
 
-      derived_power_ranks[power.name] = rr
+      derived_power_ranks[power.id] = rr
     });
 
     return derived_power_ranks

@@ -18,7 +18,7 @@
           </div>
           <label class="resource-label">{{item.displayName}}</label>
         </div>
-        <div class='item-formula item-prop'>{{ifThen (isDefaultPower item) '-' (getDerivedPowerRank item.name)}}</div>
+        <div class='item-formula item-prop'>{{ifThen (isDefaultPower item) '-' (getDerivedPowerRank item._id)}}</div>
         {{#if item.system.toggleable}}
          <div class='item-prop'>
           <input class="power-toggle" type="checkbox" name='item.system.toggleActive' {{checked item.system.toggleActive}}></input>

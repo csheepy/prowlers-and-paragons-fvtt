@@ -60,14 +60,15 @@ export class ProwlersParagonsItem extends Item {
       speaker,
       rollMode,
       type: this.name,
-      num_dice: this.actor.derived_power_ranks[this.name],
+      num_dice: this.actor.derived_power_ranks[this.id],
       ...options
     }
     return ProwlersRoll.rollDialog(powerOptions);
   }
 
   async rollWeapon({speaker, rollMode, label, options}) {
-    const maVal = this.actor.derived_power_ranks['Martial Arts'] ?? 0
+    const martialArts = this.actor.items.find(i => i.type === 'power' && i.name === 'Martial Arts');
+    const maVal = martialArts ? this.actor.derived_power_ranks[martialArts.id] ?? 0 : 0;
 
     const weaponOptions = {
       flavor: label,
@@ -83,7 +84,8 @@ export class ProwlersParagonsItem extends Item {
   }
 
   rollArmor({speaker, rollMode, label, options}) {
-    const armVal = this.actor.derived_power_ranks['Armor'] ?? 0
+    const armor = this.actor.items.find(i => i.type === 'power' && i.name === 'Armor');
+    const armVal = armor ? this.actor.derived_power_ranks[armor.id] ?? 0 : 0;
 
     const armorOptions = {
       flavor: label,
