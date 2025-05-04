@@ -22,6 +22,20 @@
       "technology": "Technology",
       "vehicles": "Vehicles"
     },
+    "Vehicle": {
+      "body": "Body",
+      "speed": {
+        "land": "Land Speed",
+        "air": "Air Speed",
+        "sea": "Sea Speed"
+      },
+      "control": {
+        "land": "Land Control",
+        "air": "Air Control",
+        "sea": "Sea Control"
+      },
+      "weapons": "Weapons"
+    },
     "SheetLabels": {
       "Actor": "ProwlersParagons Actor Sheet",
       "Item": "ProwlersParagons Item Sheet"
