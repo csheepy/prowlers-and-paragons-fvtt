@@ -103,7 +103,8 @@
           {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
           <h3>Powers
             {{#if (getCurrentTarget)}}
-              <h3 class="target-display">Target: {{getCurrentTarget}}</h3>
+              <span class="target-display">Target: {{getCurrentTarget}}</span>
+              <a class="clear-target" title="Clear Target"><i class="fas fa-times"></i></a>
             {{/if}}
           </h3>
           {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-powers-play.hbs"}}

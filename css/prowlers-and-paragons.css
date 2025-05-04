@@ -451,3 +451,14 @@
   color: #4a4a4a;
   font-style: italic;
 }
+
+.prowlers-and-paragons .clear-target {
+  margin-left: 0.5em;
+  color: #4a4a4a;
+  opacity: 0.7;
+}
+
+.prowlers-and-paragons .clear-target:hover {
+  opacity: 1;
+  color: #ff0000;
+}

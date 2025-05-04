@@ -197,6 +197,15 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     this._tokenSelectionListener = this._onTokenSelectionChange.bind(this);
     Hooks.on('targetToken', this._tokenSelectionListener);
 
+    // Clear target button
+    html.on('click', '.clear-target', (ev) => {
+      ev.preventDefault();
+      const targets = canvas.tokens.controlled;
+      targets.forEach(token => {
+        token.setTarget(false);
+      });
+    });
+
     // Render the item sheet for viewing/editing prior to the editable check.
     html.on('click', '.item-edit', (ev) => {
       const li = $(ev.currentTarget).parents('.item');
