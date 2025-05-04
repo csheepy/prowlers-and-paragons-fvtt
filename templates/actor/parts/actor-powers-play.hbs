@@ -27,7 +27,7 @@
          <div></div>
         {{/if}}
         {{#if item.system.hasCharges}}
-         <div class='item-prop'>
+         <div class='item-prop flexrow'>
           <input
           type='text'
           name='item.system.charges.value'
@@ -35,6 +35,9 @@
           value='{{item.system.charges.value}}'
           data-dtype='Number'
         />
+          <button class="reset-charges" title="Reset to max charges">
+            <i class="fas fa-sync"></i>
+          </button>
          </div>
         {{else}}
          <div></div>

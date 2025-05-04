@@ -266,6 +266,16 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
 
       item.update({ "system.charges.value": newValue });
     });
+
+    // Handle reset charges button
+    html.on('click', '.reset-charges', (ev) => {
+      const li = $(ev.currentTarget).parents('.item');
+      const item = this.actor.items.get(li.data('itemId'));
+      
+      if (item.system.charges.max !== null) {
+        item.update({ "system.charges.value": item.system.charges.max });
+      }
+    });
   }
 
   /**

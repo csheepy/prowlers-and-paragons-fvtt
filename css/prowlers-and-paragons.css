@@ -360,6 +360,27 @@
   font-size: 12px;
 }
 
+.prowlers-and-paragons .items-list .item-prop.flexrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.prowlers-and-paragons .items-list .item-prop .currentCharges {
+  width: 40px;
+  text-align: center;
+}
+
+.prowlers-and-paragons .items-list .item-prop .reset-charges {
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+  padding: 0;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
 .prowlers-and-paragons .items-list .items-header {
   height: 28px;
   margin: 2px 0;
