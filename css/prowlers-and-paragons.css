@@ -8,7 +8,7 @@
 .prowlers-and-paragons {
   --primary-color: #e63946;
   --secondary-color: #1d3557;
-  --accent-color: #f1faee;
+  --accent-color: #e9e7e0;
   --text-color: #1d3557;
   --border-color: #457b9d;
   --shadow-color: rgba(0, 0, 0, 0.2);
@@ -17,7 +17,7 @@
 .prowlers-and-paragons .sheet-header {
   background: var(--secondary-color);
   color: var(--accent-color);
-  border: 3px solid var(--primary-color);
+  /* border: 3px solid var(--primary-color); */
   border-radius: 8px;
   box-shadow: 0 4px 8px var(--shadow-color);
   padding: 10px;
@@ -35,7 +35,7 @@
 .prowlers-and-paragons .sheet-header h1.charname input {
   font-family: "Bangers", cursive;
   font-size: 1em;
-  color: var(--accent-color);
+  color: var(--secondary-color);
   text-shadow: 2px 2px 0 var(--primary-color);
 }
 
@@ -69,6 +69,13 @@
   text-shadow: 2px 2px 0 var(--shadow-color);
 }
 
+.prowlers-and-paragons .resources .resource-label {
+  font-family: "Bangers", cursive;
+  font-size: 1.2em;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 .prowlers-and-paragons .resource-label {
   font-family: "Bangers", cursive;
   font-size: 1.2em;
@@ -309,6 +316,10 @@
   font-family: "Roboto", sans-serif;
 }
 
+.prowlers-and-paragons .sheet-tabs {
+  flex: 0;
+}
+
 .prowlers-and-paragons .sheet-body,
 .prowlers-and-paragons .sheet-body .tab,
 .prowlers-and-paragons .sheet-body .tab .editor {
@@ -460,13 +471,15 @@
 
 .prowlers-and-paragons .biography .editor {
   min-height: 50px;
-  outline: thin;
-  outline-style: outset;
 }
 
+.prowlers-and-paragons .biography .editor button {
+  color: var(--secondary-color);
+}
 .prowlers-and-paragons .prosemirror .editor-container .editor-content {
   position: relative
 }
+
 
 .opposed-roll {
   order: 3
@@ -492,7 +505,8 @@
 /* Form Elements */
 .prowlers-and-paragons input[type="text"],
 .prowlers-and-paragons input[type="number"],
-.prowlers-and-paragons select {
+.prowlers-and-paragons select,
+.prowlers-and-paragons .editor {
   background: var(--accent-color);
   border: 2px solid var(--border-color);
   border-radius: 4px;
@@ -626,8 +640,8 @@
 /* 2. Hero Name Input Contrast */
 .prowlers-and-paragons .sheet-header h1.charname input {
   background: var(--accent-color);
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  color: var(--secondary-color);
+  border: 2px solid var(--accent-color);
   text-shadow: none;
 }
 
@@ -641,3 +655,4 @@
 .prowlers-and-paragons .sheet-body .tab h3 {
   margin-top: 0.5em;
 }
+
