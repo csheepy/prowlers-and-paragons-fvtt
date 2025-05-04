@@ -267,13 +267,13 @@ export class ProwlersParagonsActor extends Actor {
     let controllingUser;
     // first, look for a user who controls the character
     controllingUser = game.users.filter((user) => 
-    user.active && user.character?.id === targetActor.id
+      user.active && user.character?.id === targetActor.id
     )[0];
 
     // try to find a non-GM owner
     if (!controllingUser) {
       controllingUser = game.users.filter((user) => 
-      !user.isGM && targetActor.testUserPermission(user, "OWNER")
+      user.active && !user.isGM && targetActor.testUserPermission(user, "OWNER")
       )[0];
     }
 
