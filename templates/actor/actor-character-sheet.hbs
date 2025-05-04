@@ -68,7 +68,7 @@
   {{!-- Sheet Body --}}
   <section class="sheet-body">
 
-    {{!-- Owned Features Tab --}}
+    {{!-- Play Tab --}}
     <div class="tab features" data-group="primary" data-tab="features">
       <section class="grid grid-3col">
         <aside class="sidebar">
@@ -127,6 +127,16 @@
       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-biography.hbs"}}
     </div>
 
+    {{!-- Owned Powers Tab --}}
+    <div class="tab powers" data-group="primary" data-tab="powers">
+      {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-powers.hbs"}}
+    </div>
+
+    {{!-- Gear Tab --}}
+    <div class="tab gear" data-group="primary" data-tab="gear">
+       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-gear.hbs"}}
+    </div>
+
     {{!-- Package Tab --}}
     <div class="tab package" data-group="primary" data-tab="package">
       <h3>Currently selected package: {{localize (lookup @root.config.packages system.package_applied)}}</h3>
@@ -135,17 +145,6 @@
       <button class="apply-package flexlarge align-left" data-package="civilian">{{localize "PROWLERS_AND_PARAGONS.Packages.civilian"}}</button>
       <button class="apply-package flexlarge align-left" data-package="clear">{{localize "PROWLERS_AND_PARAGONS.Packages.clear"}}</button>
     </div>
-
-    {{!-- Gear Tab --}}
-    <div class="tab gear" data-group="primary" data-tab="gear">
-       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-gear.hbs"}}
-    </div>
-
-    {{!-- Owned Powers Tab --}}
-    <div class="tab powers" data-group="primary" data-tab="powers">
-      {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-powers.hbs"}}
-    </div>
-
         {{!-- Options Tab --}}
     <div class="tab options" data-group="primary" data-tab="options">
       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-options.hbs"}}
