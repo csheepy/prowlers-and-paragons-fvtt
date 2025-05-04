@@ -153,6 +153,7 @@ export const opposeRoll = async (targetActorId, originatingTraitName, originatin
     talents: traits.talents,
     powers: traits.powers,
     threat: traits.threat,
+    vehicle: traits.vehicle,
     gear: traits.gear,
     rollingAgainst: originatingTraitName,
     showGear: showGear(),
@@ -197,6 +198,9 @@ export const opposeRoll = async (targetActorId, originatingTraitName, originatin
     }  else if (type === 'threat') {
       options.offense = false
       return await targetActor.threatRoll(options)
+    } else if (type === 'vehicle') {
+      options.type = game.i18n.localize(traits.vehicle[selectedTrait])
+      return await targetActor.roll(`system.${id}`, options)
     }
   }
 }

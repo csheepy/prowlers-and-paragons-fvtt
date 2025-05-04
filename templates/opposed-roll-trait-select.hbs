@@ -2,6 +2,11 @@ Choose a trait to roll against {{rollingAgainst}}
 <div class="grid grid-3col">
   {{#if threat}}
   {{radioBoxes "trait" threat checked=chosen localize=true}}
+  {{else if vehicle}}
+  <div>
+    <b>Traits</b>
+    {{radioBoxes "trait" vehicle checked=chosen localize=true}}
+  </div>
   {{else}}
   <div>
     <b>Abilities</b>

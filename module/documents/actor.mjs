@@ -23,10 +23,30 @@ export class ProwlersParagonsActor extends Actor {
     // documents or derived data.
   }
 
+  getVehicleTraits() {
+    const vehicleTraits = Object.fromEntries(Object.entries({
+      body: this.system.body,
+      weapons: this.system.weapons,
+      'speed.land': this.system.speed.land,
+      'speed.air': this.system.speed.air,
+      'speed.sea': this.system.speed.sea,
+      'control.land': this.system.control.land,
+      'control.air': this.system.control.air,
+      'control.sea': this.system.control.sea,
+    }).map(([key, value]) => {
+      return [`vehicle:${key}`, game.i18n.localize(`PROWLERS_AND_PARAGONS.Vehicle.${key}`)]
+    }))
+
+    return { vehicle: vehicleTraits };
+  }
 
   traitsForSelection() {
     if (this.system.threat) {
       return {threat: {'threat:threat': 'Threat'}} // threat
+    }
+
+    if (this.type === 'vehicle') {
+      return this.getVehicleTraits();
     }
     const abilities = Object.fromEntries(
       Object.entries(CONFIG.PROWLERS_AND_PARAGONS.abilities).map(([key, value]) => [`ability:${key}`, value])
@@ -37,9 +57,9 @@ export class ProwlersParagonsActor extends Actor {
 
 
     const powers = Object.fromEntries(this.items.contents.filter((p) => p.type === 'power').map(p => {return [`item:${p.id}`, p.name]}))
-
     const weapons = Object.fromEntries(this.items.contents.filter((p) => p.type === 'weapon').map(p => {return [`item:${p.id}`, p.name]}))
     const armor = Object.fromEntries(this.items.contents.filter((p) => p.type === 'armor').map(p => {return [`item:${p.id}`, p.name]}))
+    
     return {abilities, talents, powers, gear: {weapons, armor}}
   }
 
