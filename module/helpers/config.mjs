@@ -101,3 +101,10 @@ PROWLERS_AND_PARAGONS.talents = {
   technology: 'PROWLERS_AND_PARAGONS.Talent.technology',
   vehicles: 'PROWLERS_AND_PARAGONS.Talent.vehicles',
 };
+
+PROWLERS_AND_PARAGONS.narrative_control = {
+  opponent: 'PROWLERS_AND_PARAGONS.NarrativeControl.Opponent',
+  opponent_with_embellishment: 'PROWLERS_AND_PARAGONS.NarrativeControl.OpponentWithEmbellishment',
+  actor: 'PROWLERS_AND_PARAGONS.NarrativeControl.Actor',
+  actor_with_embellishment: 'PROWLERS_AND_PARAGONS.NarrativeControl.ActorWithEmbellishment',
+}
