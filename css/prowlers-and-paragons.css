@@ -341,6 +341,7 @@
   overflow-y: auto;
   scrollbar-width: thin;
   color: #444;
+  overflow: hidden;
 }
 
 .prowlers-and-paragons .items-list .item-list {
@@ -361,9 +362,11 @@
 
 .prowlers-and-paragons .items-list .item-name h3,
 .prowlers-and-paragons .items-list .item-name h4 {
-  margin: 0;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  overflow-x: hidden;
 }
 
 .prowlers-and-paragons .items-list .item-controls {
@@ -624,6 +627,7 @@
 .prowlers-and-paragons .item {
   position: relative;
   overflow: hidden;
+  will-change: transform;
 }
 
 .prowlers-and-paragons .item::after {
