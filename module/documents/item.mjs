@@ -172,4 +172,27 @@ Hooks.on("updateItem", (item, changes, options, userId) => {
       item.actor.prepareDerivedData();
     }
   }
+
+  // Check if an item with charges has been updated
+  if (changes?.system?.charges?.value !== undefined && item.system.hasCharges) {
+    const maxCharges = item.system.charges.max;
+    let newValue = changes.system.charges.value;
+
+    // Ensure charges don't exceed max or go below 0
+    if (maxCharges !== null && newValue > maxCharges) {
+      newValue = maxCharges;
+    }
+    if (newValue < 0) {
+      newValue = 0;
+    }
+
+    // Update the value if it needed correction
+    if (newValue !== changes.system.charges.value) {
+      item.update({"system.charges.value": newValue});
+    }
+
+    if (item.actor) {
+      item.actor.prepareDerivedData();
+    }
+  }
 });

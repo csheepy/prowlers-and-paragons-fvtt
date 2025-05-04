@@ -249,13 +249,23 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       });
     }
 
+    // Handle power toggle changes
     html.on('change', '.power-toggle', (ev) => {
       const li = $(ev.currentTarget).parents('.item');
       const item = this.actor.items.get(li.data('itemId'));
       const isChecked = ev.currentTarget.checked;
 
       item.update({ "system.toggleActive": isChecked });
-    })
+    });
+
+    // Handle charge value changes
+    html.on('change', '.currentCharges', (ev) => {
+      const li = $(ev.currentTarget).parents('.item');
+      const item = this.actor.items.get(li.data('itemId'));
+      const newValue = parseInt(ev.currentTarget.value);
+
+      item.update({ "system.charges.value": newValue });
+    });
   }
 
   /**
