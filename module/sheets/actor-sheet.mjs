@@ -4,6 +4,7 @@ import {
 } from '../helpers/effects.mjs';
 
 import { ProwlersRoll } from '../dice/prowlers-roll.mjs';
+import { getActorsFromTargetedTokens } from '../helpers/tokens.mjs';
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -56,6 +57,15 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     Handlebars.registerHelper('isDefaultPower', function (power) {
       return power.system.rank_type === 'default';
     });
+
+    Handlebars.registerHelper('getCurrentTarget', function () {
+      const targets = getActorsFromTargetedTokens();
+      if (targets.length === 1) {
+        return targets[0].name;
+      }
+      return null;
+    });
+
     // Adding a pointer to CONFIG.PROWLERS_AND_PARAGONS
     context.config = CONFIG.PROWLERS_AND_PARAGONS;
 
@@ -178,6 +188,14 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
+
+    // Set up token selection listener
+    if (this._tokenSelectionListener) {
+      Hooks.off('targetToken', this._tokenSelectionListener);
+    }
+    
+    this._tokenSelectionListener = this._onTokenSelectionChange.bind(this);
+    Hooks.on('targetToken', this._tokenSelectionListener);
 
     // Render the item sheet for viewing/editing prior to the editable check.
     html.on('click', '.item-edit', (ev) => {
@@ -345,6 +363,16 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     event.preventDefault();
     const dataset = event.currentTarget.dataset
     this.actor.applyPackage(dataset.package);
+  }
+
+  /**
+   * Handle token selection changes
+   * @private
+   */
+  _onTokenSelectionChange(user, token, targeted) {
+    if (this.rendered) {
+      this.render(false);
+    }
   }
 }
 

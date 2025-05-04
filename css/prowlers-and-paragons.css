@@ -445,3 +445,9 @@
 .opposed-roll {
   order: 3
 }
+
+.prowlers-and-paragons .target-display {
+  margin-left: 1em;
+  color: #4a4a4a;
+  font-style: italic;
+}
