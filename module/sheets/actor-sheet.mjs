@@ -150,7 +150,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       else if (i.type === 'flaw') {
         flaws.push(i);
       }
-      // Append to spells.
+      // Append to powers.
       else if (i.type === 'power') {
         if (i.system.shortDescription && i.system.shortDescription.length > 0) {
           i.displayName = `${i.name} (${i.system.shortDescription})`

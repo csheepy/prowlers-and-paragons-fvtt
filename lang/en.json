@@ -41,10 +41,6 @@
       "Item": "ProwlersParagons Item Sheet"
     },
     "Item": {
-      "Spell": {
-        "SpellLVL": "Level {level} Spells",
-        "AddLVL": "Add LVL {level}"
-      },
       "Power": {
         "power_rank_type": {
           "power": "Power",
@@ -131,7 +127,6 @@
     "Item": {
       "item": "Item",
       "feature": "Feature",
-      "spell": "Spell",
       "power": "Power",
       "procon": "Pro/Con",
       "perk": "Perk",

@@ -10,7 +10,6 @@ export {default as ProwlersParagonsHQ} from './actor-hq.mjs';
 export {default as ProwlersParagonsItemBase} from "./base-item.mjs";
 export {default as ProwlersParagonsItem} from "./item-item.mjs";
 export {default as ProwlersParagonsFeature} from "./item-feature.mjs";
-export {default as ProwlersParagonsSpell} from "./item-spell.mjs";
 export {default as ProwlersParagonsPower} from "./item-power.mjs";
 export {default as ProwlersParagonsProCon} from "./item-procon.mjs";
 export {default as ProwlersParagonsPerk} from "./item-perk.mjs";

@@ -76,7 +76,6 @@ Hooks.once('init', function () {
   CONFIG.Item.dataModels = {
     item: models.ProwlersParagonsItem,
     feature: models.ProwlersParagonsFeature,
-    spell: models.ProwlersParagonsSpell,
     power: models.ProwlersParagonsPower,
     procon: models.ProwlersParagonsProCon,
     perk: models.ProwlersParagonsPerk,
