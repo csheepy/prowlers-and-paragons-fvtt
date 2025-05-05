@@ -67,7 +67,6 @@ Hooks.once('init', function () {
   // with the Character/NPC as part of super.defineSchema()
   CONFIG.Actor.dataModels = {
     character: models.ProwlersParagonsCharacter,
-    npc: models.ProwlersParagonsNPC,
     minion: models.ProwlersParagonsMinion,
     vehicle: models.ProwlersParagonsVehicle,
     hq: models.ProwlersParagonsHQ

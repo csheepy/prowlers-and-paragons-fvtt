@@ -80,7 +80,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     }
 
     // Prepare NPC data and items.
-    if (actorData.type == 'npc') {
+    if (actorData.type == 'minion') {
       this._prepareItems(context);
     }
 
@@ -362,7 +362,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       return this.actor.roll(dataset.key, options)
     }
 
-    // NPC Threat rolls
+    // minion Threat rolls
     if (dataset.threat) {
       return this.actor.threatRoll({offense: true, doOpposedRoll: true})
     }

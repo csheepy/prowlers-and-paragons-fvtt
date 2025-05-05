@@ -119,7 +119,6 @@
   "TYPES": {
     "Actor": {
       "character": "Character",
-      "npc": "NPC",
       "minion": "Minion",
       "vehicle": "Vehicle",
       "hq": "Headquarters"
