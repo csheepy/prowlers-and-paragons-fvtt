@@ -144,6 +144,10 @@
     "Actor": "Actor",
     "ActorWithEmbellishment": "Actor with Embellishment"
   },
+  "Errors": {
+    "CouldNotFindItem": "Could not find item: _ITEM_ID_",
+    "DropFailedWith": "Drop failed with error: _ERROR_MSG_"
+  },
   "TYPES": {
     "Actor": {
       "character": "Character",

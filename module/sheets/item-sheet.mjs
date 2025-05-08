@@ -119,7 +119,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
             label: "Weblink"
           });
         }
-        throw new Error(game.i18n.localize("TWODSIX.Errors.DropFailedWith").replace("_ERROR_MSG_", err));
+        throw new Error(game.i18n.localize("Errors.DropFailedWith").replace("_ERROR_MSG_", err));
       }
     }
   }
@@ -130,7 +130,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     item = await fromUuid(dropData.uuid);  //NOTE THIS MAY NEED TO BE CHANGED TO fromUuidSync  ****
 
     if (!item) {
-      throw new Error(game.i18n.localize("TWODSIX.Errors.CouldNotFindItem").replace("_ITEM_ID_", dropData.uuid));
+      throw new Error(game.i18n.localize("Errors.CouldNotFindItem").replace("_ITEM_ID_", dropData.uuid));
     }
     //handle drop from compendium
     if (item.pack) {
