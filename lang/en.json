@@ -108,7 +108,35 @@
       "HalveToughness": "Halve Toughness (defense against lethal damage)",
       "MinionOffense": "Offensive roll (add minion group bonus)"
     },
-    "Threat": "Threat"
+    "Threat": "Threat",
+    "DerivedCharacteristics": {
+      "Health": "Health",
+      "Edge": "Edge",
+      "Resolve": {
+        "Label": "Resolve",
+        "Current": "Current",
+        "Starting": "Starting",
+        "ResetToStarting": "Reset to Starting",
+        "SpendMenu": {
+          "SpendResolve": "Spend Resolve",
+          "AssistingAllies": "Assisting Allies (give to ally)",
+          "AddDice": "Add 1 Dice per Resolve",
+          "RerollCompletely": "Reroll Completely",
+          "CombatSpends": "Combat Spends",
+          "SeizeInitiative": "Seize Initiative",
+          "Knockback": "Knockback",
+          "LureAttacker": "Lure an Attacker into Hitting Something Else",
+          "EnhanceTeamAttack": "Enhance Team Attack",
+          "ReduceLethality": "(Gritty Combat) Reduce Lethality",
+          "LuckyBreaks": "Lucky Breaks",
+          "PowerStunts": "Power Stunts",
+          "PowerUse": "Power Use",
+          "NoResolve": "No Resolve points remaining!"
+        }
+      },
+      "SpentHeroPoints": "Spent Hero Points",
+      "StartingHeroPointBudget": "Starting Hero Point Budget"
+    }
   },
   "NarrativeControl": {
     "Opponent": "Opponent",

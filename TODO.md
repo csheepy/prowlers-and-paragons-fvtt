@@ -8,8 +8,6 @@ a gm screen for tracking adversity and awarding resolve - party matrix from gums
 
 make narrative control text smaller/less bold
 
-resolve spend menu?
-
 make sure everything is localised
 
 so much refactoring 

@@ -189,6 +189,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
+    const actor = this.actor;
     // Set up token selection listener
     if (this._tokenSelectionListener) {
       Hooks.off('targetToken', this._tokenSelectionListener);
@@ -209,7 +210,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Render the item sheet for viewing/editing prior to the editable check.
     html.on('click', '.item-edit', (ev) => {
       const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
+      const item = actor.items.get(li.data('itemId'));
       item.sheet.render(true);
     });
 
@@ -218,7 +219,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     if (!this.isEditable) return;
 
     html.on('click', '.reset-resolve', () => {
-      this.actor.update({ 'system.resolve.value': this.actor.system.resolve.starting })
+      actor.update({ 'system.resolve.value': actor.system.resolve.starting })
     });
 
     // Add Inventory Item
@@ -227,7 +228,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Delete Inventory Item
     html.on('click', '.item-delete', (ev) => {
       const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
+      const item = actor.items.get(li.data('itemId'));
 
       new Dialog({
         title: 'Confirm',
@@ -254,9 +255,9 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     html.on('click', '.effect-control', (ev) => {
       const row = ev.currentTarget.closest('li');
       const document =
-        row.dataset.parentId === this.actor.id
-          ? this.actor
-          : this.actor.items.get(row.dataset.parentId);
+        row.dataset.parentId === actor.id
+          ? actor
+          : actor.items.get(row.dataset.parentId);
       onManageActiveEffect(ev, document);
     });
 
@@ -267,7 +268,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     html.on('click', '.apply-package', this._applyPackage.bind(this));
 
     // Drag events for macros.
-    if (this.actor.isOwner) {
+    if (actor.isOwner) {
       let handler = (ev) => this._onDragStart(ev);
       html.find('li.item').each((i, li) => {
         if (li.classList.contains('inventory-header')) return;
@@ -279,7 +280,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Handle power toggle changes
     html.on('change', '.power-toggle', (ev) => {
       const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
+      const item = actor.items.get(li.data('itemId'));
       const isChecked = ev.currentTarget.checked;
 
       item.update({ "system.toggleActive": isChecked });
@@ -288,7 +289,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Handle charge value changes
     html.on('change', '.currentCharges', (ev) => {
       const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
+      const item = actor.items.get(li.data('itemId'));
       const newValue = parseInt(ev.currentTarget.value);
 
       item.update({ "system.charges.value": newValue });
@@ -297,11 +298,67 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Handle reset charges button
     html.on('click', '.reset-charges', (ev) => {
       const li = $(ev.currentTarget).parents('.item');
-      const item = this.actor.items.get(li.data('itemId'));
+      const item = actor.items.get(li.data('itemId'));
       
       if (item.system.charges.max !== null) {
         item.update({ "system.charges.value": item.system.charges.max });
       }
+    });
+
+    // Spend Resolve Menu Logic
+    html.on('click', '.spend-resolve-btn', function (ev) {
+      ev.preventDefault();
+      const menu = $(this).siblings('.spend-resolve-dropdown');
+      menu.toggle();
+    });
+
+    // Hide menu when clicking outside
+    $(document).on('mousedown.spendResolveMenu', function (ev) {
+      if (!$(ev.target).closest('.spend-resolve-menu-container').length) {
+        $('.spend-resolve-dropdown').hide();
+      }
+    });
+
+    // Show/hide combat submenu on hover
+    html.find('.spend-resolve-submenu').hover(
+      function () {
+        $(this).find('.spend-resolve-submenu-list').show();
+      },
+      function () {
+        $(this).find('.spend-resolve-submenu-list').hide();
+      }
+    );
+
+    // Handle option click
+    html.on('click', '.spend-resolve-option', async function (ev) {
+      ev.preventDefault();
+      const option = $(this).data('option');
+      if (!option) return;
+      $('.spend-resolve-dropdown').hide();
+
+      // Option text for chat
+      const optionText = $(this).text().trim();
+      const actorName = html.find('input[name="name"]').val() || 'A hero';
+      // Get current resolve value
+      const currentResolve = actor.system.resolve.value;
+
+      // Check if resolve is 0
+      if (currentResolve <= 0) {
+        ui.notifications.error(game.i18n.localize("PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.NoResolve"));
+        return;
+      }
+
+      // Reduce resolve by 1
+      await actor.update({
+        "system.resolve.value": currentResolve - 1
+      });
+
+      // Send to chat
+      ChatMessage.create({
+        user: game.user.id,
+        speaker: ChatMessage.getSpeaker({ actor: html.data('actorId') }),
+        content: `<b>${actorName}</b> spends ${game.i18n.localize("PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.Label")}: <b>${optionText}</b>`
+      });
     });
   }
 

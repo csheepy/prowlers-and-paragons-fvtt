@@ -660,3 +660,100 @@
   margin-top: 0.5em;
 }
 
+.spend-resolve-menu-container {
+  position: relative;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.spend-resolve-btn {
+  background: var(--primary-color);
+  color: var(--accent-color);
+  border: 2px solid var(--secondary-color);
+  border-radius: 6px;
+  font-family: "Bangers", cursive;
+  font-size: 1.1em;
+  padding: 8px 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--shadow-color);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.spend-resolve-btn:hover {
+  background: var(--secondary-color);
+  color: var(--accent-color);
+  box-shadow: 4px 4px 0 var(--primary-color);
+}
+
+.spend-resolve-dropdown {
+  display: none;
+  position: absolute;
+  left: auto;
+  right: 0;
+  top: 110%;
+  min-width: 220px;
+  background: var(--accent-color);
+  border: 3px solid var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px var(--shadow-color);
+  z-index: 1000;
+  font-family: "Bangers", cursive;
+  padding: 8px 0;
+}
+
+.spend-resolve-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.spend-resolve-dropdown li {
+  position: relative;
+}
+
+.spend-resolve-dropdown a.spend-resolve-option {
+  display: block;
+  padding: 8px 18px;
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-size: 1.05em;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
+}
+
+.spend-resolve-dropdown a.spend-resolve-option:hover,
+.spend-resolve-dropdown a.spend-resolve-option:focus {
+  background: var(--primary-color);
+  color: var(--accent-color);
+}
+
+.spend-resolve-submenu {
+  position: relative;
+}
+
+.spend-resolve-submenu-list {
+  display: none;
+  position: absolute;
+  left: auto;
+  right: 100%;
+  top: 0;
+  min-width: 220px;
+  background: var(--accent-color);
+  border: 3px solid var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px var(--shadow-color);
+  z-index: 1100;
+  padding: 8px 0;
+}
+
+.spend-resolve-submenu-list a.spend-resolve-option {
+  padding-left: 24px;
+}
+
+.dice-roll .narrative-control {
+  font-size: 14px;
+  color: var(--color-text-dark-secondary);
+}
