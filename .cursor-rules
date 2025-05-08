@@ -1,0 +1,62 @@
+# Cursor Rules for Prowlers & Paragons Foundry VTT System
+
+## General Principles
+- Follow Foundry VTT system development conventions for file structure, naming, and modularity.
+- Keep all user-facing strings in localization files (`lang/en.json`, etc.) and use `{{localize ...}}` in templates and `game.i18n.localize(...)` in JS.
+- Use semantic, descriptive variable and function names.
+- Document all custom helpers, hooks, and major functions with JSDoc or inline comments.
+- Prefer modular, reusable code (split helpers, config, and templates into logical files/folders).
+
+## File & Directory Structure
+- Use subfolders for:
+  - `templates/` (Handlebars templates)
+  - `module/` (JS code, further split by feature)
+  - `lang/` (localization files)
+  - `css/` (stylesheets)
+- Name files and folders in lowercase, using hyphens for separation (e.g., `actor-sheet.mjs`, `actor-powers-play.hbs`).
+
+## Templates
+- Never hardcode user-facing text; always use localization keys.
+- Use partials for repeated UI elements (e.g., item lists, resource rows).
+- Use semantic HTML and ARIA attributes where possible for accessibility.
+- Keep templates clean: avoid inline JS or CSS.
+
+## JavaScript
+- Always use localization for notifications, dialog text, and chat messages.
+- Register all custom Handlebars helpers in a single location (e.g., `helpers/templates.mjs`).
+- Use ES6+ features (let/const, arrow functions, destructuring).
+- Keep sheet logic in sheet classes; keep helpers and utilities in separate modules.
+- Use Foundry's event hooks and data binding where possible, rather than direct DOM manipulation.
+- Clean up event listeners and hooks to avoid memory leaks.
+
+## CSS
+- Use CSS variables for theme colors and spacing.
+- Scope all styles to the system's root class (e.g., `.prowlers-and-paragons`) to avoid conflicts.
+- Prefer flexbox and grid for layout.
+- Keep visual theming consistent and accessible (contrast, font size, etc.).
+
+## Localization
+- All user-facing strings must be in `lang/en.json` (and other language files as needed).
+- Organize localization keys by feature/category (e.g., `DerivedCharacteristics`, `Item`, `Roll`).
+- Use descriptive, hierarchical keys (e.g., `PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.AddDice`).
+
+## Version Control & Collaboration
+- Use clear, descriptive commit messages.
+- Keep PRs focused and small; avoid mixing unrelated changes.
+- Document major features and changes in a `CHANGELOG.md`.
+
+## Testing & Debugging
+- Test all features in both the Foundry VTT app and browser.
+- Check for errors in the browser console and Foundry logs.
+- Validate localization by switching languages (if available).
+- Use Foundry's built-in permissions and ownership features to test as both GM and player.
+
+## Accessibility & UX
+- Ensure sufficient color contrast and readable font sizes.
+- Use tooltips and ARIA labels for important controls.
+- Make interactive elements (buttons, menus) keyboard-accessible.
+
+## Miscellaneous
+- Avoid using deprecated Foundry APIs; keep up with system version changes.
+- Clean up unused code, templates, and assets regularly.
+- Keep documentation up to date for contributors and users.
