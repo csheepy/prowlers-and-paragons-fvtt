@@ -3,6 +3,7 @@ import { ProwlersDie } from "./prowlers-die.mjs";
 export class ProwlersRoll extends Roll {
   static CHAT_TEMPLATE = "systems/prowlers-and-paragons/templates/prowlers-dice-result.hbs";
   static TOOLTIP_TEMPLATE = "systems/prowlers-and-paragons/templates/prowlers-tooltip.hbs"
+  static DIALOG_TEMPLATE = "systems/prowlers-and-paragons/templates/prowlers-roll-trait.hbs"
 
   static register() {
     CONFIG.Dice.rolls.push(this);
@@ -119,7 +120,7 @@ export class ProwlersRoll extends Roll {
   }
 
   static async rollDialog(options = {}) {
-    const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-trait.hbs'
+    const template = this.DIALOG_TEMPLATE;
     const data = this.rollDialogData(options);
 
     // show an option to halve toughness
@@ -135,6 +136,7 @@ export class ProwlersRoll extends Roll {
     }
 
     const html = await renderTemplate(template, data);
+
     return new Promise((resolve) => {
       new Dialog({
         title: `Rolling ${options.type}`,
@@ -144,9 +146,8 @@ export class ProwlersRoll extends Roll {
             icon: '<i class="fas fa-dice"></i>',
             label: data.label,
             callback: async (buttonHtml) => {
-              options = this.addOptionsFromHtml(options, buttonHtml)
-
-              this.resolveRollCallback(resolve, options)
+              options = this.addOptionsFromHtml(options, buttonHtml);
+              this.resolveRollCallback(resolve, options);
             }
           },
           two: {
@@ -156,7 +157,7 @@ export class ProwlersRoll extends Roll {
         },
         default: "two",
       }).render(true);
-    })
+    });
   }
 
   async explode() {
@@ -188,6 +189,8 @@ export class ProwlersRoll extends Roll {
 }
 
 export class WeaponRoll extends ProwlersRoll {
+  static DIALOG_TEMPLATE = 'systems/prowlers-and-paragons/templates/prowlers-roll-weapon.hbs';
+
   constructor(formula, data = {}, options = {}) {
     const total_dice_number = WeaponRoll.initialNumberOfDice(options)
     formula = `(${total_dice_number})dp`
@@ -212,39 +215,16 @@ export class WeaponRoll extends ProwlersRoll {
     }
   }
 
-  static async rollDialog(options = {}) {
-    const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-weapon.hbs'
-    const data = this.rollDialogData(options);
-
-    const html = await renderTemplate(template, data);
-
-    return new Promise((resolve) => {
-      new Dialog({
-        title: `Rolling ${options.type}`,
-        content: html,
-        buttons: {
-          one: {
-            icon: '<i class="fas fa-dice"></i>',
-            label: data.label,
-            callback: async (buttonHtml) => {
-              options = this.addOptionsFromHtml(options, buttonHtml)
-              options.trait_rank = options.weapon_traits[buttonHtml.find('[name="trait"]').val()]
-
-              this.resolveRollCallback(resolve, options)
-            }
-          },
-          two: {
-            icon: '<i class="fas fa-times"></i>',
-            label: "Cancel",
-          }
-        },
-        default: "two",
-      }).render(true);
-    })
+  static addOptionsFromHtml(options, buttonHtml) {
+    options = super.addOptionsFromHtml(options, buttonHtml);
+    options.trait_rank = options.weapon_traits[buttonHtml.find('[name="trait"]').val()];
+    return options;
   }
 }
 
 export class ArmorRoll extends ProwlersRoll {
+  static DIALOG_TEMPLATE = 'systems/prowlers-and-paragons/templates/prowlers-roll-armor.hbs';
+
   constructor(formula, data = {}, options = {}) {
     const total_dice_number = ArmorRoll.initialNumberOfDice(options)
     formula = `(${total_dice_number})dp`
@@ -267,35 +247,10 @@ export class ArmorRoll extends ProwlersRoll {
     }
   }
 
-  static async rollDialog(options = {}) {
-    const template = 'systems/prowlers-and-paragons/templates/prowlers-roll-armor.hbs'
-    const data = this.rollDialogData(options);
-
-    const html = await renderTemplate(template, data);
-
-    return new Promise((resolve) => {
-      new Dialog({
-        title: `Rolling ${options.type}`,
-        content: html,
-        buttons: {
-          one: {
-            icon: '<i class="fas fa-dice"></i>',
-            label: data.label,
-            callback: async (buttonHtml) => {
-              options = this.addOptionsFromHtml(options, buttonHtml)
-              options.trait_rank = options.armor_traits[buttonHtml.find('[name="trait"]').val()]
-
-              this.resolveRollCallback(resolve, options)
-            }
-          },
-          two: {
-            icon: '<i class="fas fa-times"></i>',
-            label: "Cancel",
-          }
-        },
-        default: "two",
-      }).render(true)
-    })
+  static addOptionsFromHtml(options, buttonHtml) {
+    options = super.addOptionsFromHtml(options, buttonHtml);
+    options.trait_rank = options.armor_traits[buttonHtml.find('[name="trait"]').val()];
+    return options;
   }
 }
 
