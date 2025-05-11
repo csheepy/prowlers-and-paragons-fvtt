@@ -52,24 +52,7 @@
           <div class="spend-resolve-menu-container">
             <button type="button" class="spend-resolve-btn">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.SpendResolve"}}</button>
             <div class="spend-resolve-dropdown" style="display: none;">
-              <ul>
-                <li><a class="spend-resolve-option" data-option="assist">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.AssistingAllies"}}</a></li>
-                <li><a class="spend-resolve-option" data-option="add-dice">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.AddDice"}}</a></li>
-                <li><a class="spend-resolve-option" data-option="reroll">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.RerollCompletely"}}</a></li>
-                <li class="spend-resolve-submenu">
-                  <a class="spend-resolve-option" data-option="combat">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.CombatSpends"}} &raquo;</a>
-                  <ul class="spend-resolve-submenu-list">
-                    <li><a class="spend-resolve-option" data-option="seize-initiative">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.SeizeInitiative"}}</a></li>
-                    <li><a class="spend-resolve-option" data-option="knockback">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.Knockback"}}</a></li>
-                    <li><a class="spend-resolve-option" data-option="lure-attacker">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.LureAttacker"}}</a></li>
-                    <li><a class="spend-resolve-option" data-option="enhance-team-attack">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.EnhanceTeamAttack"}}</a></li>
-                    <li><a class="spend-resolve-option" data-option="reduce-lethality">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.ReduceLethality"}}</a></li>
-                  </ul>
-                </li>
-                <li><a class="spend-resolve-option" data-option="lucky-break">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.LuckyBreaks"}}</a></li>
-                <li><a class="spend-resolve-option" data-option="power-stunt">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.PowerStunts"}}</a></li>
-                <li><a class="spend-resolve-option" data-option="power-use">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.PowerUse"}}</a></li>
-              </ul>
+              {{> "systems/prowlers-and-paragons/templates/actor/parts/spend-resource-menu.hbs" options=@root.config.resolve_spend_options }}
             </div>
           </div>
           <button class="reset-resolve">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.ResetToStarting"}}</button>

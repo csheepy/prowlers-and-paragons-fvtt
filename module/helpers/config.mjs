@@ -108,3 +108,30 @@ PROWLERS_AND_PARAGONS.narrative_control = {
   actor: 'PROWLERS_AND_PARAGONS.NarrativeControl.Actor',
   actor_with_embellishment: 'PROWLERS_AND_PARAGONS.NarrativeControl.ActorWithEmbellishment',
 }
+
+PROWLERS_AND_PARAGONS.resolve_spend_options = [
+  { key: "assist", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.AssistingAllies" },
+  { key: "add-dice", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.AddDice" },
+  { key: "reroll", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.RerollCompletely" },
+  {
+    key: "combat",
+    label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.CombatSpends",
+    isSubmenu: true,
+    submenu: [
+      { key: "seize-initiative", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.SeizeInitiative" },
+      { key: "knockback", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.Knockback" },
+      { key: "lure-attacker", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.LureAttacker" },
+      { key: "enhance-team-attack", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.EnhanceTeamAttack" },
+      { key: "reduce-lethality", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.ReduceLethality" }
+    ]
+  },
+  { key: "lucky-break", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.LuckyBreaks" },
+  { key: "power-stunt", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.PowerStunts" },
+  { key: "power-use", label: "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.Options.PowerUse" }
+];
+
+PROWLERS_AND_PARAGONS.adversity_spend_options = [
+  { key: "flaws", label: "PROWLERS_AND_PARAGONS.GM.SpendAdversityMenu.Options.Flaws" },
+  { key: "misfortune", label: "PROWLERS_AND_PARAGONS.GM.SpendAdversityMenu.Options.Misfortune" },
+  { key: "villainy", label: "PROWLERS_AND_PARAGONS.GM.SpendAdversityMenu.Options.Villainy" }
+].concat(PROWLERS_AND_PARAGONS.resolve_spend_options);

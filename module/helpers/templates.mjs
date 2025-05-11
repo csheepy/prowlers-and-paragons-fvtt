@@ -20,6 +20,7 @@ export const preloadHandlebarsTemplates = async function () {
     'systems/prowlers-and-paragons/templates/actor/parts/actor-vehicle-features.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-hq-features.hbs',
     'systems/prowlers-and-paragons/templates/actor/parts/actor-vehicle-traits.hbs',
+    'systems/prowlers-and-paragons/templates/actor/parts/spend-resource-menu.hbs',
     // Item partials
     'systems/prowlers-and-paragons/templates/item/parts/item-effects.hbs',
     // globalish

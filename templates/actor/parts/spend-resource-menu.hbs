@@ -1,0 +1,16 @@
+<ul>
+  {{#each options}}
+    {{#if isSubmenu}}
+      <li class="spend-resolve-submenu">
+        <a class="spend-resolve-option" data-option="{{key}}">{{localize label}} &raquo;</a>
+        <ul class="spend-resolve-submenu-list">
+          {{#each submenu}}
+            <li><a class="spend-resolve-option" data-option="{{key}}">{{localize label}}</a></li>
+          {{/each}}
+        </ul>
+      </li>
+    {{else}}
+      <li><a class="spend-resolve-option" data-option="{{key}}">{{localize label}}</a></li>
+    {{/if}}
+  {{/each}}
+</ul> 
