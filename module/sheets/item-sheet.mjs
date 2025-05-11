@@ -143,7 +143,6 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
 
   /** @override */
   _canDragDrop() {
-    //console.log("got to drop check", selector);
     return this.isEditable && this.item.isOwner;
   }
 

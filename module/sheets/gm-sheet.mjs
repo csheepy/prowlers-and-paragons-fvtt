@@ -50,7 +50,6 @@ export class ProwlersParagonsGMSheet extends ActorSheet {
       const actorId = foundry.utils.parseUuid(data.uuid).id;
 
       const actor = game.actors.get(actorId);
-      console.log(actor)
       if (actor && actor.type === "character") {
         const ids = this.actor.system.character_ids || [];
         if (!ids.includes(actor.id)) {
