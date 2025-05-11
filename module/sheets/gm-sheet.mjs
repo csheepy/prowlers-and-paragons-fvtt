@@ -1,4 +1,6 @@
 import { socket } from "../prowlers-and-paragons.mjs";
+import { setupSpendResourceMenuListeners } from '../helpers/spend-resource-menu.mjs';
+
 export class ProwlersParagonsGMSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -90,63 +92,17 @@ export class ProwlersParagonsGMSheet extends ActorSheet {
     });
 
     // Spend Adversity Menu Logic
-    html.on("click", ".spend-resolve-btn", function (ev) {
-      ev.preventDefault();
-      const menu = $(this).siblings('.spend-resolve-dropdown');
-      menu.toggle();
-    });
-
-    // Hide menu when clicking outside
-    $(document).on('mousedown.spendAdversityMenu', function (ev) {
-      if (!$(ev.target).closest('.spend-resolve-menu-container').length) {
-        $('.spend-resolve-dropdown').hide();
-      }
-    });
-
-    // Show/hide combat submenu on hover
-    html.find('.spend-resolve-submenu').hover(
-      function () {
-        $(this).find('.spend-resolve-submenu-list').show();
-      },
-      function () {
-        $(this).find('.spend-resolve-submenu-list').hide();
-      }
-    );
-
-    // Handle option click
-    html.on("click", ".spend-resolve-option", async function (ev) {
-      ev.preventDefault();
-      const option = $(this).data('option');
-      if (!option) return;
-      $('.spend-resolve-dropdown').hide();
-
-      // Option text for chat
-      const optionText = $(this).text().trim();
-      const actorName = html.find('h1').text() || 'The GM';
-      // Get current adversity value
-      const currentAdversity = actor.system.adversity || 0;
-
-      // Check if adversity is 0
-      if (currentAdversity <= 0) {
-        ui.notifications.error(game.i18n.localize("PROWLERS_AND_PARAGONS.GM.SpendAdversityMenu.NoAdversity"));
-        return;
-      }
-
-      // Reduce adversity by 1
-      await actor.update({
-        "system.adversity": currentAdversity - 1
-      });
-
-      // Send to chat
-      ChatMessage.create({
-        user: game.user.id,
-        speaker: ChatMessage.getSpeaker({ actor: html.data('actorId') }),
-        content: `<b>${actorName}</b> spends ${game.i18n.localize("PROWLERS_AND_PARAGONS.GM.Adversity")}: <b>${optionText}</b>`
-      });
-
-      // Notify other users
-      if (game.modules.get("socketlib")?.active && socket) {
-        socket.executeForEveryone("notifySpendAdversity", { optionText });
+    setupSpendResourceMenuListeners({
+      html,
+      actor,
+      resourceField: 'adversity',
+      resourceLabelKey: 'PROWLERS_AND_PARAGONS.GM.Adversity',
+      noResourceKey: 'PROWLERS_AND_PARAGONS.GM.SpendAdversityMenu.NoAdversity',
+      getActorName: (html) => html.find('h1').text() || 'The GM',
+      onSpend: (option, actor, html) => {
+        if (game.modules.get("socketlib")?.active && socket) {
+          socket.executeForEveryone("notifySpendAdversity", { optionText: option });
+        }
       }
     });
   }

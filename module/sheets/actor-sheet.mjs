@@ -5,6 +5,7 @@ import {
 
 import { ProwlersRoll } from '../dice/prowlers-roll.mjs';
 import { getActorsFromTargetedTokens } from '../helpers/tokens.mjs';
+import { setupSpendResourceMenuListeners } from '../helpers/spend-resource-menu.mjs';
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -306,59 +307,13 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     });
 
     // Spend Resolve Menu Logic
-    html.on('click', '.spend-resolve-btn', function (ev) {
-      ev.preventDefault();
-      const menu = $(this).siblings('.spend-resolve-dropdown');
-      menu.toggle();
-    });
-
-    // Hide menu when clicking outside
-    $(document).on('mousedown.spendResolveMenu', function (ev) {
-      if (!$(ev.target).closest('.spend-resolve-menu-container').length) {
-        $('.spend-resolve-dropdown').hide();
-      }
-    });
-
-    // Show/hide combat submenu on hover
-    html.find('.spend-resolve-submenu').hover(
-      function () {
-        $(this).find('.spend-resolve-submenu-list').show();
-      },
-      function () {
-        $(this).find('.spend-resolve-submenu-list').hide();
-      }
-    );
-
-    // Handle option click
-    html.on('click', '.spend-resolve-option', async function (ev) {
-      ev.preventDefault();
-      const option = $(this).data('option');
-      if (!option) return;
-      $('.spend-resolve-dropdown').hide();
-
-      // Option text for chat
-      const optionText = $(this).text().trim();
-      const actorName = html.find('input[name="name"]').val() || 'A hero';
-      // Get current resolve value
-      const currentResolve = actor.system.resolve.value;
-
-      // Check if resolve is 0
-      if (currentResolve <= 0) {
-        ui.notifications.error(game.i18n.localize("PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.NoResolve"));
-        return;
-      }
-
-      // Reduce resolve by 1
-      await actor.update({
-        "system.resolve.value": currentResolve - 1
-      });
-
-      // Send to chat
-      ChatMessage.create({
-        user: game.user.id,
-        speaker: ChatMessage.getSpeaker({ actor: html.data('actorId') }),
-        content: `<b>${actorName}</b> spends ${game.i18n.localize("PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.Label")}: <b>${optionText}</b>`
-      });
+    setupSpendResourceMenuListeners({
+      html,
+      actor,
+      resourceField: 'resolve.value',
+      resourceLabelKey: 'PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.Label',
+      noResourceKey: 'PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.NoResolve',
+      getActorName: (html) => html.find('input[name="name"]').val() || 'A hero',
     });
   }
 
