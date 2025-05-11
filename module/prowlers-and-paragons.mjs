@@ -4,6 +4,7 @@ import { ProwlersParagonsItem } from './documents/item.mjs';
 // Import sheet classes.
 import { ProwlersParagonsActorSheet } from './sheets/actor-sheet.mjs';
 import { ProwlersParagonsItemSheet } from './sheets/item-sheet.mjs';
+import { ProwlersParagonsGMSheet } from './sheets/gm-sheet.mjs';
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { PROWLERS_AND_PARAGONS } from './helpers/config.mjs';
@@ -19,6 +20,12 @@ export let socket
 Hooks.once("socketlib.ready", () => {
 	socket = socketlib.registerSystem("prowlers-and-paragons");
   socket.register("opposeRoll", opposeRoll);
+  socket.register("notifyAwardResolve", ({ actorName }) => {
+    ui.notifications.info(`${actorName} awarded 1 Resolve!`);
+  });
+  socket.register("notifySpendAdversity", ({optionText}) => {
+    ui.notifications.info(`Adversity spent on ${optionText}!`);
+  });
 });
 
 Hooks.once('init', function () {
@@ -69,7 +76,8 @@ Hooks.once('init', function () {
     character: models.ProwlersParagonsCharacter,
     minion: models.ProwlersParagonsMinion,
     vehicle: models.ProwlersParagonsVehicle,
-    hq: models.ProwlersParagonsHQ
+    hq: models.ProwlersParagonsHQ,
+    'gm-sheet': models.ProwlersParagonsGMSheet
   }
   CONFIG.Item.documentClass = ProwlersParagonsItem;
   CONFIG.Item.dataModels = {
@@ -100,6 +108,11 @@ Hooks.once('init', function () {
   Items.registerSheet('prowlers-and-paragons', ProwlersParagonsItemSheet, {
     makeDefault: true,
     label: 'PROWLERS_AND_PARAGONS.SheetLabels.Item',
+  });
+  Actors.registerSheet('prowlers-and-paragons', ProwlersParagonsGMSheet, {
+    types: ['gm-sheet'],
+    makeDefault: true,
+    label: 'PROWLERS_AND_PARAGONS.Actor.gm-sheet',
   });
 
   // Preload Handlebars templates.

@@ -1,6 +1,17 @@
 {
   "Actor": {
-    "types": ["character", "minion", "vehicle", "hq"]
+    "types": ["character", "minion", "vehicle", "hq", "gm-sheet"],
+    "templates": {
+      "gm-sheet": "systems/prowlers-and-paragons/templates/actor/actor-gm-sheet.hbs"
+    },
+    "gm-sheet": {
+      "name": "",
+      "type": "gm-sheet",
+      "system": {
+        "adversity": 0,
+        "character_ids": []
+      }
+    }
   },
   "Item": {
     "types": ["item", "feature","power", "procon", "perk", "flaw", "weapon", "armor"]

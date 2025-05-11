@@ -119,23 +119,43 @@
         "ResetToStarting": "Reset to Starting",
         "SpendMenu": {
           "SpendResolve": "Spend Resolve",
-          "AssistingAllies": "Assisting Allies (give to ally)",
-          "AddDice": "Add 1 Dice per Resolve",
-          "RerollCompletely": "Reroll Completely",
-          "CombatSpends": "Combat Spends",
-          "SeizeInitiative": "Seize Initiative",
-          "Knockback": "Knockback",
-          "LureAttacker": "Lure an Attacker into Hitting Something Else",
-          "EnhanceTeamAttack": "Enhance Team Attack",
-          "ReduceLethality": "(Gritty Combat) Reduce Lethality",
-          "LuckyBreaks": "Lucky Breaks",
-          "PowerStunts": "Power Stunts",
-          "PowerUse": "Power Use",
-          "NoResolve": "No Resolve points remaining!"
+          "NoResolve": "No Resolve points remaining!",
+          "Options": {
+            "AssistingAllies": "Assisting Allies (give to ally)",
+            "AddDice": "Add 1 Dice per Resolve",
+            "RerollCompletely": "Reroll Completely",
+            "CombatSpends": "Combat Spends",
+            "SeizeInitiative": "Seize Initiative",
+            "Knockback": "Knockback",
+            "LureAttacker": "Lure an Attacker into Hitting Something Else",
+            "EnhanceTeamAttack": "Enhance Team Attack",
+            "ReduceLethality": "(Gritty Combat) Reduce Lethality",
+            "LuckyBreaks": "Lucky Breaks",
+            "PowerStunts": "Power Stunts",
+            "PowerUse": "Power Use"
+          }
         }
       },
       "SpentHeroPoints": "Spent Hero Points",
       "StartingHeroPointBudget": "Starting Hero Point Budget"
+    },
+    "GM": {
+      "Adversity": "Adversity",
+      "SpendAdversity": "Spend Adversity",
+      "SpendAdversityMenu": {
+        "Title": "Spend Adversity",
+        "NoAdversity": "No Adversity points remaining!",
+        "Options": {
+          "Flaws": "Flaws",
+          "Misfortune": "Misfortune",
+          "Villainy": "Villainy"
+        }   
+      },
+      "Characters": "Characters",
+      "AwardResolve": "Award Resolve",
+      "RemoveCharacter": "Remove character",
+      "Talents": "Talents",
+      "Rank": "Rank"
     }
   },
   "NarrativeControl": {
@@ -153,7 +173,8 @@
       "character": "Character",
       "minion": "Minion",
       "vehicle": "Vehicle",
-      "hq": "Headquarters"
+      "hq": "Headquarters",
+      "gm-sheet": "GM Sheet"
     },
     "Item": {
       "item": "Item",
