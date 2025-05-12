@@ -1,5 +1,7 @@
 ## will do
 
+write README.md
+
 ## might do
 
 get all the powers perks and flaws into foundry

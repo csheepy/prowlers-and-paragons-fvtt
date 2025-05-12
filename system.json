@@ -1,16 +1,16 @@
 {
   "id": "prowlers-and-paragons",
   "title": "Prowlers and Paragons",
-  "description": "The Prowlers and Paragons system for FoundryVTT!",
+  "description": "An unofficial system for Prowlers and Paragons",
   "authors": [
     {
-      "name": "DoomyDoom"
+      "name": "Clay Sheppard"
     }
   ],
   "url": "https://github.com/csheepy/prowlers-and-paragons-fvtt",
   "license": "LICENSE.txt",
   "readme": "README.md",
-  "bugs": "Replace this with a link to file issues or tickets",
+  "bugs": "https://github.com/csheepy/prowlers-and-paragons-fvtt/issues",
   "changelog": "CHANGELOG.md",
   "media": [
     {
@@ -21,8 +21,8 @@
   ],
   "version": "0.0.1",
   "compatibility": {
-    "minimum": 11,
-    "verified": "11.315"
+    "minimum": 12,
+    "verified": "12.331"
   },
   "esmodules": ["module/prowlers-and-paragons.mjs"],
   "styles": ["css/prowlers-and-paragons.css"],
