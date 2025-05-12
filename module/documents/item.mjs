@@ -5,6 +5,7 @@
 
 import { ArmorRoll, ProwlersRoll, WeaponRoll } from "../dice/prowlers-roll.mjs";
 import { getActorsFromTargetedTokens } from '../helpers/tokens.mjs'
+import { setupOpposedRoll } from '../helpers/rolls.mjs';
 
 export class ProwlersParagonsItem extends Item {
   /**
@@ -113,14 +114,10 @@ export class ProwlersParagonsItem extends Item {
     const rollMode = game.settings.get('core', 'rollMode');
     const label = `[${item.type}] ${item.name}`;
 
-
     if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
-      const d = await this.actor.targetRoll(this.name)
-      if(d !== undefined) {
-        options = {...options, ...{ difficulty: 'opposed', difficultyNumber: d}}
-      } else {
-          return;
-      }
+      const opposedRoll = await setupOpposedRoll(this.actor, this.name);
+      if (!opposedRoll) return;
+      options = { ...options, ...opposedRoll };
     }
     // power/ability/talent rolls
     if(this.system.rank) {
