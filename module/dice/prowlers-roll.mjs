@@ -55,7 +55,8 @@ export class ProwlersRoll extends Roll {
       total: isPrivate ? "?" : total,
       netSuccess: isPrivate ? "" : netSuccess,
       narrativeControl: isPrivate ? "" : narrativeControl,
-      difficulty: game.i18n.format(CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled[this.options.difficulty], { level: this.options.difficultyNumber })
+      difficulty: game.i18n.format(CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled[this.options.difficulty], { level: this.options.difficultyNumber }),
+      hideSuccesses: this.options.hideSuccesses
     };
   }
 

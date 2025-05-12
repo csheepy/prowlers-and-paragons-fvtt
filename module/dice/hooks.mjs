@@ -156,7 +156,8 @@ export const opposeRoll = async (targetActorId, originatingTraitName, originatin
     difficulty: 'opposed',
     difficultyNumber: 0,
     doOpposedRoll: false,
-    originatingActorName
+    originatingActorName,
+    hideSuccesses: true,
   };
 
   return await executeTraitRoll(targetActor, selectedTrait, traits, options);
