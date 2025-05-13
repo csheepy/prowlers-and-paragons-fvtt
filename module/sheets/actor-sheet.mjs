@@ -202,7 +202,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     // Clear target button
     html.on('click', '.clear-target', (ev) => {
       ev.preventDefault();
-      const targets = canvas.tokens.controlled;
+      const targets = game.user.targets;
       targets.forEach(token => {
         token.setTarget(false);
       });
