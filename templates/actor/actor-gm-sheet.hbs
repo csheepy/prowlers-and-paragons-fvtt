@@ -39,7 +39,7 @@
           <tr>
             <th>{{localize (concat "PROWLERS_AND_PARAGONS.Talent." talentKey)}}</th>
             {{#each ../characters as |char|}}
-              <td>{{lookup (lookup char.system.talents talentKey) "value"}}</td>
+              <td class="align-center">{{lookup (lookup char.system.talents talentKey) "value"}}</td>
             {{/each}}
           </tr>
         {{/each}}
