@@ -137,10 +137,90 @@ export const runDiceHooks = () => {
 
   Hooks.on("renderChatLog", (_app, html, _data) => {
     html.on("click", ".opposed-roll", chatOpposedRoll);
+    html.on("click", ".apply-damage-btn", toggleApplyDamageMenu);
+    html.on("click", ".apply-damage-option", chatApplyDamage);
+    
+    // Add mousedown listener to close dropdown on outside click
+    $(document).off('mousedown.applyDamageMenu').on('mousedown.applyDamageMenu', function (ev) {
+      if (!$(ev.target).closest('.apply-damage-menu-container').length) {
+        $('.apply-damage-dropdown').hide();
+      }
+    });
   });
   Hooks.on("renderChatPopout", (_app, html, _data) => {
     html.on("click", ".opposed-roll", chatOpposedRoll);
+    html.on("click", ".apply-damage-btn", toggleApplyDamageMenu);
+    html.on("click", ".apply-damage-option", chatApplyDamage);
+    
+    // Add mousedown listener to close dropdown on outside click
+    $(document).off('mousedown.applyDamageMenu').on('mousedown.applyDamageMenu', function (ev) {
+      if (!$(ev.target).closest('.apply-damage-menu-container').length) {
+        $('.apply-damage-dropdown').hide();
+      }
+    });
   });
+
+  // Add the new functions below the existing ones
+  const toggleApplyDamageMenu = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const button = $(event.currentTarget);
+    const dropdown = button.siblings('.apply-damage-dropdown');
+    
+    // Dynamically get current selected and targeted tokens
+    const selectedActor = getControlledCharacter();
+    const targetedTokens = Array.from(game.user.targets);
+    const selectedName = selectedActor ? selectedActor.name : 'None';
+    const targetName = targetedTokens.length > 0 ? targetedTokens[0].name : 'None';
+    
+    // Update the dropdown content with current values
+    dropdown.html(`
+      <ul>
+        <li class="apply-damage-option" data-option="selected">Apply to Selected Token (${selectedName})</li>
+        <li class="apply-damage-option" data-option="target">Apply to Target (${targetName})</li>
+      </ul>
+    `);
+    
+    dropdown.toggle();
+  };
+
+  const chatApplyDamage = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const option = $(event.currentTarget).data('option');
+    if (!option) return;
+    $(event.currentTarget).closest('.apply-damage-dropdown').hide();
+
+    const chatMessageId = $(event.currentTarget).closest('.message').data('messageId');
+    const chatMessage = game.messages.get(chatMessageId);
+    if (!chatMessage) return ui.notifications.warn('Chat message not found!');
+
+    const roll = chatMessage.rolls?.[0];
+    if (!roll || roll.netSuccess <= 0) return ui.notifications.warn('No valid roll to apply damage!');
+
+    // const controlledCharacter = getControlledCharacter();
+    // if (!controlledCharacter) return ui.notifications.warn('You must select or control a character!');
+
+    let damagedActor;
+    if (option === 'selected') {
+      damagedActor = getControlledCharacter();
+      if (!damagedActor) return ui.notifications.warn('You must select or control a character!');
+    } else if (option === 'target') {
+      const targetedTokens = Array.from(game.user.targets);
+      if (targetedTokens.length > 0) {
+        damagedActor = targetedTokens[0].actor;
+      } else {
+        return ui.notifications.warn('No target selected!');
+      }
+    }
+
+    if (damagedActor) {
+      const currentHealth = damagedActor.system.health.value || 0;
+      const newHealth = Math.max(currentHealth - roll.netSuccess, 0);
+      await damagedActor.update({ 'system.health.value': newHealth });
+      ui.notifications.info(`Applied ${roll.netSuccess} damage to ${damagedActor.name}'s Health.`);
+    }
+  };
 };
 
 // called when a roll is made with a target selected. this function is called for the target before the original roll is resolved

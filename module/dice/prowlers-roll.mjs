@@ -33,14 +33,14 @@ export class ProwlersRoll extends Roll {
   async _prepareContext({ flavor, isPrivate }) {
     const total = Math.round(this.total * 100) / 100
 
-    const netSuccess = total - this.options.difficultyNumber
+    this.netSuccess = total - this.options.difficultyNumber
     let narrativeControl = 'Oops, Narrative Control is broken'
 
-    if (netSuccess <= -2) {
+    if (this.netSuccess <= -2) {
       narrativeControl = game.i18n.localize('NarrativeControl.Opponent')
-    } else if (netSuccess < 1) {
+    } else if (this.netSuccess < 1) {
       narrativeControl = game.i18n.localize('NarrativeControl.OpponentWithEmbellishment')
-    } else if (netSuccess <= 2) {
+    } else if (this.netSuccess <= 2) {
       narrativeControl = game.i18n.localize('NarrativeControl.ActorWithEmbellishment')
     } else {
       narrativeControl = game.i18n.localize('NarrativeControl.Actor')
@@ -53,7 +53,7 @@ export class ProwlersRoll extends Roll {
       user: game.user.id,
       tooltip: isPrivate ? "" : await this.getTooltip(),
       total: isPrivate ? "?" : total,
-      netSuccess: isPrivate ? "" : netSuccess,
+      netSuccess: isPrivate ? "" : this.netSuccess,
       narrativeControl: isPrivate ? "" : narrativeControl,
       difficulty: game.i18n.format(CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled[this.options.difficulty], { level: this.options.difficultyNumber }),
       hideSuccesses: this.options.hideSuccesses
