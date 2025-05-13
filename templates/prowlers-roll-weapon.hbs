@@ -41,15 +41,5 @@
     radioButtons.forEach(radio => {
       radio.addEventListener("change", handleRadioChange);
     });
-
-
-  function updateDifficultyNumber(selectElement) {
-    const selectedOption = selectElement.value;
-    const numberInput = selectElement.closest('label').querySelector('input[name="difficulty-number"]');
-    if (numberInput) {
-      // Set the input value based on the selected option
-      numberInput.value = CONFIG.PROWLERS_AND_PARAGONS.roll_difficulty_values[selectedOption] || 0; // Default to 0 if no match
-    }
-  }
 }
 </script>
