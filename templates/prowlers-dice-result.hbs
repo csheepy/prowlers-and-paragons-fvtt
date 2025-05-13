@@ -14,13 +14,15 @@
         </h4>
     </div>
 
-    {{#if (gt netSuccess 0)}}
-      <div class="apply-damage-menu-container">
-        <button class="apply-damage-btn">Apply Damage</button>
-        <div class="apply-damage-dropdown" style="display: none;">
+    {{#unless hideSuccesses}}
+        {{#if (gt netSuccess 0)}}
+        <div class="apply-damage-menu-container">
+            <button class="apply-damage-btn">Apply Damage</button>
+            <div class="apply-damage-dropdown" style="display: none;">
+            </div>
         </div>
-      </div>
-    {{/if}}
+        {{/if}}
+    {{/unless}}
 
     <button class="opposed-roll">Opposed roll</button>
 </div>
