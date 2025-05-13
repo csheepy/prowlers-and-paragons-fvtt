@@ -476,9 +476,6 @@
   min-height: 50px;
 }
 
-.prowlers-and-paragons .biography .editor button {
-  color: var(--secondary-color);
-}
 .prowlers-and-paragons .prosemirror .editor-container .editor-content {
   position: relative
 }
@@ -756,4 +753,13 @@
 .dice-roll .narrative-control {
   font-size: 14px;
   color: var(--color-text-dark-secondary);
+}
+
+.prosemirror .editor-menu {
+  background: var(--secondary-color);
+}
+
+.prosemirror span,
+.prosemirror .fa-table {
+  color: var(--text-color);
 }
