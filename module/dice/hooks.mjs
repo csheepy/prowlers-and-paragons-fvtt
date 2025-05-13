@@ -10,7 +10,7 @@ const hasGear = (traits) => {
   return false;
 };
 
-const showTraitSelectionDialog = async (traits, rollingAgainst) => {
+const showTraitSelectionDialog = async (traits, rollingAgainst, rollingAgainstName) => {
   const template = 'systems/prowlers-and-paragons/templates/opposed-roll-trait-select.hbs';
   const data = {
     abilities: traits.abilities,
@@ -19,7 +19,8 @@ const showTraitSelectionDialog = async (traits, rollingAgainst) => {
     threat: traits.threat,
     vehicle: traits.vehicle,
     gear: traits.gear,
-    rollingAgainst,
+    rollingAgainstTrait: rollingAgainst,
+    rollingAgainstName: rollingAgainstName,
     showGear: hasGear(traits),
     chosen: ''
   };
@@ -121,7 +122,7 @@ export const runDiceHooks = () => {
     }
 
     const traits = controlledCharacter.traitsForSelection();
-    const selectedTrait = await showTraitSelectionDialog(traits, roll.options.type);
+    const selectedTrait = await showTraitSelectionDialog(traits, roll.options.type, roll.options.originatingActorName);
     if (!selectedTrait) return;
 
     const options = {
@@ -228,7 +229,7 @@ export const opposeRoll = async (targetActorId, originatingTraitName, originatin
   const targetActor = game.actors.get(targetActorId);
   const traits = targetActor.traitsForSelection();
   
-  const selectedTrait = await showTraitSelectionDialog(traits, originatingTraitName);
+  const selectedTrait = await showTraitSelectionDialog(traits, originatingTraitName, originatingActorName);
   if (!selectedTrait) return;
 
   const options = {
