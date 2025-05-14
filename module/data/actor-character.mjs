@@ -50,6 +50,8 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     schema.healthOverride = new fields.BooleanField({initial: false}) // special shenanigans for villains or whatever
     schema.halveHealth = new fields.BooleanField({initial: false}) // for foes
 
+    schema.earnedHeroPoints = new fields.NumberField({initial: 0, min: 0})
+
     return schema;
   }
 

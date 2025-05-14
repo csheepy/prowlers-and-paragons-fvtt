@@ -28,7 +28,7 @@
           <h4>{{item.displayName}}</h4>
         </div>
         <div class='item-formula item-prop'>{{ifThen (isDefaultPower item) '-' item.system.rank }}</div>
-        <div class='item-formula item-prop'>{{ifThen (isDefaultPower item) '-' (getDerivedPowerRank item._id)}}</div>
+        <div class='item-formula item-prop no-left-border'>{{ifThen (isDefaultPower item) '-' (getDerivedPowerRank item._id)}}</div>
         <div class='item-controls'>
           <a
             class='item-control item-edit'

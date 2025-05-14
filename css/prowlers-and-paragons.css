@@ -394,11 +394,18 @@
   margin-right: 5px;
 }
 
+.prowlers-and-paragons .item .no-left-border {
+  border-left: none !important;
+}
+
 .prowlers-and-paragons .items-list .item-prop {
   text-align: center;
   border-left: 1px solid #c9c7b8;
   border-right: 1px solid #c9c7b8;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .prowlers-and-paragons .items-list .item-prop.flexrow {
@@ -463,12 +470,13 @@
   margin-top: 10px;
 }
 
-.prowlers-and-paragons .spent-hero-points {
+.prowlers-and-paragons .spent-hero-points,
+.prowlers-and-paragons .earned-hero-points {
   font-weight: bold;
   margin-top: auto;
 }
 
-.prowlers-and-paragons .actor-middle-column {
+.prowlers-and-paragons .flex-column {
   display: flex;
   flex-direction: column;
 }

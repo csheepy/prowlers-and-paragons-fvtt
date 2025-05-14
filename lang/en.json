@@ -137,7 +137,9 @@
         }
       },
       "SpentHeroPoints": "Spent Hero Points",
-      "StartingHeroPointBudget": "Starting Hero Point Budget"
+      "StartingHeroPointBudget": "Starting Hero Point Budget",
+      "EarnedHeroPoints": "Earned Hero Points",
+      "TotalHeroPointBudget": "Total Hero Point Budget"
     },
     "GM": {
       "Adversity": "Adversity",

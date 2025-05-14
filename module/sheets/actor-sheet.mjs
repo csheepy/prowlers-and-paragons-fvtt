@@ -50,6 +50,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     context.flags = actorData.flags;
     context.rollDifficulties = CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties
     context.startingHeroPoints = game.settings.get("prowlers-and-paragons", "heroPointBudget")
+    context.totalHeroPointBudget = context.system.earnedHeroPoints + context.startingHeroPoints
 
     Handlebars.registerHelper('getDerivedPowerRank', function (power) {
       return actorData.derived_power_ranks[power];
