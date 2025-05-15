@@ -29,11 +29,12 @@
           <h4>{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.TotalHeroPointBudget"}}: {{totalHeroPointBudget}}</h4>
         </div>
 
-        <div class="resource flex-group-center">
-          <label for="system.edge.value" class="resource-label">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Edge"}}</label>
-          <div class="resource-content flexrow flex-center flex-between">
-          <input type="text" name="system.edge.value" value="{{system.edge.value}}" data-dtype="Number"/>
-        </div>
+        <div class="resource flex-group-center flex-column">
+          <div class="resource-content flex-column flex-center flex-between">
+            <label for="system.edge.value" class="resource-label">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Edge"}}</label>
+            <input type="text" name="system.edge.value" value="{{system.edge.value}}" data-dtype="Number"/>
+          </div>
+          <button type="button" id="temporary-buffs-button" class="temporary-buffs-btn" style="margin-top: auto;">{{temporaryButtonText}}</button>
         </div>
 
         <div class="resource flex-group-center">
@@ -76,6 +77,7 @@
     <a class="item" data-tab="gear">Gear</a>
     <a class="item" data-tab="package">Package</a>
     <a class="item" data-tab="options">options</a>
+    <a class="item" data-tab="effects">Effects</a>
   </nav>
 
   {{!-- Sheet Body --}}
@@ -95,7 +97,7 @@
             {{#each system.abilities as |ability key|}}
             <div class="ability flexrow flex-group-center">
               <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-key="system.abilities.{{key}}.value" data-label="{{localize (lookup @root.config.abilities key)}}">{{localize (lookup @root.config.abilities key)}}</label>
-              <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
+              <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number" {{#if (lookup @root.temporaryModeTraits key)}}class="highlighted-border"{{/if}}>
             </div>
             {{/each}}
           </div>
@@ -105,7 +107,7 @@
             {{#each system.talents as |talent key|}}
             <div class="ability flexrow flex-group-center">
               <label for="system.talents.{{key}}.value" class="resource-label rollable flexlarge align-left" data-key="system.talents.{{key}}.value" data-label="{{localize (lookup @root.config.talents key)}}">{{localize (lookup @root.config.talents key)}}</label>
-              <input type="text" name="system.talents.{{key}}.value" value="{{talent.value}}" data-dtype="Number"/>
+              <input type="text" name="system.talents.{{key}}.value" value="{{talent.value}}" data-dtype="Number" {{#if (lookup @root.temporaryMode key)}}class="highlighted-border"{{/if}}>
             </div>
             {{/each}}
           </div>
@@ -161,6 +163,11 @@
         {{!-- Options Tab --}}
     <div class="tab options" data-group="primary" data-tab="options">
       {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-options.hbs"}}
+    </div>
+
+  {{! -- Effects Tab --}}
+        <div class="tab effects" data-group="primary" data-tab="effects">
+      {{> "systems/prowlers-and-paragons/templates/actor/parts/actor-effects.hbs"}}
     </div>
   </section>
 </form>

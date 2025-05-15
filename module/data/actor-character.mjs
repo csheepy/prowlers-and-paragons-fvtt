@@ -108,3 +108,18 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     return data
   }
 }
+
+// At the end of the file, after the class definition
+Hooks.on('preUpdateActor', (actor, update, options, userId) => {
+  if (actor.getFlag('prowlers-and-paragons', 'temporaryMode')) {
+    if (update.system) {
+      const abilitiesChanged = update.system.abilities && Object.keys(update.system.abilities).length > 0;
+      const talentsChanged = update.system.talents && Object.keys(update.system.talents).length > 0;
+      
+      delete update.system.abilities
+      delete update.system.talents
+    }
+  }
+});
+
+

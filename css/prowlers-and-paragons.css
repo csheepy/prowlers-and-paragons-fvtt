@@ -815,3 +815,7 @@
   background: var(--primary-color);
   color: var(--accent-color);
 }
+
+.highlighted-border {
+  border-color: var(--primary-color) !important;
+}

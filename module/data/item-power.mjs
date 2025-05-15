@@ -24,6 +24,8 @@ export default class ProwlersParagonsPower extends ProwlersParagonsItemBase {
       max: new fields.NumberField({ required: false, nullable: true, integer: true})
     });
 
+    schema.temporary = new fields.BooleanField({initial: false})
+
     return schema;
   }
 }

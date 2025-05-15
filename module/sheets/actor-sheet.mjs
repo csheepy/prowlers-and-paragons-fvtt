@@ -51,7 +51,9 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     context.rollDifficulties = CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties
     context.startingHeroPoints = game.settings.get("prowlers-and-paragons", "heroPointBudget")
     context.totalHeroPointBudget = context.system.earnedHeroPoints + context.startingHeroPoints
-
+    context.temporaryMode = this.actor.getFlag('prowlers-and-paragons', 'temporaryMode')
+    context.temporaryButtonText = this.actor.getFlag('prowlers-and-paragons', 'temporaryMode') ? 'Return to Normal' : 'Enter Temporary Buffs Mode'
+    context.temporaryModeTraits = this.actor.getFlag('prowlers-and-paragons', 'temporaryModeTraits')
     Handlebars.registerHelper('getDerivedPowerRank', function (power) {
       return actorData.derived_power_ranks[power];
     });
@@ -316,6 +318,72 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       noResourceKey: 'PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.NoResolve',
       getActorName: (html) => html.find('input[name="name"]').val() || 'A hero',
     });
+
+
+    html.on('blur', 'input[name^="system.abilities."], input[name^="system.talents."]', async (ev) => {
+      const input = $(ev.currentTarget);
+        // Add class for border color on blur
+      const abilityOrTalent = input.attr('name');
+      const value = parseInt(input.val());
+
+      if (actor.getFlag('prowlers-and-paragons', 'temporaryMode')) {
+        const actorValue = abilityOrTalent.split('.').reduce((acc, key) => acc && acc[key], actor);
+        if (actorValue === value) {
+          return;
+        }
+
+        actor.setFlag('prowlers-and-paragons', 'temporaryModeTraits', {
+          [abilityOrTalent.split('.')[2]]: true
+        });
+        
+        const existingEffect = actor.effects.find(effect => effect.changes.some(change => change.key === abilityOrTalent));
+        if (existingEffect) {
+          existingEffect.changes.forEach(change => {
+            if (change.key === abilityOrTalent) {
+              change.value = value;
+            }
+          });
+        } else {
+          const effectData = {
+            label: `Temporary Ability Boost (${abilityOrTalent})`,
+            icon: 'icons/svg/aura.svg',
+            flags: { isTemporary: true },
+            changes: [{ key: abilityOrTalent, value: value, mode: 5 }],
+          };
+          await actor.createEmbeddedDocuments('ActiveEffect', [effectData]);
+        }
+      }
+    });
+    
+
+    // Add this inside the activateListeners function, after existing html.on listeners
+    html.on('click', '#temporary-buffs-button', async (ev) => {
+      const button = ev.currentTarget;
+      const actor = this.actor;
+
+      const temporaryMode = actor.getFlag('prowlers-and-paragons', 'temporaryMode')
+      if (temporaryMode === true) {
+        // Enter temporary mode
+        // Set a flag or state for temporary mode (e.g., on the actor)
+        await actor.setFlag('prowlers-and-paragons', 'temporaryMode', false);
+
+        const effects = actor.effects.filter(effect => effect.flags.isTemporary);
+        if (effects.length > 0) await actor.deleteEmbeddedDocuments('ActiveEffect', effects.map(e => e.id));
+        actor.setFlag('prowlers-and-paragons', 'temporaryModeTraits', null)
+        
+        // Add deletion of temporary powers
+        const temporaryPowers = actor.items.filter(item => item.type === 'power' && item.system.temporary);
+        if (temporaryPowers.length > 0) {
+          const powerIds = temporaryPowers.map(power => power.id);
+          await actor.deleteEmbeddedDocuments('Item', powerIds);
+        }
+        // Additional logic can be added here for non-persistent changes
+      } else {
+        await actor.setFlag('prowlers-and-paragons', 'temporaryMode', true);
+
+      }
+    });
+
   }
 
   /**
@@ -340,6 +408,14 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     };
     // Remove the type from the dataset since it's in the itemData.type prop.
     delete itemData.system['type'];
+
+    // Inside _onItemCreate function, after preparing itemData
+    if (type === 'power') {
+      const temporaryMode = this.actor.getFlag('prowlers-and-paragons', 'temporaryMode');
+      if (temporaryMode) {
+        itemData.system.temporary = true;  // Set temporary flag for powers
+      }
+    }
 
     // Finally, create the item!
     return await Item.create(itemData, { parent: this.actor });
