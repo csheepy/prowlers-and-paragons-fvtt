@@ -15,6 +15,8 @@ add perks to compendium module
 
 add flaws to compendium module
 
+send power description to chat
+
 ## might do
 
 make sure everything is localised
