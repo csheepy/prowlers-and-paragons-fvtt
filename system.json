@@ -19,7 +19,7 @@
       "thumbnail": "systems/prowlers-and-paragons/assets/anvil-impact.png"
     }
   ],
-  "version": "0.0.1",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": 12,
     "verified": "12.331"
