@@ -1,6 +1,6 @@
-# Prowlers and Paragons system
+# Prowlers and Paragons Ultimate Edition foundry system
 
-This is an unofficial Foundry VTT system for running games in [Prowlers and Paragons](https://mobiusworldspublishing.com/products/prowlers-paragons-ultimate-edition/).
+This is an unofficial Foundry VTT system for running games in [Prowlers and Paragons Ultimate Edition](https://mobiusworldspublishing.com/products/prowlers-paragons-ultimate-edition/). The authors are not affiliated with LakeSide Games or Mobius Worlds Publishing. Prowlers and Paragons and Prowlers and Paragons Ultimate Edition are trademarks of LakeSide Games, Inc.
 
 ## Features
 
