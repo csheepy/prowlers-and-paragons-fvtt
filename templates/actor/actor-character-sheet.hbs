@@ -107,7 +107,7 @@
             {{#each system.talents as |talent key|}}
             <div class="ability flexrow flex-group-center">
               <label for="system.talents.{{key}}.value" class="resource-label rollable flexlarge align-left" data-key="system.talents.{{key}}.value" data-label="{{localize (lookup @root.config.talents key)}}">{{localize (lookup @root.config.talents key)}}</label>
-              <input type="text" name="system.talents.{{key}}.value" value="{{talent.value}}" data-dtype="Number" {{#if (lookup @root.temporaryMode key)}}class="highlighted-border"{{/if}}>
+              <input type="text" name="system.talents.{{key}}.value" value="{{talent.value}}" data-dtype="Number" {{#if (lookup @root.temporaryModeTraits key)}}class="highlighted-border"{{/if}}>
             </div>
             {{/each}}
           </div>
