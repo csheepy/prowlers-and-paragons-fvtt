@@ -66,17 +66,21 @@ const executeTraitRoll = async (actor, selectedTrait, traits, options) => {
 };
 
 export const runDiceHooks = () => {
+  let hook = "getChatMessageContextOptions";
+  if (parseInt(game.version.split('.')[0]) < 13) {
+    hook = "getChatLogEntryContext";
+  }
   // Add a custom "Reroll" button to the context menu
-  Hooks.on("getChatLogEntryContext", (html, options) => {
+  Hooks.on(hook, (html, options) => {
     options.push({
       name: "Reroll",
       icon: '<i class="fas fa-dice"></i>',
       condition: (li) => {
-        const message = game.messages.get(li.data("messageId"));
+        const message = game.messages.get(li.dataset.messageId || li.data.messageId);
         return message?.rolls?.length > 0;
       },
       callback: async (li) => {
-        const message = game.messages.get(li.data("messageId"));
+        const message = game.messages.get(li.dataset.messageId || li.data.messageId);
         const roll = message.rolls[0];
         if (roll) {
           const reroll = await roll.reroll();
@@ -86,16 +90,16 @@ export const runDiceHooks = () => {
     });
   });
 
-  Hooks.on("getChatLogEntryContext", (html, options) => {
+  Hooks.on(hook, (html, options) => {
     options.push({
       name: "Explode 6s",
       icon: '<i class="fas fa-dice"></i>',
       condition: (li) => {
-        const message = game.messages.get(li.data("messageId"));
+        const message = game.messages.get(li.dataset.messageId || li.data.messageId);
         return message?.rolls?.length > 0;
       },
       callback: async (li) => {
-        const message = game.messages.get(li.data("messageId"));
+        const message = game.messages.get(li.dataset.messageId || li.data.messageId);
         const roll = message.rolls[0];
         if (roll) {
           await roll.explode();
