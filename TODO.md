@@ -1,6 +1,6 @@
 ## will do
 
-write README.md
+improve  README.md
 
 absorption/mimicry brainstorming
 
@@ -16,6 +16,14 @@ add perks to compendium module
 add flaws to compendium module
 
 send power description to chat
+
+appv2 migration for foundry 13
+
+traditional results (instead of narrative)
+
+randomized initiative setting
+
+change UI for default rank powers to appear as flat cost
 
 ## might do
 
