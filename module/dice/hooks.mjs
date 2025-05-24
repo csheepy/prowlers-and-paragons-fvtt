@@ -76,11 +76,11 @@ export const runDiceHooks = () => {
       name: "Reroll",
       icon: '<i class="fas fa-dice"></i>',
       condition: (li) => {
-        const message = game.messages.get(li.dataset.messageId || li.data.messageId);
+        const message = game.messages.get(li?.dataset?.messageId || li.data('messageId'));
         return message?.rolls?.length > 0;
       },
       callback: async (li) => {
-        const message = game.messages.get(li.dataset.messageId || li.data.messageId);
+        const message = game.messages.get(li?.dataset?.messageId || li.data('messageId'));
         const roll = message.rolls[0];
         if (roll) {
           const reroll = await roll.reroll();
@@ -95,11 +95,11 @@ export const runDiceHooks = () => {
       name: "Explode 6s",
       icon: '<i class="fas fa-dice"></i>',
       condition: (li) => {
-        const message = game.messages.get(li.dataset.messageId || li.data.messageId);
+        const message = game.messages.get(li?.dataset?.messageId || li.data('messageId'));
         return message?.rolls?.length > 0;
       },
       callback: async (li) => {
-        const message = game.messages.get(li.dataset.messageId || li.data.messageId);
+        const message = game.messages.get(li?.dataset?.messageId || li.data('messageId'));
         const roll = message.rolls[0];
         if (roll) {
           await roll.explode();
