@@ -80,7 +80,7 @@ test.describe('Character Sheet Functionality', () => {
             });
 
             test('should update abilities and talents', async ({ characterSheet }) => {
-                await characterSheet.getByRole('tab', { name: 'Play' }).click();
+                await characterSheet.getByTestId('play-tab').click();
                 await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe(abilityValue);
                 await expect(characterSheet.locator('input[name="system.talents.academics.value"]').inputValue()).resolves.toBe(talentValue);
             });
@@ -88,6 +88,72 @@ test.describe('Character Sheet Functionality', () => {
             test('should update spent hero points', async ({ characterSheet }) => {
                 await expect(characterSheet.getByText(`Spent Hero Points: ${heroPoints}`)).toBeVisible();
             });
+
+            test('clear package shoud reset spent points', async ({ characterSheet }) => {
+                await characterSheet.getByTestId('package-tab').click();
+                await characterSheet.getByRole('button', { name: 'Clear Package' }).click();
+                await expect(characterSheet.getByText('Spent Hero Points: 0')).toBeVisible();
+
+                await characterSheet.getByTestId('play-tab').click();
+                await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe("0");
+                await expect(characterSheet.locator('input[name="system.talents.academics.value"]').inputValue()).resolves.toBe("0");
+            });
+        });
+    });
+
+
+    // test the spend resolve button
+    test.describe('spend resolve button', () => {
+        test('should open the spend resolve menu', async ({ characterSheet }) => {
+            await characterSheet.getByTestId('spend-resolve-btn').click();
+            await expect(characterSheet.locator('.spend-resolve-dropdown')).toBeVisible();
+        });
+
+        test('hovering combat spend should show the combat spend options', async ({ characterSheet }) => {
+            await characterSheet.getByTestId('spend-resolve-btn').click();
+
+            await characterSheet.locator('.spend-resolve-dropdown').hover();
+            await expect(characterSheet.locator('.spend-resolve-submenu')).toBeVisible();
+        });
+
+        test('should spend resolve', async ({ characterSheet }) => {
+            await characterSheet.locator('input[name="system.resolve.value"]').fill('10');
+            await characterSheet.locator('input[name="system.resolve.starting"]').fill('10');
+
+            await characterSheet.getByTestId('spend-resolve-btn').click();
+            await characterSheet.locator('.spend-resolve-dropdown').hover();
+            const initialResolveValue = await characterSheet.locator('input[name="system.resolve.value"]').inputValue();
+            const submenuOption = characterSheet.locator('.spend-resolve-submenu a.spend-resolve-option').first();
+            await submenuOption.click();
+            const updatedResolveValue = await characterSheet.locator('input[name="system.resolve.value"]').inputValue();
+            await expect(Number(updatedResolveValue)).toBeLessThan(Number(initialResolveValue));  // Assuming spending resolve decreases the value
+        });
+
+        test('spending resolve with no resolve left should display an error', async ({ page, characterSheet }) => {
+            await characterSheet.locator('input[name="system.resolve.value"]').fill('0');
+            await characterSheet.locator('input[name="system.resolve.starting"]').fill('0');
+
+            await characterSheet.getByTestId('spend-resolve-btn').click();
+            await characterSheet.locator('.spend-resolve-option').first().click();
+            await expect(page.getByText('No Resolve points remaining!')).toBeVisible();
+        });
+
+        test('reset buttonshould reset resolve to starting value', async ({ characterSheet }) => {
+            await characterSheet.locator('input[name="system.resolve.value"]').fill('10');
+            await characterSheet.locator('input[name="system.resolve.starting"]').fill('10');
+
+            // First, spend some resolve to change the value
+            await characterSheet.getByTestId('spend-resolve-btn').click();
+            await characterSheet.locator('.spend-resolve-dropdown').hover();
+
+            const submenuOption = characterSheet.locator('.spend-resolve-submenu a.spend-resolve-option').first();
+            await submenuOption.click();  // This should decrease resolve
+            const startingResolveValue = await characterSheet.locator('input[name="system.resolve.starting"]').inputValue();
+
+            await characterSheet.locator('.reset-resolve').click();  // Click the reset button
+            const updatedResolveValue = await characterSheet.locator('input[name="system.resolve.value"]').inputValue();
+
+            await expect(updatedResolveValue).toBe(startingResolveValue);  // Verify it matches the starting value
         });
     });
 }); 

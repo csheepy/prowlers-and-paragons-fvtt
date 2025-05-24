@@ -56,7 +56,7 @@
 
         <div class="resource flex-group-center">
           <div class="spend-resolve-menu-container">
-            <button type="button" class="spend-resolve-btn">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.SpendResolve"}}</button>
+            <button type="button" class="spend-resolve-btn" data-testid="spend-resolve-btn">{{localize "PROWLERS_AND_PARAGONS.DerivedCharacteristics.Resolve.SpendMenu.SpendResolve"}}</button>
             <div class="spend-resolve-dropdown" style="display: none;">
               {{> "systems/prowlers-and-paragons/templates/actor/parts/spend-resource-menu.hbs" options=@root.config.resolve_spend_options }}
             </div>
@@ -71,7 +71,7 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="features" role="tab" data-testid="features-tab">Play</a>
+    <a class="item" data-tab="play" role="tab" data-testid="play-tab">Play</a>
     <a class="item" data-tab="biography" role="tab" data-testid="biography-tab">Biography</a>
     <a class="item" data-tab="powers" role="tab" data-testid="powers-tab">Powers</a>
     <a class="item" data-tab="gear" role="tab" data-testid="gear-tab">Gear</a>
@@ -84,7 +84,7 @@
   <section class="sheet-body">
 
     {{!-- Play Tab --}}
-    <div class="tab features" data-group="primary" data-tab="features">
+    <div class="tab features" data-group="primary" data-tab="play">
       <section class="grid grid-3col">
         <aside class="sidebar">
 
