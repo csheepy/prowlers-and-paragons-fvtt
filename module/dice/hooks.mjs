@@ -190,12 +190,15 @@ export const runDiceHooks = () => {
   const chatApplyDamage = async (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const optionElement = event.target;
+    let optionElement = event.target;
+    if (parseInt(game.version.split('.')[0]) < 13 && typeof jQuery !== 'undefined' && optionElement instanceof jQuery) {
+        optionElement = optionElement[0];  // Convert jQuery object to plain DOM element
+    }
     const option = optionElement.dataset.option;
     if (!option) return;
     const dropdown = optionElement.closest('.apply-damage-dropdown');
     if (dropdown) dropdown.style.display = 'none';
-    const chatMessageIdElement = event.target.closest('.message');
+    const chatMessageIdElement = optionElement.closest('.message');
     const chatMessageId = chatMessageIdElement ? chatMessageIdElement.dataset.messageId : null;
     const chatMessage = game.messages.get(chatMessageId);
     if (!chatMessage) return ui.notifications.warn('Chat message not found!');
