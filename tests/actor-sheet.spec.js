@@ -19,10 +19,11 @@ const test = base.extend({
             actorName = crypto.randomUUID();
             await navigateToActorTab(page);
             await page.evaluate((name) => {
-                window.Actor.create({
-                    name: name,
-                    type: 'character',
-                });
+                if (window.Actor) {
+                    window.Actor.create({ name: name, type: 'character' });
+                } else {
+                    Actor.create({ name: name, type: 'character' });
+                }
             }, actorName);
             await navigateToActorSheet(page, actorName);
             await use();  // End of setup
@@ -67,7 +68,6 @@ test.describe('Character Sheet Functionality', () => {
             await characterSheet.getByTestId('package-tab').click();
             const buttonLocator = characterSheet.getByRole('button', { name: 'Superhero', exact: true });
             await buttonLocator.click();
-            
         });
 
         test('should update selected package label', async ({ characterSheet }) => {
