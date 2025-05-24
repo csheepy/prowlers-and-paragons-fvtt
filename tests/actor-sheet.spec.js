@@ -63,24 +63,31 @@ test.describe('Character Sheet Functionality', () => {
         }
     });
 
-    test.describe('applying a package  ', () => {
-        test.beforeEach(async ({ characterSheet }) => {
-            await characterSheet.getByTestId('package-tab').click();
-            const buttonLocator = characterSheet.getByRole('button', { name: 'Superhero', exact: true });
-            await buttonLocator.click();
-        });
+    [
+        { heroPackage: 'Superhero', heroPoints: 50, abilityValue: "3", talentValue: "3" },
+        { heroPackage: 'Hero', heroPoints: 40, abilityValue: "3", talentValue: "2" },
+        { heroPackage: 'Civilian', heroPoints: 35, abilityValue: "2", talentValue: "2" },
+    ].forEach(({ heroPackage, heroPoints, abilityValue, talentValue }) => {
+        test.describe(`applying a package ${heroPackage}`, () => {
+            test.beforeEach(async ({ characterSheet }) => {
+                await characterSheet.getByTestId('package-tab').click();
+                const buttonLocator = characterSheet.getByRole('button', { name: heroPackage, exact: true });
+                await buttonLocator.click();
+             });
 
-        test('should update selected package label', async ({ characterSheet }) => {
-            await expect(characterSheet.getByText('Currently selected package: Superhero')).toBeVisible();
-        });
+            test('should update selected package label', async ({ characterSheet }) => {
+                await expect(characterSheet.getByText(`Currently selected package: ${heroPackage}`)).toBeVisible();
+            });
 
-        test('should update abilities and talents', async ({ characterSheet }) => {
-            await characterSheet.getByRole('tab', { name: 'Play' }).click();
-            await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe('3');
-        });
+            test('should update abilities and talents', async ({ characterSheet }) => {
+                await characterSheet.getByRole('tab', { name: 'Play' }).click();
+                await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe(abilityValue);
+                await expect(characterSheet.locator('input[name="system.talents.academics.value"]').inputValue()).resolves.toBe(talentValue);
+            });
 
-        test('should update spent hero points', async ({ characterSheet }) => {
-            await expect(characterSheet.getByText('Spent Hero Points: 50')).toBeVisible();
+            test('should update spent hero points', async ({ characterSheet }) => {
+                await expect(characterSheet.getByText(`Spent Hero Points: ${heroPoints}`)).toBeVisible();
+            });
         });
     });
 }); 
