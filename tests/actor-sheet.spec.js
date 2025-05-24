@@ -8,40 +8,36 @@ const navigateToActorTab = async (page) => {
 };
 
 const navigateToActorSheet = async (page, actorName) => {
-    await page.locator(`section#actors a:has-text("${actorName}")`).click();
+    const locator = page.getByText(actorName);
+    await locator.click();
 };
 
 const test = base.extend({
     actor: async ({ page }, use) => {
-        // First, navigate to the Actors tab and then the actor sheet
-        await navigateToActorTab(page);
-
-        // Create the actor with logging
-        await page.evaluate(() => {
-            if (window.Actor) {
+        let actorName;
+        try {
+            actorName = crypto.randomUUID();
+            await navigateToActorTab(page);
+            await page.evaluate((name) => {
                 window.Actor.create({
-                    name: 'Tester',
+                    name: name,
                     type: 'character',
                 });
-            } else {
-                console.error('window.Actor is not defined even after waiting');
+            }, actorName);
+            await navigateToActorSheet(page, actorName);
+            await use();  // End of setup
+        } finally {
+            if (actorName) {
+                await page.evaluate((name) => {
+                    if (window.game && window.game.actors.getName(name)) {
+                        window.game.actors.getName(name).delete();
+                        console.log('Actor ' + name + ' deleted successfully');
+                    } else {
+                        console.error('Actor ' + name + ' not found for deletion');
+                    }
+                }, actorName);
             }
-        });
-
-        await page.waitForFunction(() => window.game && window.game.actors.getName('Tester') != null);
-        await navigateToActorSheet(page, 'Tester');  // Assuming 'Tester' as a placeholder; adjust if needed
-
-        await use();  // Signal that the fixture is ready
-        
-        // Teardown: Delete the actor
-        await page.evaluate(() => {
-            if (window.game && window.game.actors.getName('Tester')) {
-                window.game.actors.getName('Tester').delete();
-                console.log('Actor Tester deleted successfully');
-            } else {
-                console.error('Actor Tester not found for deletion');
-            }
-        });
+        }
     },
     characterSheet: async ({ page, actor }, use) => {
         // Now that navigation and actor creation are done, use the sheet
@@ -66,15 +62,25 @@ test.describe('Character Sheet Functionality', () => {
         }
     });
 
-    // test.describe('applying a package  ', () => {
+    test.describe('applying a package  ', () => {
+        test.beforeEach(async ({ characterSheet }) => {
+            await characterSheet.getByTestId('package-tab').click();
+            const buttonLocator = characterSheet.getByRole('button', { name: 'Superhero', exact: true });
+            await buttonLocator.click();
+            
+        });
 
-    //     test('should update selected package label', async ({ page }) => {
-    //     });
+        test('should update selected package label', async ({ characterSheet }) => {
+            await expect(characterSheet.getByText('Currently selected package: Superhero')).toBeVisible();
+        });
 
-    //     test('should update abilities and talents', async ({ page }) => {
-    //     });
+        test('should update abilities and talents', async ({ characterSheet }) => {
+            await characterSheet.getByRole('tab', { name: 'Play' }).click();
+            await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe('3');
+        });
 
-    //     test('should update spent hero points', async ({ page }) => {
-    //     });
-    // });
+        test('should update spent hero points', async ({ characterSheet }) => {
+            await expect(characterSheet.getByText('Spent Hero Points: 50')).toBeVisible();
+        });
+    });
 }); 
