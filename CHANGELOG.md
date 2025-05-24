@@ -9,6 +9,8 @@
 
 - foundry 13 compatability changes: refactor hooks, fix activeeffect creation
 
+- this version should work with both 12 and 13
+
 ## 1.0.0
 
 Initial release
