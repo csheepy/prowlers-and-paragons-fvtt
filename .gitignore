@@ -1,2 +1,8 @@
 node_modules
 compendium_data
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

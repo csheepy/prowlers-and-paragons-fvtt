@@ -345,7 +345,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
           });
         } else {
           const effectData = {
-            label: `Temporary Ability Boost (${abilityOrTalent})`,
+            name: `Temporary Ability Boost (${abilityOrTalent})`,
             icon: 'icons/svg/aura.svg',
             flags: { isTemporary: true },
             changes: [{ key: abilityOrTalent, value: value, mode: 5 }],
@@ -363,8 +363,6 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
 
       const temporaryMode = actor.getFlag('prowlers-and-paragons', 'temporaryMode')
       if (temporaryMode === true) {
-        // Enter temporary mode
-        // Set a flag or state for temporary mode (e.g., on the actor)
         await actor.setFlag('prowlers-and-paragons', 'temporaryMode', false);
 
         const effects = actor.effects.filter(effect => effect.flags.isTemporary);
@@ -380,7 +378,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
         // Additional logic can be added here for non-persistent changes
       } else {
         await actor.setFlag('prowlers-and-paragons', 'temporaryMode', true);
-
+        ui.notifications.info('Changes to abilities and talents will be temporary until you return to normal mode.')
       }
     });
 

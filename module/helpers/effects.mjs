@@ -38,7 +38,7 @@ export function onManageActiveEffect(event, owner) {
  * @param {ActiveEffect[]} effects    A collection or generator of Active Effect documents to prepare sheet data for
  * @return {object}                   Data for rendering
  */
-export function prepareActiveEffectCategories(effects) {
+export function prepareActiveEffectCategories(effects, isItem = false) {
   // Define effect header categories
   const categories = {
     temporary: {
@@ -56,11 +56,20 @@ export function prepareActiveEffectCategories(effects) {
       label: game.i18n.localize('PROWLERS_AND_PARAGONS.Effect.Inactive'),
       effects: [],
     },
+
   };
 
+  if (isItem) {
+    categories.procon = {
+      type: 'procon',
+      label: game.i18n.localize('PROWLERS_AND_PARAGONS.Effect.Procon'),
+      effects: [],
+    };
+  }
   // Iterate over active effects, classifying them into categories
   for (let e of effects) {
     if (e.disabled) categories.inactive.effects.push(e);
+    else if (isItem && !e.transfer) categories.procon.effects.push(e);
     else if (e.isTemporary) categories.temporary.effects.push(e);
     else categories.passive.effects.push(e);
   }

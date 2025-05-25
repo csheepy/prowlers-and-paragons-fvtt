@@ -197,38 +197,48 @@ export class ProwlersParagonsActor extends Actor {
   }
 
   increaseAllAbilities(n) {
+    const updates = {};
     for (const key in this.system.abilities) {
-      // Use _source to get values unmodified by effects
-      const baseValue = this.system._source.abilities[key].value
-      const newValue = baseValue + n
-      this.update({ [`system.abilities.${key}.value`]: newValue})
+      const baseValue = this.system._source.abilities[key].value;
+      const newValue = baseValue + n;
+      updates[`system.abilities.${key}.value`] = newValue;
     }
+    return updates;
   }
 
   increaseAllTalents(n) {
+    const updates = {};
     for (const key in this.system.talents) {
-      // Use _source to get values unmodified by effects
-      const baseValue = this.system._source.talents[key].value
-      const newValue = baseValue + n
-      this.update({ [`system.talents.${key}.value`]: newValue})
+      const baseValue = this.system._source.talents[key].value;
+      const newValue = baseValue + n;
+      updates[`system.talents.${key}.value`] = newValue;
     }
+    return updates;
   }
 
   async clearPackage() {
+    let updates = {};
     if (this.system.package_applied === 'hero') {
-      this.increaseAllAbilities(-3)
-      this.increaseAllTalents(-2)
+      updates = {
+        ...this.increaseAllAbilities(-3),
+        ...this.increaseAllTalents(-2),
+      }
     }
     if (this.system.package_applied === 'superhero') {
-      this.increaseAllAbilities(-3)
-      this.increaseAllTalents(-3)
+      updates = {
+        ...this.increaseAllAbilities(-3),
+        ...this.increaseAllTalents(-3),
+      }
     }
     if (this.system.package_applied === 'civilian') {
-      this.increaseAllAbilities(-2)
-      this.increaseAllTalents(-2)
+      updates = {
+        ...this.increaseAllAbilities(-2),
+        ...this.increaseAllTalents(-2),
+      }
     }
-    return this.update({'system.package_applied': ''})
+    return this.update({'system.package_applied': '', ...updates})
   }
+
   async applyPackage(pp) {
     if (this.system.package_applied.length > 0 && pp === 'clear') {
       await this.clearPackage();
@@ -236,23 +246,30 @@ export class ProwlersParagonsActor extends Actor {
     }
 
     await this.clearPackage();
+    let updates = {};
     if (pp === 'hero') {
-      this.increaseAllAbilities(3)
-      this.increaseAllTalents(2)
-      this.update({'system.package_applied': 'hero'})
+      updates = {
+        ...this.increaseAllAbilities(3),
+        ...this.increaseAllTalents(2),
+        'system.package_applied': 'hero'
+      }
     }
     if (pp === 'superhero') {
-      this.increaseAllAbilities(3)
-      this.increaseAllTalents(3)
-      this.update({'system.package_applied': 'superhero'})
+      updates = {
+        ...this.increaseAllAbilities(3),
+        ...this.increaseAllTalents(3),
+        'system.package_applied': 'superhero'
+      }
     }
     if (pp === 'civilian') {
-      this.increaseAllAbilities(2)
-      this.increaseAllTalents(2)
-      this.update({'system.package_applied': 'civilian'})
+      updates = {
+        ...this.increaseAllAbilities(2),
+        ...this.increaseAllTalents(2),
+        'system.package_applied': 'civilian'
+      }
     }
 
-    return true
+    return this.update(updates);
   }
 
   // Alice calls roll() with target Bob. Alice calls targetRoll(). Alice sees a 'please hold' dialog

@@ -12,6 +12,8 @@ Powers like Density can be set to Toggleable and they'll turn on and off any ass
 
 A temporary buffs mode for the sheet to make short-term flexible powers increasing Abilities/Talents easier
 
+Pros and Cons should be created as items and dropped onto Powers
+
 ## Thanks
 
 https://github.com/asacolips-projects/boilerplate/ this was a great starting point

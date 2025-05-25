@@ -13,6 +13,8 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.21",
     "sass": "^1.53.0"
   }
 }

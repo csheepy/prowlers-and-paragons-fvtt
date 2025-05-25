@@ -1,5 +1,5 @@
 import { getControlledCharacter } from "../helpers/tokens.mjs";
-
+import { addEventListener } from "../helpers/html-events.mjs";
 const hasGear = (traits) => {
   if (traits.gear?.weapons) {
     return Object.keys(traits.gear.weapons).length > 0;
@@ -66,17 +66,21 @@ const executeTraitRoll = async (actor, selectedTrait, traits, options) => {
 };
 
 export const runDiceHooks = () => {
+  let hook = "getChatMessageContextOptions";
+  if (parseInt(game.version.split('.')[0]) < 13) {
+    hook = "getChatLogEntryContext";
+  }
   // Add a custom "Reroll" button to the context menu
-  Hooks.on("getChatLogEntryContext", (html, options) => {
+  Hooks.on(hook, (html, options) => {
     options.push({
       name: "Reroll",
       icon: '<i class="fas fa-dice"></i>',
       condition: (li) => {
-        const message = game.messages.get(li.data("messageId"));
+        const message = game.messages.get(li?.dataset?.messageId || li.data('messageId'));
         return message?.rolls?.length > 0;
       },
       callback: async (li) => {
-        const message = game.messages.get(li.data("messageId"));
+        const message = game.messages.get(li?.dataset?.messageId || li.data('messageId'));
         const roll = message.rolls[0];
         if (roll) {
           const reroll = await roll.reroll();
@@ -86,16 +90,16 @@ export const runDiceHooks = () => {
     });
   });
 
-  Hooks.on("getChatLogEntryContext", (html, options) => {
+  Hooks.on(hook, (html, options) => {
     options.push({
       name: "Explode 6s",
       icon: '<i class="fas fa-dice"></i>',
       condition: (li) => {
-        const message = game.messages.get(li.data("messageId"));
+        const message = game.messages.get(li?.dataset?.messageId || li.data('messageId'));
         return message?.rolls?.length > 0;
       },
       callback: async (li) => {
-        const message = game.messages.get(li.data("messageId"));
+        const message = game.messages.get(li?.dataset?.messageId || li.data('messageId'));
         const roll = message.rolls[0];
         if (roll) {
           await roll.explode();
@@ -109,99 +113,97 @@ export const runDiceHooks = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    const chatMessageId = $(event.currentTarget).closest(".message").data("messageId");
+    const closestElement = event.target.closest('.message');
+    const chatMessageId = closestElement ? closestElement.dataset.messageId : null;
     const chatMessage = game.messages.get(chatMessageId);
-    if (!chatMessage) return ui.notifications.warn("Chat message not found!");
-
-    const roll = chatMessage.rolls?.[0];
-    if (!roll) return ui.notifications.warn("No roll found in this message!");
-
+    if (!chatMessage) return ui.notifications.warn('Chat message not found!');
     const controlledCharacter = getControlledCharacter();
     if (!controlledCharacter) {
-      return ui.notifications.warn("You must select or control a character!");
+      return ui.notifications.warn('You must select or control a character!');
     }
-
     const traits = controlledCharacter.traitsForSelection();
-    const selectedTrait = await showTraitSelectionDialog(traits, roll.options.type, roll.options.originatingActorName);
+    const selectedTrait = await showTraitSelectionDialog(traits, chatMessage.rolls?.[0]?.options.type, chatMessage.rolls?.[0]?.options.originatingActorName);
     if (!selectedTrait) return;
-
     const options = {
       rollMode: game.settings.get('core', 'rollMode'),
       difficulty: 'opposed',
-      difficultyNumber: roll.total - roll.options.difficultyNumber,
+      difficultyNumber: chatMessage.rolls?.[0]?.total - chatMessage.rolls?.[0]?.options.difficultyNumber,
       doOpposedRoll: false,
       originatingActorName: chatMessage.speaker.alias
     };
-
     return await executeTraitRoll(controlledCharacter, selectedTrait, traits, options);
   };
 
-  Hooks.on("renderChatLog", (_app, html, _data) => {
-    html.on("click", ".opposed-roll", chatOpposedRoll);
-    html.on("click", ".apply-damage-btn", toggleApplyDamageMenu);
-    html.on("click", ".apply-damage-option", chatApplyDamage);
+  Hooks.on('renderChatLog', (_app, html, _data) => {
+    addEventListener(html, 'click', chatOpposedRoll, '.opposed-roll');
+    addEventListener(html, 'click', toggleApplyDamageMenu, '.apply-damage-btn');
+    addEventListener(html, 'click', chatApplyDamage, '.apply-damage-option');
     
-    // Add mousedown listener to close dropdown on outside click
-    $(document).off('mousedown.applyDamageMenu').on('mousedown.applyDamageMenu', function (ev) {
-      if (!$(ev.target).closest('.apply-damage-menu-container').length) {
-        $('.apply-damage-dropdown').hide();
+    const mousedownHandler = (ev) => {
+      if (!ev.target.closest('.apply-damage-menu-container')) {
+        const dropdowns = document.querySelectorAll('.apply-damage-dropdown');
+        dropdowns.forEach(dropdown => dropdown.style.display = 'none');
       }
-    });
+    };
+    
+    document.removeEventListener('mousedown', mousedownHandler);
+    document.addEventListener('mousedown', mousedownHandler);
   });
-  Hooks.on("renderChatPopout", (_app, html, _data) => {
-    html.on("click", ".opposed-roll", chatOpposedRoll);
-    html.on("click", ".apply-damage-btn", toggleApplyDamageMenu);
-    html.on("click", ".apply-damage-option", chatApplyDamage);
+
+  Hooks.on('renderChatPopout', (_app, html, _data) => {
+    addEventListener(html, 'click', chatOpposedRoll, '.opposed-roll');
+    addEventListener(html, 'click', toggleApplyDamageMenu, '.apply-damage-btn');
+    addEventListener(html, 'click', chatApplyDamage, '.apply-damage-option');
     
-    // Add mousedown listener to close dropdown on outside click
-    $(document).off('mousedown.applyDamageMenu').on('mousedown.applyDamageMenu', function (ev) {
-      if (!$(ev.target).closest('.apply-damage-menu-container').length) {
-        $('.apply-damage-dropdown').hide();
+    const mousedownHandler = (ev) => {
+      if (!ev.target.closest('.apply-damage-menu-container')) {
+        const dropdowns = document.querySelectorAll('.apply-damage-dropdown');
+        dropdowns.forEach(dropdown => dropdown.style.display = 'none');
       }
-    });
+    };
+    
+    document.removeEventListener('mousedown', mousedownHandler);
+    document.addEventListener('mousedown', mousedownHandler);
   });
 
   // Add the new functions below the existing ones
   const toggleApplyDamageMenu = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const button = $(event.currentTarget);
-    const dropdown = button.siblings('.apply-damage-dropdown');
-    
-    // Dynamically get current selected and targeted tokens
-    const selectedActor = getControlledCharacter();
-    const targetedTokens = Array.from(game.user.targets);
-    const selectedName = selectedActor ? selectedActor.name : 'None';
-    const targetName = targetedTokens.length > 0 ? targetedTokens[0].name : 'None';
-    
-    // Update the dropdown content with current values
-    dropdown.html(`
-      <ul>
-        <li class="apply-damage-option" data-option="selected">Apply to Selected Token (${selectedName})</li>
-        <li class="apply-damage-option" data-option="target">Apply to Target (${targetName})</li>
-      </ul>
-    `);
-    
-    dropdown.toggle();
+    const button = event.target;
+    const dropdown = button.nextElementSibling;
+    if (dropdown && dropdown.classList.contains('apply-damage-dropdown')) {
+      const selectedActor = getControlledCharacter();
+      const targetedTokens = Array.from(game.user.targets);
+      const selectedName = selectedActor ? selectedActor.name : 'None';
+      const targetName = targetedTokens.length > 0 ? targetedTokens[0].name : 'None';
+      dropdown.innerHTML = `
+        <ul>
+          <li class="apply-damage-option" data-option="selected">Apply to Selected Token (${selectedName})</li>
+          <li class="apply-damage-option" data-option="target">Apply to Target (${targetName})</li>
+        </ul>
+      `;
+      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
   };
 
   const chatApplyDamage = async (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const option = $(event.currentTarget).data('option');
+    let optionElement = event.target;
+    if (parseInt(game.version.split('.')[0]) < 13 && typeof jQuery !== 'undefined' && optionElement instanceof jQuery) {
+        optionElement = optionElement[0];  // Convert jQuery object to plain DOM element
+    }
+    const option = optionElement.dataset.option;
     if (!option) return;
-    $(event.currentTarget).closest('.apply-damage-dropdown').hide();
-
-    const chatMessageId = $(event.currentTarget).closest('.message').data('messageId');
+    const dropdown = optionElement.closest('.apply-damage-dropdown');
+    if (dropdown) dropdown.style.display = 'none';
+    const chatMessageIdElement = optionElement.closest('.message');
+    const chatMessageId = chatMessageIdElement ? chatMessageIdElement.dataset.messageId : null;
     const chatMessage = game.messages.get(chatMessageId);
     if (!chatMessage) return ui.notifications.warn('Chat message not found!');
-
     const roll = chatMessage.rolls?.[0];
     if (!roll || roll.netSuccess <= 0) return ui.notifications.warn('No valid roll to apply damage!');
-
-    // const controlledCharacter = getControlledCharacter();
-    // if (!controlledCharacter) return ui.notifications.warn('You must select or control a character!');
-
     let damagedActor;
     if (option === 'selected') {
       damagedActor = getControlledCharacter();
@@ -214,12 +216,16 @@ export const runDiceHooks = () => {
         return ui.notifications.warn('No target selected!');
       }
     }
-
-    if (damagedActor) {
+    if (damagedActor && damagedActor.system.health) {
       const currentHealth = damagedActor.system.health.value || 0;
       const newHealth = Math.max(currentHealth - roll.netSuccess, 0);
       await damagedActor.update({ 'system.health.value': newHealth });
       ui.notifications.info(`Applied ${roll.netSuccess} damage to ${damagedActor.name}'s Health.`);
+    } else if (damagedActor && damagedActor.system.count) {
+      const currentCount = damagedActor.system.count || 0;
+      const newCount = Math.max(currentCount - roll.netSuccess, 0);
+      await damagedActor.update({ 'system.count': newCount });
+      ui.notifications.info(`Applied ${roll.netSuccess} damage to ${damagedActor.name}'s Count.`);
     }
   };
 };
