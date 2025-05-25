@@ -221,22 +221,81 @@ test.describe('Character Sheet Functionality', () => {
         
     });
 
-    test.describe('rolling', () => {
-         test('clicking an ability should open the roll modal', async ({ page, characterSheet }) => {
-            await characterSheet.getByText('Agility').click();
-            await expect(page.locator('.dialog-button.one')).toBeVisible();
-         });
+    [{
+        textSelector: 'Agility',
+    },
+    {
+         textSelector: 'Academics',
+    },
+    {
+        textSelector: 'Test Power',
+    },]
+    .forEach(({ textSelector }) => {
+        test.describe(`rolling ${textSelector}`, () => {
+            test(`should be able to roll ${textSelector} and then roll against it`, async ({ page, characterSheet }) => {
+                const actorName = await characterSheet.locator('input[name="name"]').inputValue();
+                await characterSheet.getByText(textSelector).first().click();
+                await expect(page.locator('.dialog-button.one')).toBeVisible();
 
-         test('clicking a talent should open the roll modal', async ({ page, characterSheet }) => {
-            await characterSheet.getByText('Academics').click();
-            await expect(page.locator('[data-button="one"]')).toBeVisible();
-         });
+                await page.getByRole('combobox').selectOption('Average (1)');
+                await page.locator('.dialog-button.one').click();
 
-         test('clicking a power should open the roll modal', async ({ page, characterSheet }) => {
-            const actorName = await characterSheet.locator('input[name="name"]').inputValue();
+                await await page.getByRole('tab', { name: 'Chat Messages' }).click();
 
-            await characterSheet.getByText('Test Power').first().click();
-            await expect(page.locator('[data-button="one"]')).toBeVisible();
-         });
+                const chatMessage = page.locator(`.chat-message:has-text("${actorName}")`);
+                await expect(chatMessage).toContainText('Difficulty: Average (1)');
+                await expect(chatMessage).toContainText(textSelector);
+                await expect(chatMessage).toContainText('Opposed roll');
+
+                // create a token for the actor
+                await page.evaluate(async (actorName) => {
+                    const scene = await game.scenes.getName('Foundry Virtual Tabletop');
+                    await scene.update({active: true, navigation: true});
+                    const actor = game.actors.getName(actorName);
+                    if (actor && scene) {
+                        await scene.createEmbeddedDocuments('Token', [{
+                            actorId: actor.id,
+                            x: 0,
+                            y: 0,
+                            name: actorName
+                        }]);
+                        const token = scene.tokens.getName(actorName);
+                        await token.object.control({"releaseOthers": true});
+                    }
+                }, actorName);
+
+                await chatMessage.getByText('Opposed roll').click();
+
+                const opposedRollDialog = page.locator('.application.dialog');
+                await expect(opposedRollDialog).toBeVisible();
+                await expect(opposedRollDialog.locator('button:has-text("Make Choice")')).toBeVisible();
+
+                for (const key in localizations['PROWLERS_AND_PARAGONS']['Ability']) {
+                    const abilityName = localizations['PROWLERS_AND_PARAGONS']['Ability'][key]['long'];
+                    await expect(opposedRollDialog.getByText(abilityName)).toBeVisible();
+                }
+        
+                for (const key in localizations['PROWLERS_AND_PARAGONS']['Talent']) {
+                    const talentName = localizations['PROWLERS_AND_PARAGONS']['Talent'][key];
+                    await expect(opposedRollDialog.getByText(talentName)).toBeVisible();
+                }
+                await opposedRollDialog.getByText('Toughness').click();
+                await opposedRollDialog.getByText('Make Choice').click();
+
+                const secondRoll = page.locator('div:has-text("Rolling Toughness")');
+                await expect(secondRoll).toContainText(`Roll against ${actorName}`);
+                await expect(secondRoll).toContainText(`Opposed`);
+
+                await secondRoll.getByText(`Roll against ${actorName}`).click();
+
+                await expect(page.locator(`.chat-message:has-text("${actorName}"):has-text("Difficulty: Opposed")`)).toBeVisible();
+
+                // token cleanup
+                await page.evaluate(async (actorName) => { 
+                    const scene = await game.scenes.getName('Foundry Virtual Tabletop');
+                    await scene.tokens.getName(actorName).delete();
+                }, actorName);
+             });
+        });
     });
-}); 
+})
