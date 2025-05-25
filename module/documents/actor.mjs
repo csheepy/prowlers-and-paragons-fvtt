@@ -197,21 +197,23 @@ export class ProwlersParagonsActor extends Actor {
   }
 
   increaseAllAbilities(n) {
+    const updates = {};
     for (const key in this.system.abilities) {
-      // Use _source to get values unmodified by effects
-      const baseValue = this.system._source.abilities[key].value
-      const newValue = baseValue + n
-      this.update({ [`system.abilities.${key}.value`]: newValue})
+      const baseValue = this.system._source.abilities[key].value;
+      const newValue = baseValue + n;
+      updates[`system.abilities.${key}.value`] = newValue;
     }
+    this.update(updates);
   }
 
   increaseAllTalents(n) {
+    const updates = {};
     for (const key in this.system.talents) {
-      // Use _source to get values unmodified by effects
-      const baseValue = this.system._source.talents[key].value
-      const newValue = baseValue + n
-      this.update({ [`system.talents.${key}.value`]: newValue})
+      const baseValue = this.system._source.talents[key].value;
+      const newValue = baseValue + n;
+      updates[`system.talents.${key}.value`] = newValue;
     }
+    this.update(updates);
   }
 
   async clearPackage() {

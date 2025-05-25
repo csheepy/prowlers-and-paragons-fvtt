@@ -99,7 +99,7 @@ test.describe('Character Sheet Functionality', () => {
                 await expect(characterSheet.getByText(`Spent Hero Points: ${heroPoints}`)).toBeVisible();
             });
 
-            test('clear package shoud reset spent points', async ({ characterSheet }) => {
+            test('clear package should reset spent points', async ({ characterSheet }) => {
                 await characterSheet.getByTestId('package-tab').click();
                 await characterSheet.getByRole('button', { name: 'Clear Package' }).click();
                 await expect(characterSheet.getByText('Spent Hero Points: 0')).toBeVisible();
@@ -126,14 +126,19 @@ test.describe('Character Sheet Functionality', () => {
             await expect(characterSheet.locator('.spend-resolve-submenu')).toBeVisible();
         });
 
-        test('should spend resolve', async ({ characterSheet }) => {
+        test('should spend resolve', async ({ page, characterSheet }) => {
+            const actorName = await characterSheet.locator('input[name="name"]').inputValue();
             await characterSheet.locator('input[name="system.resolve.value"]').fill('10');
             await characterSheet.locator('input[name="system.resolve.starting"]').fill('10');
 
             await characterSheet.getByTestId('spend-resolve-btn').click();
             const initialResolveValue = await characterSheet.locator('input[name="system.resolve.value"]').inputValue();
-            const submenuOption = characterSheet.locator('.spend-resolve-submenu a.spend-resolve-option').first();
-            await submenuOption.click();
+            const menuOption = characterSheet.locator('.spend-resolve-option').first();
+            await menuOption.click();
+
+            await page.getByRole('tab', { name: 'Chat Messages' }).click();
+            await expect(page.getByText(`${actorName} spends Resolve`)).toBeVisible();
+
             const updatedResolveValue = await characterSheet.locator('input[name="system.resolve.value"]').inputValue();
             await expect(Number(updatedResolveValue)).toBeLessThan(Number(initialResolveValue));  // Assuming spending resolve decreases the value
         });
@@ -189,6 +194,7 @@ test.describe('Character Sheet Functionality', () => {
             await characterSheet.locator('input[name="system.abilities.agility.value"]').fill('10');
             await characterSheet.locator('input[name="system.abilities.agility.value"]').blur();
             await characterSheet.locator('.temporary-buffs-btn').click();
+            await expect(characterSheet.locator('.temporary-buffs-btn')).toHaveText('Enter Temporary Buffs Mode');
             await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe("0");
             await expect(characterSheet.locator('input[name="system.abilities.agility.value"]')).not.toHaveClass('highlighted-border');
         });
