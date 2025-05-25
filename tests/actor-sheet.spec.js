@@ -18,9 +18,19 @@ const test = base.extend({
         try {
             actorName = crypto.randomUUID();
             await navigateToActorTab(page);
-            await page.evaluate((name) => {
+            await page.evaluate(async (name) => {
                 if (window.Actor) {
-                    window.Actor.create({ name: name, type: 'character' });
+                    const actor = await window.Actor.create({ name: name, type: 'character' });
+                    actor.createEmbeddedDocuments('Item', [{
+                        name: 'Test Power',
+                        type: 'power',
+                        rank: 1,  // Initial value based on schema
+                        rank_type: 'default',  // Example from schema choices
+                        source: 'default',  // Example from schema
+                        range: 'melee',  // Example from schema
+                        cost: 5,  // Example initial value
+                        // Add other fields as needed, e.g., connected_ability: 'agility'
+                    }]);
                 } else {
                     Actor.create({ name: name, type: 'character' });
                 }
@@ -192,5 +202,24 @@ test.describe('Character Sheet Functionality', () => {
             await expect(agilityInput).toHaveClass('highlighted-border');
         });
         
+    });
+
+    test.describe('rolling', () => {
+         test('clicking an ability should open the roll modal', async ({ page, characterSheet }) => {
+            await characterSheet.getByText('Agility').click();
+            await expect(page.locator('.dialog-button.one')).toBeVisible();
+         });
+
+         test('clicking a talent should open the roll modal', async ({ page, characterSheet }) => {
+            await characterSheet.getByText('Academics').click();
+            await expect(page.locator('[data-button="one"]')).toBeVisible();
+         });
+
+         test('clicking a power should open the roll modal', async ({ page, characterSheet }) => {
+            const actorName = await characterSheet.locator('input[name="name"]').inputValue();
+
+            await characterSheet.getByText('Test Power').first().click();
+            await expect(page.locator('[data-button="one"]')).toBeVisible();
+         });
     });
 }); 
