@@ -13,6 +13,8 @@
 
 - improve speed of package change
 
+- fixed applying damage to minions
+
 ## 1.0.0
 
 Initial release
