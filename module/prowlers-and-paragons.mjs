@@ -62,6 +62,14 @@ Hooks.once('init', function () {
     type: Boolean,
     default: false,
   })
+  game.settings.register('prowlers-and-paragons', 'randomInitiative', {
+    name: 'Rolled Initiative',
+    hint: 'Enable rolled initiative instead of the default fixed initiative (requires reload)',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+  })
   // Add custom constants for configuration.
   CONFIG.PROWLERS_AND_PARAGONS = PROWLERS_AND_PARAGONS;
 
@@ -69,10 +77,17 @@ Hooks.once('init', function () {
    * Set an initiative formula for the system
    * @type {String}
    */
-  CONFIG.Combat.initiative = {
-    formula: '@edge.value',
-    decimals: 2,
-  };
+  if (game.settings.get('prowlers-and-paragons', 'randomInitiative')) {
+    CONFIG.Combat.initiative = {
+      formula: '(@edge.value)dp',
+      decimals: 2,
+    };
+  } else {
+    CONFIG.Combat.initiative = {
+      formula: '@edge.value',
+      decimals: 2,
+    };
+  }
 
   // Define custom Document and DataModel classes
   CONFIG.Actor.documentClass = ProwlersParagonsActor;
