@@ -69,7 +69,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
     context.config = CONFIG.PROWLERS_AND_PARAGONS;
 
     // Prepare active effects for easier access
-    context.effects = prepareActiveEffectCategories(this.item.effects);
+    context.effects = prepareActiveEffectCategories(this.item.effects, true);
 
     context.abilities = CONFIG.PROWLERS_AND_PARAGONS.abilities
     context.power_rank_types = CONFIG.PROWLERS_AND_PARAGONS.power_rank_types
