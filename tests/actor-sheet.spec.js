@@ -32,7 +32,13 @@ const test = base.extend({
                         // Add other fields as needed, e.g., connected_ability: 'agility'
                     }]);
                 } else {
-                    Actor.create({ name: name, type: 'character' });
+                    const actor = await Actor.create({ name: name, type: 'character' });
+                    actor.createEmbeddedDocuments('Item', [{
+                        name: 'Test Power',
+                        type: 'power',
+                        rank: 1,
+                        rank_type: 'default',
+                    }]);
                 }
             }, actorName);
             await navigateToActorSheet(page, actorName);
@@ -153,18 +159,23 @@ test.describe('Character Sheet Functionality', () => {
         });
 
         test('reset button should reset resolve to starting value', async ({ characterSheet }) => {
-            await characterSheet.locator('input[name="system.resolve.value"]').fill('10');
-            await characterSheet.locator('input[name="system.resolve.starting"]').fill('10');
+            const resolveValueSelector = characterSheet.locator('input[name="system.resolve.value"]');
+            const resolveStartingSelector = characterSheet.locator('input[name="system.resolve.starting"]');
+            await resolveValueSelector.fill('10')
+            await resolveValueSelector.blur();
+            await resolveStartingSelector.fill('10')
+            await resolveStartingSelector.blur();
+
 
             // First, spend some resolve to change the value
             await characterSheet.getByTestId('spend-resolve-btn').click();
 
             const submenuOption = characterSheet.locator('.spend-resolve-submenu a.spend-resolve-option').first();
             await submenuOption.click();  // This should decrease resolve
-            const startingResolveValue = await characterSheet.locator('input[name="system.resolve.starting"]').inputValue();
+            const startingResolveValue = await resolveStartingSelector.inputValue();
 
             await characterSheet.locator('.reset-resolve').click();  // Click the reset button
-            const updatedResolveValue = await characterSheet.locator('input[name="system.resolve.value"]').inputValue();
+            const updatedResolveValue = await resolveValueSelector.inputValue();
 
             await expect(updatedResolveValue).toBe(startingResolveValue);  // Verify it matches the starting value
         });
