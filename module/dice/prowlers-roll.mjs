@@ -36,14 +36,17 @@ export class ProwlersRoll extends Roll {
     this.netSuccess = total - this.options.difficultyNumber
     let narrativeControl = 'Oops, Narrative Control is broken'
 
+    const resultsObject = game.settings.get('prowlers-and-paragons', 'traditionalResults') ?
+      CONFIG.PROWLERS_AND_PARAGONS.traditional_results : CONFIG.PROWLERS_AND_PARAGONS.narrative_control
+    
     if (this.netSuccess <= -2) {
-      narrativeControl = game.i18n.localize('NarrativeControl.Opponent')
+      narrativeControl = game.i18n.localize(resultsObject.complete_failure)
     } else if (this.netSuccess < 1) {
-      narrativeControl = game.i18n.localize('NarrativeControl.OpponentWithEmbellishment')
+      narrativeControl = game.i18n.localize(resultsObject.partial_failure)
     } else if (this.netSuccess <= 2) {
-      narrativeControl = game.i18n.localize('NarrativeControl.ActorWithEmbellishment')
+      narrativeControl = game.i18n.localize(resultsObject.partial_success)
     } else {
-      narrativeControl = game.i18n.localize('NarrativeControl.Actor')
+      narrativeControl = game.i18n.localize(resultsObject.complete_success)
     }
 
     return {

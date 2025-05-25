@@ -103,10 +103,17 @@ PROWLERS_AND_PARAGONS.talents = {
 };
 
 PROWLERS_AND_PARAGONS.narrative_control = {
-  opponent: 'PROWLERS_AND_PARAGONS.NarrativeControl.Opponent',
-  opponent_with_embellishment: 'PROWLERS_AND_PARAGONS.NarrativeControl.OpponentWithEmbellishment',
-  actor: 'PROWLERS_AND_PARAGONS.NarrativeControl.Actor',
-  actor_with_embellishment: 'PROWLERS_AND_PARAGONS.NarrativeControl.ActorWithEmbellishment',
+  complete_failure: 'PROWLERS_AND_PARAGONS.NarrativeControl.Opponent',
+  partial_failure: 'PROWLERS_AND_PARAGONS.NarrativeControl.OpponentWithEmbellishment',
+  partial_success: 'PROWLERS_AND_PARAGONS.NarrativeControl.Actor',
+  complete_success: 'PROWLERS_AND_PARAGONS.NarrativeControl.ActorWithEmbellishment',
+}
+
+PROWLERS_AND_PARAGONS.traditional_results = {
+  complete_failure: 'PROWLERS_AND_PARAGONS.TraditionalResults.CompleteFailure',
+  partial_failure: 'PROWLERS_AND_PARAGONS.TraditionalResults.PartialFailure',
+  partial_success: 'PROWLERS_AND_PARAGONS.TraditionalResults.PartialSuccess',
+  complete_success: 'PROWLERS_AND_PARAGONS.TraditionalResults.CompleteSuccess',
 }
 
 PROWLERS_AND_PARAGONS.resolve_spend_options = [

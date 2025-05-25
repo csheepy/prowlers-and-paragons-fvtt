@@ -54,6 +54,14 @@ Hooks.once('init', function () {
     type: Number,
     default: 125,
   })
+  game.settings.register('prowlers-and-paragons', 'traditionalResults', {
+    name: 'Traditional Results',
+    hint: 'Enable traditional results instead of the default narrative control results',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+  })
   // Add custom constants for configuration.
   CONFIG.PROWLERS_AND_PARAGONS = PROWLERS_AND_PARAGONS;
 

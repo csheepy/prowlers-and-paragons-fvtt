@@ -159,13 +159,19 @@
       "RemoveCharacter": "Remove character",
       "Talents": "Talents",
       "Rank": "Rank"
+    },
+    "NarrativeControl": {
+      "Opponent": "Opponent",
+      "OpponentWithEmbellishment": "Opponent with Embellishment",
+      "Actor": "Actor",
+      "ActorWithEmbellishment": "Actor with Embellishment"
+    },
+    "TraditionalResults": {
+      "CompleteFailure": "Complete Failure",
+      "PartialFailure": "Failure with Silver Lining",
+      "PartialSuccess": "Success with Complication",
+      "CompleteSuccess": "Complete Success"
     }
-  },
-  "NarrativeControl": {
-    "Opponent": "Opponent",
-    "OpponentWithEmbellishment": "Opponent with Embellishment",
-    "Actor": "Actor",
-    "ActorWithEmbellishment": "Actor with Embellishment"
   },
   "Errors": {
     "CouldNotFindItem": "Could not find item: _ITEM_ID_",
