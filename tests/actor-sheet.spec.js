@@ -121,7 +121,6 @@ test.describe('Character Sheet Functionality', () => {
             await characterSheet.locator('input[name="system.resolve.starting"]').fill('10');
 
             await characterSheet.getByTestId('spend-resolve-btn').click();
-            await characterSheet.locator('.spend-resolve-dropdown').hover();
             const initialResolveValue = await characterSheet.locator('input[name="system.resolve.value"]').inputValue();
             const submenuOption = characterSheet.locator('.spend-resolve-submenu a.spend-resolve-option').first();
             await submenuOption.click();
@@ -138,13 +137,12 @@ test.describe('Character Sheet Functionality', () => {
             await expect(page.getByText('No Resolve points remaining!')).toBeVisible();
         });
 
-        test('reset buttonshould reset resolve to starting value', async ({ characterSheet }) => {
+        test('reset button should reset resolve to starting value', async ({ characterSheet }) => {
             await characterSheet.locator('input[name="system.resolve.value"]').fill('10');
             await characterSheet.locator('input[name="system.resolve.starting"]').fill('10');
 
             // First, spend some resolve to change the value
             await characterSheet.getByTestId('spend-resolve-btn').click();
-            await characterSheet.locator('.spend-resolve-dropdown').hover();
 
             const submenuOption = characterSheet.locator('.spend-resolve-submenu a.spend-resolve-option').first();
             await submenuOption.click();  // This should decrease resolve
@@ -155,5 +153,44 @@ test.describe('Character Sheet Functionality', () => {
 
             await expect(updatedResolveValue).toBe(startingResolveValue);  // Verify it matches the starting value
         });
+    });
+
+    // temporary buffs mode tests
+    test.describe('temporary buffs mode', () => {
+        test('entering temporary buffs mode should change the button text', async ({ characterSheet }) => {
+            await characterSheet.locator('.temporary-buffs-btn').click();
+
+            await expect(characterSheet.locator('.temporary-buffs-btn')).toHaveText('Return to Normal');
+        });
+
+        test('exiting temporary buffs mode should change the button text', async ({ characterSheet }) => {
+            await characterSheet.locator('.temporary-buffs-btn').click();
+            await characterSheet.locator('.temporary-buffs-btn').click();
+            await expect(characterSheet.locator('.temporary-buffs-btn')).toHaveText('Enter Temporary Buffs Mode');
+        });
+        
+        test('temporary buffs mode should show a notification upon entering', async ({ page,characterSheet }) => {
+            await characterSheet.locator('.temporary-buffs-btn').click();
+            await expect(page.getByText('Changes to abilities and talents will be temporary until you return to normal mode.')).toBeVisible();
+        });
+
+        test('changes to abilities and talents should be temporary', async ({ characterSheet }) => {
+            await characterSheet.locator('.temporary-buffs-btn').click();
+            await characterSheet.locator('input[name="system.abilities.agility.value"]').fill('10');
+            await characterSheet.locator('input[name="system.abilities.agility.value"]').blur();
+            await characterSheet.locator('.temporary-buffs-btn').click();
+            await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe("0");
+            await expect(characterSheet.locator('input[name="system.abilities.agility.value"]')).not.toHaveClass('highlighted-border');
+        });
+
+        test('temporary changes should gain the highlighted-border class', async ({ characterSheet }) => {
+            await characterSheet.locator('.temporary-buffs-btn').click();
+
+            const agilityInput = characterSheet.locator('input[name="system.abilities.agility.value"]');
+            await agilityInput.fill('10');
+            await agilityInput.blur();
+            await expect(agilityInput).toHaveClass('highlighted-border');
+        });
+        
     });
 }); 
