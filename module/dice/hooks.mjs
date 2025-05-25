@@ -216,11 +216,16 @@ export const runDiceHooks = () => {
         return ui.notifications.warn('No target selected!');
       }
     }
-    if (damagedActor) {
+    if (damagedActor && damagedActor.system.health) {
       const currentHealth = damagedActor.system.health.value || 0;
       const newHealth = Math.max(currentHealth - roll.netSuccess, 0);
       await damagedActor.update({ 'system.health.value': newHealth });
       ui.notifications.info(`Applied ${roll.netSuccess} damage to ${damagedActor.name}'s Health.`);
+    } else if (damagedActor && damagedActor.system.count) {
+      const currentCount = damagedActor.system.count || 0;
+      const newCount = Math.max(currentCount - roll.netSuccess, 0);
+      await damagedActor.update({ 'system.count': newCount });
+      ui.notifications.info(`Applied ${roll.netSuccess} damage to ${damagedActor.name}'s Count.`);
     }
   };
 };
