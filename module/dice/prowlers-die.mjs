@@ -17,11 +17,15 @@ export class ProwlersDie extends Die {
     
       // count 6s as *twice as even*
       countEven(modifier) {
-        for ( let r of this.results ) {
-          r.success = ( (r.result % 2) === 0 );
-          r.count = r.success ? 1 : 0;
+        if (game.settings.get('prowlers-and-paragons', 'reducedSwinginess')) {
+          super.countEven(modifier);
+        } else {
+          for ( let r of this.results ) {
+            r.success = ( (r.result % 2) === 0 );
+            r.count = r.success ? 1 : 0;
 
-          r.count = ((r.result % 6) === 0) ? 2 : r.count;
+            r.count = ((r.result % 6) === 0) ? 2 : r.count;
+          }
         }
       }
 

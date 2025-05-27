@@ -1,6 +1,17 @@
 # CHANGELOG
 
+## 1.2.0
+
+- add rolled initiative game setting
+
+- add traditional results game setting
+
+- add sheet option to override Edge
+
+- add game setting to reduce swinginess of rolls
+
 ## 1.1.0
+
 - add UI notification to make the intent of temporary mode more clear
 
 - add line in the readme about how pros and cons are implemented

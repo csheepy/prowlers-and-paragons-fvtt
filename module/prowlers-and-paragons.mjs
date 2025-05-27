@@ -70,6 +70,14 @@ Hooks.once('init', function () {
     type: Boolean,
     default: false,
   })
+  game.settings.register('prowlers-and-paragons', 'reducedSwinginess', {
+    name: 'Reduced Swinginess',
+    hint: 'If enabled, 6s will no longer count as two successes',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+  })
   // Add custom constants for configuration.
   CONFIG.PROWLERS_AND_PARAGONS = PROWLERS_AND_PARAGONS;
 

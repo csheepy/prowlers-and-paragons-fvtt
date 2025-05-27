@@ -50,6 +50,8 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     schema.healthOverride = new fields.BooleanField({initial: false}) // special shenanigans for villains or whatever
     schema.halveHealth = new fields.BooleanField({initial: false}) // for foes
 
+    schema.edgeOverride = new fields.BooleanField({initial: false})
+
     schema.earnedHeroPoints = new fields.NumberField({initial: 0, min: 0})
 
     return schema;
@@ -73,7 +75,7 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     }
 
     // edge
-
+    if (!this.edgeOverride) { 
     //danger sense substitutes for perception
     const dangerSense = this.parent.items.find(p => p.name === 'Danger Sense')
     const per = (dangerSense?.system.rank ?? 0) + this.abilities.perception.value
@@ -90,6 +92,9 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     if (superSpeed) {
       this.edge.value = Math.max(this.edge.value,superSpeed.system.rank * 3)
     }
+    }
+
+
 
   }
 

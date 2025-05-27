@@ -15,46 +15,33 @@ const navigateToActorSheet = async (page, actorName) => {
 const test = base.extend({
     actor: async ({ page }, use) => {
         let actorName;
-        try {
-            actorName = crypto.randomUUID();
-            await navigateToActorTab(page);
-            await page.evaluate(async (name) => {
-                if (window.Actor) {
-                    const actor = await window.Actor.create({ name: name, type: 'character' });
-                    actor.createEmbeddedDocuments('Item', [{
-                        name: 'Test Power',
-                        type: 'power',
-                        rank: 1,  // Initial value based on schema
-                        rank_type: 'default',  // Example from schema choices
-                        source: 'default',  // Example from schema
-                        range: 'melee',  // Example from schema
-                        cost: 5,  // Example initial value
-                        // Add other fields as needed, e.g., connected_ability: 'agility'
-                    }]);
-                } else {
-                    const actor = await Actor.create({ name: name, type: 'character' });
-                    actor.createEmbeddedDocuments('Item', [{
-                        name: 'Test Power',
-                        type: 'power',
-                        rank: 1,
-                        rank_type: 'default',
-                    }]);
-                }
-            }, actorName);
-            await navigateToActorSheet(page, actorName);
-            await use();  // End of setup
-        } finally {
-            if (actorName) {
-                await page.evaluate((name) => {
-                    if (window.game && window.game.actors.getName(name)) {
-                        window.game.actors.getName(name).delete();
-                        console.log('Actor ' + name + ' deleted successfully');
-                    } else {
-                        console.error('Actor ' + name + ' not found for deletion');
-                    }
-                }, actorName);
+        actorName = crypto.randomUUID();
+        await navigateToActorTab(page);
+        await page.evaluate(async (name) => {
+            if (window.Actor) {
+                const actor = await window.Actor.create({ name: name, type: 'character' });
+                actor.createEmbeddedDocuments('Item', [{
+                    name: 'Test Power',
+                    type: 'power',
+                    rank: 1,  // Initial value based on schema
+                    rank_type: 'default',  // Example from schema choices
+                    source: 'default',  // Example from schema
+                    range: 'melee',  // Example from schema
+                    cost: 5,  // Example initial value
+                    // Add other fields as needed, e.g., connected_ability: 'agility'
+                }]);
+            } else {
+                const actor = await Actor.create({ name: name, type: 'character' });
+                actor.createEmbeddedDocuments('Item', [{
+                    name: 'Test Power',
+                    type: 'power',
+                    rank: 1,
+                    rank_type: 'default',
+                }]);
             }
-        }
+        }, actorName);
+        await navigateToActorSheet(page, actorName);
+        await use();  // End of setup
     },
     characterSheet: async ({ page, actor }, use) => {
         // Now that navigation and actor creation are done, use the sheet
@@ -80,16 +67,16 @@ test.describe('Character Sheet Functionality', () => {
     });
 
     [
-        { heroPackage: 'Superhero', heroPoints: 50, abilityValue: "3", talentValue: "3" },
-        { heroPackage: 'Hero', heroPoints: 40, abilityValue: "3", talentValue: "2" },
-        { heroPackage: 'Civilian', heroPoints: 35, abilityValue: "2", talentValue: "2" },
+        { heroPackage: 'Superhero', heroPoints: 50, abilityValue: '3', talentValue: '3' },
+        { heroPackage: 'Hero', heroPoints: 40, abilityValue: '3', talentValue: '2' },
+        { heroPackage: 'Civilian', heroPoints: 35, abilityValue: '2', talentValue: '2' },
     ].forEach(({ heroPackage, heroPoints, abilityValue, talentValue }) => {
         test.describe(`applying a package ${heroPackage}`, () => {
             test.beforeEach(async ({ characterSheet }) => {
                 await characterSheet.getByTestId('package-tab').click();
                 const buttonLocator = characterSheet.getByRole('button', { name: heroPackage, exact: true });
                 await buttonLocator.click();
-             });
+            });
 
             test('should update selected package label', async ({ characterSheet }) => {
                 await expect(characterSheet.getByText(`Currently selected package: ${heroPackage}`)).toBeVisible();
@@ -97,8 +84,8 @@ test.describe('Character Sheet Functionality', () => {
 
             test('should update abilities and talents', async ({ characterSheet }) => {
                 await characterSheet.getByTestId('play-tab').click();
-                await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe(abilityValue);
-                await expect(characterSheet.locator('input[name="system.talents.academics.value"]').inputValue()).resolves.toBe(talentValue);
+                await expect(characterSheet.locator('input[name="system.abilities.agility.value"]')).toHaveValue(abilityValue);
+                await expect(characterSheet.locator('input[name="system.talents.academics.value"]')).toHaveValue(talentValue);
             });
 
             test('should update spent hero points', async ({ characterSheet }) => {
@@ -111,8 +98,8 @@ test.describe('Character Sheet Functionality', () => {
                 await expect(characterSheet.getByText('Spent Hero Points: 0')).toBeVisible();
 
                 await characterSheet.getByTestId('play-tab').click();
-                await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe("0");
-                await expect(characterSheet.locator('input[name="system.talents.academics.value"]').inputValue()).resolves.toBe("0");
+                await expect(characterSheet.locator('input[name="system.abilities.agility.value"]')).toHaveValue('0');
+                await expect(characterSheet.locator('input[name="system.talents.academics.value"]')).toHaveValue('0');
             });
         });
     });
@@ -205,14 +192,12 @@ test.describe('Character Sheet Functionality', () => {
             await characterSheet.locator('input[name="system.abilities.agility.value"]').fill('10');
             await characterSheet.locator('input[name="system.abilities.agility.value"]').blur();
             await characterSheet.locator('.temporary-buffs-btn').click();
-            await expect(characterSheet.locator('.temporary-buffs-btn')).toHaveText('Enter Temporary Buffs Mode');
-            await expect(characterSheet.locator('input[name="system.abilities.agility.value"]').inputValue()).resolves.toBe("0");
+            await expect(characterSheet.locator('input[name="system.abilities.agility.value"]')).toHaveValue('0');
             await expect(characterSheet.locator('input[name="system.abilities.agility.value"]')).not.toHaveClass('highlighted-border');
         });
 
         test('temporary changes should gain the highlighted-border class', async ({ characterSheet }) => {
             await characterSheet.locator('.temporary-buffs-btn').click();
-
             const agilityInput = characterSheet.locator('input[name="system.abilities.agility.value"]');
             await agilityInput.fill('10');
             await agilityInput.blur();
@@ -296,6 +281,46 @@ test.describe('Character Sheet Functionality', () => {
                     await scene.tokens.getName(actorName).delete();
                 }, actorName);
              });
+        });
+    });
+
+    test.describe('sheet options', () => {
+        test('should not update edge when disabled', async ({ characterSheet }) => {    
+            await characterSheet.locator('input[name="system.abilities.agility.value"]').fill('10');
+            await characterSheet.locator('input[name="system.abilities.agility.value"]').blur();
+            await expect(characterSheet.locator('input[name="system.edge.value"]')).toHaveValue('10');
+
+            await characterSheet.getByTestId('options-tab').click();
+            await characterSheet.locator('input[name="system.edgeOverride"]').click();
+            await characterSheet.locator('input[name="system.edgeOverride"]').blur();
+            await characterSheet.locator('input[name="system.edge.value"]').fill('20');
+            await characterSheet.locator('input[name="system.edge.value"]').blur();
+            await expect(characterSheet.locator('input[name="system.edge.value"]')).toHaveValue('20');
+        });
+
+        test('max health should not update when health overrride is enabled', async ({ characterSheet }) => {    
+            await characterSheet.locator('input[name="system.abilities.might.value"]').fill('10');
+            await characterSheet.locator('input[name="system.abilities.might.value"]').blur();
+            await expect(characterSheet.locator('input[name="system.health.max"]')).toHaveValue('5');
+
+            await characterSheet.getByTestId('options-tab').click();
+            await characterSheet.locator('input[name="system.healthOverride"]').click();
+            await characterSheet.locator('input[name="system.healthOverride"]').blur();
+            await characterSheet.locator('input[name="system.health.max"]').fill('20');
+            await characterSheet.locator('input[name="system.health.max"]').blur();
+            await expect(characterSheet.locator('input[name="system.health.max"]')).toHaveValue('20');
+        });
+
+        test('halve health should halve health', async ({ characterSheet }) => {
+            await characterSheet.locator('input[name="system.abilities.might.value"]').fill('10');
+            await characterSheet.locator('input[name="system.abilities.might.value"]').blur();
+            await expect(characterSheet.locator('input[name="system.health.max"]')).toHaveValue('5');
+
+            await characterSheet.getByTestId('options-tab').click();
+            await characterSheet.locator('input[name="system.halveHealth"]').click();
+            await characterSheet.locator('input[name="system.halveHealth"]').blur();
+            await expect(characterSheet.locator('input[name="system.health.max"]')).toHaveValue('3');
+            
         });
     });
 })

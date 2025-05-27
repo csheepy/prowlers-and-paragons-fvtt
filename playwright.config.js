@@ -37,10 +37,15 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'cleanup',
+      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      testMatch: /global\.teardown\.js/,
+    },
+    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      teardown: 'cleanup',
     },
-
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },

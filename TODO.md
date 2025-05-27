@@ -19,14 +19,8 @@ send power description to chat
 
 appv2 migration for foundry 13
 
-traditional results (instead of narrative)
-
-randomized initiative setting
-
-change UI for default rank powers to appear as flat cost
+add error for adversity spend when out of adversity
 
 ## might do
 
 make sure everything is localised
-
-end to end tests using Playwright
