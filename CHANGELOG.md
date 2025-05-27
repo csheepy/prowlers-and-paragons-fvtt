@@ -10,6 +10,8 @@
 
 - add game setting to reduce swinginess of rolls
 
+- improve UI for default rank powers
+
 ## 1.1.0
 
 - add UI notification to make the intent of temporary mode more clear

@@ -19,8 +19,6 @@ send power description to chat
 
 appv2 migration for foundry 13
 
-add error for adversity spend when out of adversity
-
 ## might do
 
 make sure everything is localised
