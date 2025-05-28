@@ -327,10 +327,14 @@ export class ProwlersParagonsActor extends Actor {
     });
 
     holdPlease.render({force: true});
-    const difficulty = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id, flavor, this.name)
+
+    const opposeRoll = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id, flavor, this.name)
+    const difficulty = opposeRoll.roll.total - opposeRoll.roll.options.difficultyNumber;
+
     holdPlease.close();
 
-    return difficulty
+    console.log(opposeRoll)
+    return {difficulty, message: opposeRoll.message}
   }
 
   async roll(trait, options) {
@@ -347,7 +351,16 @@ export class ProwlersParagonsActor extends Actor {
       if (!opposedRoll) return;
       options = { ...options, ...opposedRoll };
     }
-    return await ProwlersRoll.rollDialog(options);
+    const {roll, message} = await ProwlersRoll.rollDialog(options);
+    if (options.difficulty === 'opposed' && options.originatingMessageId) {
+      console.log(options)
+      const originalMessage = game.messages.get(options.originatingMessageId);
+      const oppposedRolls = originalMessage.getFlag('prowlers-and-paragons', 'opposedRolls') ?? [];
+      if (originalMessage) {
+        originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', [...oppposedRolls, message.id]);
+      }
+    }
+    return {roll, message};
   }
 
   async threatRoll(options) {

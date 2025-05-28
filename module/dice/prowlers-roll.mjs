@@ -92,11 +92,11 @@ export class ProwlersRoll extends Roll {
   static async resolveRollCallback(resolve, options) {
     const roll = new this(undefined, undefined, options);
     await roll.evaluate();
-    roll.toMessage({
+    const message = await roll.toMessage({
       speaker: options.speaker,
       rollMode: options.rollMode
     });
-    resolve(roll.total - options.difficultyNumber)
+    resolve({roll, message})
   }
 
   static rollDialogData(options) {
@@ -151,7 +151,7 @@ export class ProwlersRoll extends Roll {
             label: data.label,
             callback: async (buttonHtml) => {
               options = this.addOptionsFromHtml(options, buttonHtml);
-              this.resolveRollCallback(resolve, options);
+              return this.resolveRollCallback(resolve, options);
             }
           },
           two: {

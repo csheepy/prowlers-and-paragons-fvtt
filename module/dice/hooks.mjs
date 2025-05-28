@@ -46,23 +46,41 @@ const executeTraitRoll = async (actor, selectedTrait, traits, options) => {
   const [type, id] = selectedTrait.split(':');
   if (!id) return;
 
+  let roll;
+  let message;
   switch (type) {
     case 'ability':
       options.type = game.i18n.localize(traits.abilities[selectedTrait]);
-      return await actor.roll(`system.abilities.${id}.value`, options);
+      ({roll, message} = await actor.roll(`system.abilities.${id}.value`, options));
+      break;
     case 'talent':
       options.type = game.i18n.localize(traits.talents[selectedTrait]);
-      return await actor.roll(`system.talents.${id}.value`, options);
+      ({roll, message} = await actor.roll(`system.talents.${id}.value`, options));
+      break;
     case 'item':
       const item = actor.items.get(id);
-      return await item.roll(options);
+      ({roll, message} = await item.roll(options));
+      break;
     case 'threat':
       options.offense = options.offense ?? true;
-      return await actor.threatRoll(options);
+      ({roll, message} = await actor.threatRoll(options));
+      break;
     case 'vehicle':
       options.type = game.i18n.localize(traits.vehicle[selectedTrait]);
-      return await actor.roll(`system.${id}`, options);
+      ({roll, message} = await actor.roll(`system.${id}`, options));
+      break;
   }
+
+  // add the roll to the original message's opposed rolls so that this roll can be updated if they reroll
+  // if (options.difficulty === 'opposed') {
+  //   const originalMessage = game.messages.get(options.originatingMessageId);
+  //   if (originalMessage) {
+  //     if (!originalMessage.flags.opposedRolls) originalMessage.flags.opposedRolls = [];
+  //     const newFlagValue = [...originalMessage.flags.opposedRolls, roll.message.id];
+  //     await originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', newFlagValue);
+  //   }
+  // }
+  return {roll, message};
 };
 
 export const runDiceHooks = () => {
@@ -84,7 +102,33 @@ export const runDiceHooks = () => {
         const roll = message.rolls[0];
         if (roll) {
           const reroll = await roll.reroll();
-          await reroll.toMessage();
+          const newMessage = await reroll.toMessage({speaker: roll.options.speaker, rollMode: roll.options.rollMode});
+          if (message.getFlag('prowlers-and-paragons', 'opposedRolls')) {
+            // make sure the new message gets the opposed rolls flags from the original
+            await newMessage.setFlag('prowlers-and-paragons', 'opposedRolls', message.getFlag('prowlers-and-paragons', 'opposedRolls'));
+            console.log('newMessage', newMessage)
+            console.log('old message', message)
+            // modify rolls that opposed this one to update their difficulty/ recompute total
+            for (const opposedId of message.getFlag('prowlers-and-paragons', 'opposedRolls')) {
+              const opposedMessage = game.messages.get(opposedId);
+              if (opposedMessage && opposedMessage.rolls[0]) {
+                const opposedRoll = opposedMessage.rolls[0];
+                opposedRoll.options.difficultyNumber = reroll.total - reroll.options.difficultyNumber;
+                console.log('opposedRoll', opposedRoll)
+                console.log('message', opposedMessage)
+
+                const updatedContent = await opposedRoll.render();  // Render the new roll to a string
+      
+                // Update the existing message with the new content
+                await opposedMessage.update({
+                  content: updatedContent,  // Replace content with the new roll result
+                  rolls: [opposedRoll]  // Optionally update the rolls array if needed
+                });
+                // const newOpposedRoll = await opposedRoll.reroll();
+                // await newOpposedRoll.toMessage({replaceMessage: opposedMessage.id});
+              }
+            }
+          }
         }
       },
     });
@@ -129,7 +173,9 @@ export const runDiceHooks = () => {
       difficulty: 'opposed',
       difficultyNumber: chatMessage.rolls?.[0]?.total - chatMessage.rolls?.[0]?.options.difficultyNumber,
       doOpposedRoll: false,
-      originatingActorName: chatMessage.speaker.alias
+      originatingActorName: chatMessage.speaker.alias,
+      originatingMessageId: chatMessage.id,
+      speaker: controlledCharacter.name
     };
     return await executeTraitRoll(controlledCharacter, selectedTrait, traits, options);
   };
