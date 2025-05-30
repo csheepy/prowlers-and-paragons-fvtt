@@ -351,13 +351,13 @@ export class ProwlersParagonsActor extends Actor {
       options = { ...options, ...opposedRoll };
     }
     const {roll, message} = await ProwlersRoll.rollDialog(options);
-    if (options.difficulty === 'opposed' && options.originatingMessageId) {
-      const originalMessage = game.messages.get(options.originatingMessageId);
-      const oppposedRolls = originalMessage.getFlag('prowlers-and-paragons', 'opposedRolls') ?? [];
-      if (originalMessage) {
-        originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', [...oppposedRolls, message.id]);
-      }
-    }
+    // if (options.difficulty === 'opposed' && options.originatingMessageId) {
+    //   const originalMessage = game.messages.get(options.originatingMessageId);
+    //   const oppposedRolls = originalMessage.getFlag('prowlers-and-paragons', 'opposedRolls') ?? [];
+    //   if (originalMessage) {
+    //     originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', [...oppposedRolls, message.id]);
+    //   }
+    // }
     return {roll, message};
   }
 

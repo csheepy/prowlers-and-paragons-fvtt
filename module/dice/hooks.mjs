@@ -71,15 +71,6 @@ const executeTraitRoll = async (actor, selectedTrait, traits, options) => {
       break;
   }
 
-  // add the roll to the original message's opposed rolls so that this roll can be updated if they reroll
-  // if (options.difficulty === 'opposed') {
-  //   const originalMessage = game.messages.get(options.originatingMessageId);
-  //   if (originalMessage) {
-  //     if (!originalMessage.flags.opposedRolls) originalMessage.flags.opposedRolls = [];
-  //     const newFlagValue = [...originalMessage.flags.opposedRolls, roll.message.id];
-  //     await originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', newFlagValue);
-  //   }
-  // }
   return {roll, message};
 };
 
@@ -116,8 +107,8 @@ export const runDiceHooks = () => {
       
                 // Update the existing message with the new content
                 await opposedMessage.update({
-                  content: updatedContent,  // Replace content with the new roll result
-                  rolls: [opposedRoll]  // Optionally update the rolls array if needed
+                  content: updatedContent,
+                  rolls: [opposedRoll]
                 });
               }
             }

@@ -89,6 +89,17 @@ export class ProwlersRoll extends Roll {
     return options
   }
 
+  static insertSelfIntoOpposedRolls(options, message) {
+    if (options.difficulty === 'opposed' && options.originatingMessageId) {
+      const originalMessage = game.messages.get(options.originatingMessageId);
+      const oppposedRolls = originalMessage.getFlag('prowlers-and-paragons', 'opposedRolls') ?? [];
+      if (originalMessage) {
+        console.log(originalMessage, message)
+        originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', [...oppposedRolls, message.id]);
+      }
+    }
+  }
+
   static async resolveRollCallback(resolve, options) {
     const roll = new this(undefined, undefined, options);
     await roll.evaluate();
@@ -96,6 +107,7 @@ export class ProwlersRoll extends Roll {
       speaker: options.speaker,
       rollMode: options.rollMode
     });
+    this.insertSelfIntoOpposedRolls(options, message);
     resolve({roll, message})
   }
 
