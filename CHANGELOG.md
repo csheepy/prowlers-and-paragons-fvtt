@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.3.0
+
+- Rerolling a roll will now update any rolls that opposed that roll with the new result
+
+- add ui warning if you dismiss the trait selection dialog
+
+- fix actor name not appearing on opposed rolls
+
 ## 1.2.0
 
 - add rolled initiative game setting

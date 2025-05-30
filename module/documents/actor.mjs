@@ -333,7 +333,6 @@ export class ProwlersParagonsActor extends Actor {
 
     holdPlease.close();
 
-    console.log(opposeRoll)
     return {difficulty, message: opposeRoll.message}
   }
 
@@ -353,7 +352,6 @@ export class ProwlersParagonsActor extends Actor {
     }
     const {roll, message} = await ProwlersRoll.rollDialog(options);
     if (options.difficulty === 'opposed' && options.originatingMessageId) {
-      console.log(options)
       const originalMessage = game.messages.get(options.originatingMessageId);
       const oppposedRolls = originalMessage.getFlag('prowlers-and-paragons', 'opposedRolls') ?? [];
       if (originalMessage) {
