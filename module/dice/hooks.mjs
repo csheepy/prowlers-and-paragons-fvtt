@@ -106,17 +106,12 @@ export const runDiceHooks = () => {
           if (message.getFlag('prowlers-and-paragons', 'opposedRolls')) {
             // make sure the new message gets the opposed rolls flags from the original
             await newMessage.setFlag('prowlers-and-paragons', 'opposedRolls', message.getFlag('prowlers-and-paragons', 'opposedRolls'));
-            console.log('newMessage', newMessage)
-            console.log('old message', message)
             // modify rolls that opposed this one to update their difficulty/ recompute total
             for (const opposedId of message.getFlag('prowlers-and-paragons', 'opposedRolls')) {
               const opposedMessage = game.messages.get(opposedId);
               if (opposedMessage && opposedMessage.rolls[0]) {
                 const opposedRoll = opposedMessage.rolls[0];
                 opposedRoll.options.difficultyNumber = reroll.total - reroll.options.difficultyNumber;
-                console.log('opposedRoll', opposedRoll)
-                console.log('message', opposedMessage)
-
                 const updatedContent = await opposedRoll.render();  // Render the new roll to a string
       
                 // Update the existing message with the new content
@@ -124,8 +119,6 @@ export const runDiceHooks = () => {
                   content: updatedContent,  // Replace content with the new roll result
                   rolls: [opposedRoll]  // Optionally update the rolls array if needed
                 });
-                // const newOpposedRoll = await opposedRoll.reroll();
-                // await newOpposedRoll.toMessage({replaceMessage: opposedMessage.id});
               }
             }
           }
@@ -167,7 +160,9 @@ export const runDiceHooks = () => {
     }
     const traits = controlledCharacter.traitsForSelection();
     const selectedTrait = await showTraitSelectionDialog(traits, chatMessage.rolls?.[0]?.options.type, chatMessage.rolls?.[0]?.options.originatingActorName);
-    if (!selectedTrait) return;
+    if (!selectedTrait) {
+      return ui.notifications.warn('No trait selected!');
+    };
     const options = {
       rollMode: game.settings.get('core', 'rollMode'),
       difficulty: 'opposed',
@@ -175,7 +170,7 @@ export const runDiceHooks = () => {
       doOpposedRoll: false,
       originatingActorName: chatMessage.speaker.alias,
       originatingMessageId: chatMessage.id,
-      speaker: controlledCharacter.name
+      speaker: ChatMessage.getSpeaker({ actor: controlledCharacter.id })
     };
     return await executeTraitRoll(controlledCharacter, selectedTrait, traits, options);
   };
