@@ -159,7 +159,7 @@ export const runDiceHooks = () => {
       return ui.notifications.warn('You must select or control a character!');
     }
     const traits = controlledCharacter.traitsForSelection();
-    const selectedTrait = await showTraitSelectionDialog(traits, chatMessage.rolls?.[0]?.options.type, chatMessage.rolls?.[0]?.options.originatingActorName);
+    const selectedTrait = await showTraitSelectionDialog(traits, chatMessage.rolls?.[0]?.options.type, chatMessage.speaker.alias);
     if (!selectedTrait) {
       return ui.notifications.warn('No trait selected!');
     };
