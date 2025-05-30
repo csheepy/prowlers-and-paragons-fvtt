@@ -9,8 +9,9 @@ import { getActorsFromTargetedTokens } from './tokens.mjs';
 export async function setupOpposedRoll(actor, flavor) {
   if (!getActorsFromTargetedTokens().length === 1) return undefined;
   
-  const {difficulty, message} = await actor.initiateOpposedRoll(flavor);
-  if (difficulty === undefined) return undefined;
+  const result = await actor.initiateOpposedRoll(flavor);
+  if (!result) return undefined;
+  const { difficulty, message } = result;
   
   return {
     difficulty: 'opposed',
