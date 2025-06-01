@@ -94,7 +94,6 @@ export class ProwlersRoll extends Roll {
       const originalMessage = game.messages.get(options.originatingMessageId);
       const oppposedRolls = originalMessage.getFlag('prowlers-and-paragons', 'opposedRolls') ?? [];
       if (originalMessage) {
-        console.log(originalMessage, message)
         originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', [...oppposedRolls, message.id]);
       }
     }
