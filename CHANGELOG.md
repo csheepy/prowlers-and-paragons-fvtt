@@ -8,6 +8,10 @@
 
 - fix actor name not appearing on opposed rolls
 
+- adds a notification if target fails to respond in an opposed roll
+
+- added Psychic to power sources
+
 ## 1.2.0
 
 - add rolled initiative game setting
