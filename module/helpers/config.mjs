@@ -65,6 +65,7 @@ PROWLERS_AND_PARAGONS.roll_difficulty_values = {
 PROWLERS_AND_PARAGONS.power_sources = {
   magic: 'PROWLERS_AND_PARAGONS.Item.Power.source.magic',
   innate: 'PROWLERS_AND_PARAGONS.Item.Power.source.innate',
+  psychic: 'PROWLERS_AND_PARAGONS.Item.Power.source.psychic',
   super: 'PROWLERS_AND_PARAGONS.Item.Power.source.super',
   tech: 'PROWLERS_AND_PARAGONS.Item.Power.source.tech',
   trained: 'PROWLERS_AND_PARAGONS.Item.Power.source.trained',

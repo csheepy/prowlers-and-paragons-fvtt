@@ -51,6 +51,7 @@
         "source": {
           "magic": "Magic",
           "innate": "Innate",
+          "psychic": "Psychic",
           "super": "Super",
           "tech": "Tech",
           "trained": "Trained"
