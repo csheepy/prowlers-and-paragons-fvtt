@@ -65,13 +65,30 @@ export function prepareActiveEffectCategories(effects, isItem = false) {
       label: game.i18n.localize('PROWLERS_AND_PARAGONS.Effect.Procon'),
       effects: [],
     };
+
+    categories.conditions = {
+      type: 'conditions',
+      label: game.i18n.localize('PROWLERS_AND_PARAGONS.Effect.Conditions'),
+      effects: [],
+    };
   }
   // Iterate over active effects, classifying them into categories
   for (let e of effects) {
     if (e.disabled) categories.inactive.effects.push(e);
-    else if (isItem && !e.transfer) categories.procon.effects.push(e);
+    else if (isItem && e.isProCon()) categories.procon.effects.push(e);
     else if (e.isTemporary) categories.temporary.effects.push(e);
+    else if (isItem && e.isCondition()) categories.conditions.effects.push(e);
     else categories.passive.effects.push(e);
   }
   return categories;
 }
+
+Hooks.once('init', () => {
+    ActiveEffect.prototype.isProCon = function() {
+        return this.changes.some(change => change.key === 'kind' && ['pro', 'con'].includes(change.value));
+    };
+
+    ActiveEffect.prototype.isCondition = function() {
+      return this.changes.some(change => change.key === 'kind' && change.value === 'condition');
+  };
+});

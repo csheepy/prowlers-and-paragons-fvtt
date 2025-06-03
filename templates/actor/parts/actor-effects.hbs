@@ -3,7 +3,7 @@
     <li class="items-header flexrow" data-effect-type="{{section.type}}" data-parent-id="{{@root.actor.id}}" >
       <h3 class="item-name effect-name flexrow">{{localize section.label}}</h3>
       <div class="effect-source">{{localize "PROWLERS_AND_PARAGONS.Effect.Source"}}</div>
-      <div class="effect-source">{{localize "EFFECT.TabDuration"}}</div>
+      <div class="effect-source">{{localize "PROWLERS_AND_PARAGONS.Effect.Duration"}}</div>
       <div class="item-controls effect-controls flexrow">
         <a class="effect-control" data-action="create" title="{{localize 'DOCUMENT.Create' type="Effect"}}">
           <i class="fas fa-plus"></i> {{localize "DOCUMENT.New" type="Effect"}}
@@ -19,7 +19,7 @@
           <h4>{{effect.name}}</h4>
         </div>
         <div class="effect-source">{{effect.sourceName}}</div>
-        <div class="effect-duration">{{effect.duration.label}}</div>
+        <div class="effect-duration">{{effect.duration.rounds}}</div>
         <div class="item-controls effect-controls flexrow">
           <a class="effect-control" data-action="toggle" title="{{localize 'PROWLERS_AND_PARAGONS.Effect.Toggle'}}">
             <i class="fas {{#if effect.disabled}}fa-check{{else}}fa-times{{/if}}"></i>

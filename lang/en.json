@@ -71,7 +71,9 @@
       "Temporary": "Temporary Effects",
       "Passive": "Passive Effects",
       "Inactive": "Inactive Effects",
-      "Procon": "Pros and Cons (create as an item and drag here)"
+      "Conditions": "Conditions",
+      "Procon": "Pros and Cons (create as an item and drag here)",
+      "Duration": "Duration"
     },
     "Packages": {
       "hero": "Hero",
@@ -194,7 +196,8 @@
       "perk": "Perk",
       "flaw": "Flaw",
       "weapon": "Weapon",
-      "armor": "Armor"
+      "armor": "Armor",
+      "condition": "Condition"
     }
   }
 }
