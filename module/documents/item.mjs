@@ -62,7 +62,8 @@ export class ProwlersParagonsItem extends Item {
       rollMode,
       type: this.name,
       num_dice: this.actor.derived_power_ranks[this.id],
-      conditions: this.effects.filter(e => e.isCondition()).map(e => e.toObject()),
+      conditionsToApply: this.effects.filter(e => e.isCondition()).map(e => e.toObject()),
+      conditionsAffectingRoll: this.actor.conditions.filter(c => c.changes.some(change => change.key === 'rollModifier')),
       ...options
     }
     return ProwlersRoll.rollDialog(powerOptions);

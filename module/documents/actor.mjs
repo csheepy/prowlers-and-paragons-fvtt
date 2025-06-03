@@ -157,6 +157,7 @@ export class ProwlersParagonsActor extends Actor {
 
     actorData.derived_power_ranks = this.derivePowerRanks();
     actorData.spentHeroPoints = this.calculateSpentPoints();
+    actorData.conditions = this.effects.filter(e => e.isCondition()).map(e => e.toObject());
     const flags = actorData.flags.prowlersandparagons || {};
   }
 

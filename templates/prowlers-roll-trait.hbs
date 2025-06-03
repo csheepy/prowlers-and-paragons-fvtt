@@ -19,6 +19,14 @@
       {{localize "PROWLERS_AND_PARAGONS.Roll.HalveToughness"}}
       </input>
       {{/if}}
+      {{#if conditionsAffectingRoll}}
+        {{#each conditionsAffectingRoll as |condition|}}
+          <br>
+          <input type='checkbox' name='condition-{{condition._id}}' checked> 
+          {{condition.name}} ({{condition.formattedRollModifierValue}})
+          </input>
+        {{/each}}
+      {{/if}}
     </div>
   </fieldset>
   <br>

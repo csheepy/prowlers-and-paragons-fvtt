@@ -76,26 +76,23 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
 
     // edge
     if (!this.edgeOverride) { 
-    //danger sense substitutes for perception
-    const dangerSense = this.parent.items.find(p => p.name === 'Danger Sense')
-    const per = (dangerSense?.system.rank ?? 0) + this.abilities.perception.value
-    this.edge.value = per + Math.max(this.abilities.agility.value, this.abilities.intellect.value)
+      //danger sense substitutes for perception
+      const dangerSense = this.parent.items.find(p => p.name === 'Danger Sense')
+      const per = (dangerSense?.system.rank ?? 0) + this.abilities.perception.value
+      this.edge.value = per + Math.max(this.abilities.agility.value, this.abilities.intellect.value)
 
-    // lightning reflexes adds 6
-    const lightningReflexes = this.parent.items.find(p => p.name === 'Lightning Reflexes')
-    if (lightningReflexes) {
-      this.edge.value += 6;
+      // lightning reflexes adds 6
+      const lightningReflexes = this.parent.items.find(p => p.name === 'Lightning Reflexes')
+      if (lightningReflexes) {
+        this.edge.value += 6;
+      }
+
+      // super-speed substitutes its rank * 3
+      const superSpeed = this.parent.items.find(p => p.name === 'Super Speed')
+      if (superSpeed) {
+        this.edge.value = Math.max(this.edge.value,superSpeed.system.rank * 3)
+      }
     }
-
-    // super-speed substitutes its rank * 3
-    const superSpeed = this.parent.items.find(p => p.name === 'Super Speed')
-    if (superSpeed) {
-      this.edge.value = Math.max(this.edge.value,superSpeed.system.rank * 3)
-    }
-    }
-
-
-
   }
 
   getRollData() {

@@ -284,7 +284,7 @@ export const runDiceHooks = () => {
     }
 
     const durationRounds = Math.floor(roll.netSuccess / 2);
-    for (const condition of roll.options.conditions) {
+    for (const condition of roll.options.conditionsToApply) {
       const updatedCondition = foundry.utils.mergeObject(condition, { duration: { rounds: durationRounds } });
       await damagedActor.createEmbeddedDocuments('ActiveEffect', [updatedCondition]);
     }

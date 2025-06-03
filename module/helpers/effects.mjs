@@ -20,8 +20,10 @@ export function onManageActiveEffect(event, owner) {
           icon: 'icons/svg/aura.svg',
           origin: owner.uuid,
           'duration.rounds':
-            li.dataset.effectType === 'temporary' ? 1 : undefined,
+            (li.dataset.effectType === 'temporary') ? 1 : undefined,
+          transfer: li.dataset.effectType === 'conditions' ? false : undefined,
           disabled: li.dataset.effectType === 'inactive',
+          changes: li.dataset.effectType === 'conditions' ? [{ mode: 0, key: 'kind', value: 'condition' }] : undefined,
         },
       ]);
     case 'edit':
