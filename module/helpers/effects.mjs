@@ -92,3 +92,18 @@ Hooks.once('init', () => {
       return this.changes.some(change => change.key === 'kind' && change.value === 'condition');
   };
 });
+
+
+Hooks.on('updateCombat', (combat, update, options, user) => {
+  for (let combatant of combat.turns) {
+    if (combatant.actor) {
+      let actor = combatant.actor;
+      for (let effect of actor.effects) {
+        if (effect.duration.type === 'turns' && effect.duration.remaining <= 0) {
+          ui.notifications.info(`${actor.name}'s condition ${effect.name} has expired.`);
+          effect.delete();
+        }
+      }
+    }
+  }
+});

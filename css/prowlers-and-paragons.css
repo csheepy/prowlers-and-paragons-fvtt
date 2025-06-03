@@ -778,7 +778,8 @@
   order: 2
 }
 
-.apply-damage-btn {
+.apply-damage-btn,
+.apply-condition-btn {
   padding: 5px 10px;
   cursor: pointer;
   width: 100%;
