@@ -84,7 +84,6 @@ export class ProwlersParagonsActor extends Actor {
         }
       }
 
-      // search conditions for changes with power.$id
       const powerCondition = actorData.conditions.find(c => c.changes.some(change => change.key === `powers.${power.id}`))
       if (powerCondition) {
         rr = powerCondition.changes.find(change => change.key === `powers.${power.id}`).value;
