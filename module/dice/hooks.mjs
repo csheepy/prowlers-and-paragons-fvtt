@@ -48,6 +48,7 @@ const executeTraitRoll = async (actor, selectedTrait, traits, options) => {
 
   let roll;
   let message;
+  options.conditionsAffectingRoll = actor.conditionsAffectingRoll;
   switch (type) {
     case 'ability':
       options.type = game.i18n.localize(traits.abilities[selectedTrait]);
@@ -333,8 +334,9 @@ export const runDiceHooks = () => {
 };
 
 // called when a roll is made with a target selected. this function is called for the target before the original roll is resolved
-export const opposeRoll = async (targetActorId, originatingTraitName, originatingActorName) => {
-  const targetActor = game.actors.get(targetActorId);
+export const opposeRoll = async (tokenID, originatingTraitName, originatingActorName) => {
+  const targetToken = canvas.tokens.get(tokenID);
+  const targetActor = targetToken.actor;
   const traits = targetActor.traitsForSelection();
   
   const selectedTrait = await showTraitSelectionDialog(traits, originatingTraitName, originatingActorName);

@@ -20,23 +20,30 @@ const test = base.extend({
         await page.evaluate(async (name) => {
             if (window.Actor) {
                 const actor = await window.Actor.create({ name: name, type: 'character' });
-                actor.createEmbeddedDocuments('Item', [{
+                const power = await actor.createEmbeddedDocuments('Item', [{
                     name: 'Test Power',
                     type: 'power',
-                    rank: 1,  // Initial value based on schema
-                    rank_type: 'default',  // Example from schema choices
-                    source: 'default',  // Example from schema
-                    range: 'melee',  // Example from schema
-                    cost: 5,  // Example initial value
-                    // Add other fields as needed, e.g., connected_ability: 'agility'
+                    system: {
+                        rank: 20,
+                        rank_type: 'power',
+                        source: 'psychic',
+                        cost: 5
+                    }
+                }]);
+                actor.items.getName('Test Power').createEmbeddedDocuments('ActiveEffect', [{
+                    name: 'Test Condition',
+                    duration: 1,
+                    duration_type: 'rounds',
+                    transfer: false,
+                    changes: [{ mode: 0, key: 'kind', value: 'condition' }, { mode: 0, key: 'rollModifier', value: 3 }],
                 }]);
             } else {
                 const actor = await Actor.create({ name: name, type: 'character' });
                 actor.createEmbeddedDocuments('Item', [{
                     name: 'Test Power',
                     type: 'power',
-                    rank: 1,
-                    rank_type: 'default',
+                    rank: 20,
+                    rank_type: 'power',
                 }]);
             }
         }, actorName);
@@ -242,7 +249,8 @@ test.describe('Character Sheet Functionality', () => {
                             actorId: actor.id,
                             x: 0,
                             y: 0,
-                            name: actorName
+                            name: actorName,
+                            actorLink: true
                         }]);
                         const token = scene.tokens.getName(actorName);
                         await token.object.control({"releaseOthers": true});
@@ -320,6 +328,62 @@ test.describe('Character Sheet Functionality', () => {
             await characterSheet.locator('input[name="system.halveHealth"]').click();
             await characterSheet.locator('input[name="system.halveHealth"]').blur();
             await expect(characterSheet.locator('input[name="system.health.max"]')).toHaveValue('3');
+            
+        });
+    });
+
+    test.describe('condition application', () => {
+        test('should apply condition to selected actor and modify rolls', async ({ page, characterSheet }) => {
+            const actorName = await characterSheet.locator('input[name="name"]').inputValue();
+            // roll test power
+            await characterSheet.getByText('Test Power').first().click();
+            await page.locator('.dialog-button.one').click();
+
+            await page.getByRole('tab', { name: 'Chat Messages' }).click();
+            const chatMessage = page.locator(`.chat-message:has-text("${actorName}")`);
+            await expect(chatMessage).toContainText('Test Power');
+
+            // create a token for the actor
+            await page.evaluate(async (actorName) => {
+                const scene = await game.scenes.getName('Foundry Virtual Tabletop');
+                await scene.update({active: true, navigation: true});
+                const actor = game.actors.getName(actorName);
+                if (actor && scene) {
+                    await scene.createEmbeddedDocuments('Token', [{
+                        actorId: actor.id,
+                        x: 0,
+                        y: 0,
+                        name: actorName,
+                        actorLink: true
+                    }]);
+                    const token = scene.tokens.getName(actorName);
+                    await token.object.control({"releaseOthers": true});
+                }
+            }, actorName);
+
+            // apply condition
+            await chatMessage.getByText('Apply Power\'s Conditions').click();
+            await chatMessage.locator('.apply-condition-option').first().click();
+
+            // verify the condition is applied
+
+            // navigate to effects tab on actor sheet
+            await characterSheet.getByTestId('effects-tab').click();
+            // find div with item-name effect-name flexrow
+            const effectName = characterSheet.locator('div.item-name.effect-name.flexrow');
+            await expect(effectName).toContainText('Test Condition');
+
+            // switch back to play tab
+            await characterSheet.getByTestId('play-tab').click();
+            // roll agility and verify the roll modifier is present
+            await characterSheet.getByText('Agility').first().click();
+
+            await expect(page.getByRole('dialog')).toContainText('+3');
+            await expect(page.getByRole('dialog')).toContainText('Test Condition');
+            
+            await page.getByRole('combobox').selectOption('Average (1)');
+            await page.locator('.dialog-button.one').click();
+            
             
         });
     });

@@ -158,6 +158,7 @@ export class ProwlersParagonsActor extends Actor {
     actorData.derived_power_ranks = this.derivePowerRanks();
     actorData.spentHeroPoints = this.calculateSpentPoints();
     actorData.conditions = this.effects.filter(e => e.isCondition()).map(e => e.toObject());
+    actorData.conditionsAffectingRoll = actorData.conditions.filter(c => c.changes.some(change => change.key === 'rollModifier'));
     const flags = actorData.flags.prowlersandparagons || {};
   }
 
@@ -329,7 +330,7 @@ export class ProwlersParagonsActor extends Actor {
 
     holdPlease.render({force: true});
 
-    const opposeRoll = await socket.executeAsUser("opposeRoll", targetPlayerId, targetActor.id, flavor, this.name)
+    const opposeRoll = await socket.executeAsUser("opposeRoll", targetPlayerId, targetToken.id, flavor, this.name)
     if (!opposeRoll) {
       ui.notifications.warn("Target did not respond to the opposed roll request.");
       holdPlease.close();
