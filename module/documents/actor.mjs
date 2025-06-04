@@ -157,7 +157,7 @@ export class ProwlersParagonsActor extends Actor {
 
     actorData.derived_power_ranks = this.derivePowerRanks();
     actorData.spentHeroPoints = this.calculateSpentPoints();
-    actorData.conditions = this.effects.filter(e => e.isCondition()).map(e => e.toObject());
+    actorData.conditions = this.effects.filter(e => e.isCondition()).map(e => e);
     actorData.conditionsAffectingRoll = actorData.conditions.filter(c => c.changes.some(change => change.key === 'rollModifier'));
     const flags = actorData.flags.prowlersandparagons || {};
   }

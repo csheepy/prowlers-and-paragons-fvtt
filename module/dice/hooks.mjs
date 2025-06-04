@@ -284,10 +284,16 @@ export const runDiceHooks = () => {
       }
     }
 
-    const durationRounds = Math.floor(roll.netSuccess / 2);
+    const durationRounds = Math.ceil(roll.netSuccess / 2);
     for (const condition of roll.options.conditionsToApply) {
       const updatedCondition = foundry.utils.mergeObject(condition, { duration: { rounds: durationRounds } });
-      await damagedActor.createEmbeddedDocuments('ActiveEffect', [updatedCondition]);
+      // if the condition is already active, update the duration
+      const existingCondition = damagedActor.conditions.find(c => c.name === updatedCondition.name);
+      if (existingCondition) {
+        await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
+      } else {
+        await damagedActor.createEmbeddedDocuments('ActiveEffect', [updatedCondition]);
+      }
     }
   }
   const chatApplyDamage = async (event) => {
