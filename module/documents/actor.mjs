@@ -89,7 +89,7 @@ export class ProwlersParagonsActor extends Actor {
       if (powerCondition) {
         rr = powerCondition.changes.find(change => change.key === `powers.${power.id}`).value;
       }
-      derived_power_ranks[power.id] = rr
+      derived_power_ranks[power.id] = parseInt(rr)
     });
 
     return derived_power_ranks

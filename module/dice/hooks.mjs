@@ -293,8 +293,7 @@ export const runDiceHooks = () => {
         await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
       } else {
         updatedCondition.changes.forEach(change => {
-          if (change.key === 'opposedTrait') {
-            // find a chat message that opposes this one using the flag
+          if (change.key === 'opposedTrait') { // this is a special key that will be replaced by the trait that opposed this roll
             const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessageId));
             if (opposedMessage) {
               change.key = opposedMessage.rolls?.[0]?.options.trait;
