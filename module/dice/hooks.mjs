@@ -48,6 +48,7 @@ const executeTraitRoll = async (actor, selectedTrait, traits, options) => {
 
   let roll;
   let message;
+  options.conditionsAffectingRoll = actor.conditionsAffectingRoll;
   switch (type) {
     case 'ability':
       options.type = game.i18n.localize(traits.abilities[selectedTrait]);
@@ -169,13 +170,18 @@ export const runDiceHooks = () => {
   Hooks.on('renderChatLog', (_app, html, _data) => {
     addEventListener(html, 'click', chatOpposedRoll, '.opposed-roll');
     addEventListener(html, 'click', toggleApplyDamageMenu, '.apply-damage-btn');
+    addEventListener(html, 'click', toggleApplyConditionMenu, '.apply-condition-btn');
     addEventListener(html, 'click', chatApplyDamage, '.apply-damage-option');
-    
+    addEventListener(html, 'click', chatApplyCondition, '.apply-condition-option');
+
     const mousedownHandler = (ev) => {
       if (!ev.target.closest('.apply-damage-menu-container')) {
-        const dropdowns = document.querySelectorAll('.apply-damage-dropdown');
-        dropdowns.forEach(dropdown => dropdown.style.display = 'none');
+        const damageDropdowns = document.querySelectorAll('.apply-damage-dropdown');
+        damageDropdowns.forEach(dropdown => dropdown.style.display = 'none');
+        const conditionDropdowns = document.querySelectorAll('.apply-condition-dropdown');
+        conditionDropdowns.forEach(dropdown => dropdown.style.display = 'none');
       }
+
     };
     
     document.removeEventListener('mousedown', mousedownHandler);
@@ -185,9 +191,16 @@ export const runDiceHooks = () => {
   Hooks.on('renderChatPopout', (_app, html, _data) => {
     addEventListener(html, 'click', chatOpposedRoll, '.opposed-roll');
     addEventListener(html, 'click', toggleApplyDamageMenu, '.apply-damage-btn');
+    addEventListener(html, 'click', toggleApplyConditionMenu, '.apply-condition-btn');
     addEventListener(html, 'click', chatApplyDamage, '.apply-damage-option');
-    
+    addEventListener(html, 'click', chatApplyCondition, '.apply-condition-option');
+
     const mousedownHandler = (ev) => {
+      if (!ev.target.closest('.apply-condition-menu-container')) {
+        const dropdowns = document.querySelectorAll('.apply-condition-dropdown');
+        dropdowns.forEach(dropdown => dropdown.style.display = 'none');
+      }
+
       if (!ev.target.closest('.apply-damage-menu-container')) {
         const dropdowns = document.querySelectorAll('.apply-damage-dropdown');
         dropdowns.forEach(dropdown => dropdown.style.display = 'none');
@@ -219,6 +232,78 @@ export const runDiceHooks = () => {
     }
   };
 
+  const toggleApplyConditionMenu = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const button = event.target;
+    const dropdown = button.nextElementSibling;
+    if (dropdown && dropdown.classList.contains('apply-condition-dropdown')) {
+      const selectedActor = getControlledCharacter();
+      const targetedTokens = Array.from(game.user.targets);
+      const selectedName = selectedActor ? selectedActor.name : 'None';
+      const targetName = targetedTokens.length > 0 ? targetedTokens[0].name : 'None';
+      dropdown.innerHTML = `
+        <ul>
+          <li class="apply-condition-option" data-option="selected">Apply to Selected Token (${selectedName})</li>
+          <li class="apply-condition-option" data-option="target">Apply to Target (${targetName})</li>
+        </ul>
+      `;
+      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+  };
+
+  const chatApplyCondition = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    let optionElement = event.target;
+    if (parseInt(game.version.split('.')[0]) < 13 && typeof jQuery !== 'undefined' && optionElement instanceof jQuery) {
+        optionElement = optionElement[0];  // Convert jQuery object to plain DOM element
+    }
+    const option = optionElement.dataset.option;
+    if (!option) return;
+    const dropdown = optionElement.closest('.apply-condition-dropdown');
+    if (dropdown) dropdown.style.display = 'none';
+    const chatMessageIdElement = optionElement.closest('.message');
+    const chatMessageId = chatMessageIdElement ? chatMessageIdElement.dataset.messageId : null;
+    const chatMessage = game.messages.get(chatMessageId);
+
+    if (!chatMessage) return ui.notifications.warn('Chat message not found!');
+
+    const roll = chatMessage.rolls?.[0];
+
+    let damagedActor;
+    if (option === 'selected') {
+      damagedActor = getControlledCharacter();
+      if (!damagedActor) return ui.notifications.warn('You must select or control a character!');
+    } else if (option === 'target') {
+      const targetedTokens = Array.from(game.user.targets);
+      if (targetedTokens.length > 0) {
+        damagedActor = targetedTokens[0].actor;
+      } else {
+        return ui.notifications.warn('No target selected!');
+      }
+    }
+
+    const durationRounds = Math.ceil(roll.netSuccess / 2);
+    for (const condition of roll.options.conditionsToApply) {
+      const updatedCondition = foundry.utils.mergeObject(condition, { duration: { rounds: durationRounds } });
+      // if the condition is already active, update the duration
+      const existingCondition = damagedActor.conditions.find(c => c.name === updatedCondition.name);
+      if (existingCondition) {
+        await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
+      } else {
+        updatedCondition.changes.forEach(change => {
+          if (change.key === 'opposedTrait') { // this is a special key that will be replaced by the trait that opposed this roll
+            const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessageId));
+            if (opposedMessage) {
+              change.key = opposedMessage.rolls?.[0]?.options.trait;
+            }
+          }
+        });
+        await damagedActor.createEmbeddedDocuments('ActiveEffect', [updatedCondition]);
+      }
+    }
+  }
   const chatApplyDamage = async (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -263,8 +348,9 @@ export const runDiceHooks = () => {
 };
 
 // called when a roll is made with a target selected. this function is called for the target before the original roll is resolved
-export const opposeRoll = async (targetActorId, originatingTraitName, originatingActorName) => {
-  const targetActor = game.actors.get(targetActorId);
+export const opposeRoll = async (tokenID, originatingTraitName, originatingActorName) => {
+  const targetToken = canvas.tokens.get(tokenID);
+  const targetActor = targetToken.actor;
   const traits = targetActor.traitsForSelection();
   
   const selectedTrait = await showTraitSelectionDialog(traits, originatingTraitName, originatingActorName);
