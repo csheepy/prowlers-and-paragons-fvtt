@@ -84,6 +84,11 @@ export class ProwlersParagonsActor extends Actor {
         }
       }
 
+      // search conditions for changes with power.$id
+      const powerCondition = actorData.conditions.find(c => c.changes.some(change => change.key === `powers.${power.id}`))
+      if (powerCondition) {
+        rr = powerCondition.changes.find(change => change.key === `powers.${power.id}`).value;
+      }
       derived_power_ranks[power.id] = rr
     });
 
@@ -155,10 +160,10 @@ export class ProwlersParagonsActor extends Actor {
   prepareDerivedData() {
     const actorData = this;
 
-    actorData.derived_power_ranks = this.derivePowerRanks();
-    actorData.spentHeroPoints = this.calculateSpentPoints();
     actorData.conditions = this.effects.filter(e => e.isCondition()).map(e => e);
     actorData.conditionsAffectingRoll = actorData.conditions.filter(c => c.changes.some(change => change.key === 'rollModifier'));
+    actorData.derived_power_ranks = this.derivePowerRanks();
+    actorData.spentHeroPoints = this.calculateSpentPoints();
     const flags = actorData.flags.prowlersandparagons || {};
   }
 
@@ -350,7 +355,8 @@ export class ProwlersParagonsActor extends Actor {
 
     options.num_dice = val;
     options.rollMode = game.settings.get('core', 'rollMode');
-    options.speaker = ChatMessage.getSpeaker({ actor: this })
+    options.speaker = ChatMessage.getSpeaker({ actor: this });
+    options.trait = trait;
 
     if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
       const opposedRoll = await setupOpposedRoll(this, options.flavor);

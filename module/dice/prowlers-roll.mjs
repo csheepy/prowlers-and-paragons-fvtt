@@ -15,7 +15,7 @@ export class ProwlersRoll extends Roll {
       for (const condition of options.appliedConditions) {
         conditionModifier += parseInt(condition.changes.find(c => c.key === 'rollModifier')?.value || 0)
       }
-      const total_dice_number = ProwlersRoll.initialNumberOfDice(options) + conditionModifier + options.modifier
+      const total_dice_number = Math.max(0, ProwlersRoll.initialNumberOfDice(options) + conditionModifier + options.modifier)
       formula = `(${total_dice_number})dp`
     }
     super(formula, data, options);
@@ -144,6 +144,7 @@ export class ProwlersRoll extends Roll {
       
       return {
         ...condition,
+        id: condition.id,
         rollModifierValue: rollModifierValue,
         formattedRollModifierValue: formattedRollModifierValue,
       };

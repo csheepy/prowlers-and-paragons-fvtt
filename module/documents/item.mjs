@@ -115,6 +115,8 @@ export class ProwlersParagonsItem extends Item {
     const rollMode = game.settings.get('core', 'rollMode');
     const label = `[${item.type}] ${item.name}`;
 
+    options.trait = `powers.${item.id}`;
+
     if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
       const opposedRoll = await setupOpposedRoll(this.actor, this.name);
       if (!opposedRoll) return;

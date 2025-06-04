@@ -292,6 +292,15 @@ export const runDiceHooks = () => {
       if (existingCondition) {
         await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
       } else {
+        updatedCondition.changes.forEach(change => {
+          if (change.key === 'opposedTrait') {
+            // find a chat message that opposes this one using the flag
+            const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessageId));
+            if (opposedMessage) {
+              change.key = opposedMessage.rolls?.[0]?.options.trait;
+            }
+          }
+        });
         await damagedActor.createEmbeddedDocuments('ActiveEffect', [updatedCondition]);
       }
     }
