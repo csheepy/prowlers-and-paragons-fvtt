@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.4.0
+
+    - Sheet portrait is now larger and respects aspect ratio
+
 ## 1.3.0
 
 - Rerolling a roll will now update any rolls that opposed that roll with the new result
