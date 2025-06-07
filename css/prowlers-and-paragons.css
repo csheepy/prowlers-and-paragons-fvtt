@@ -821,3 +821,11 @@
 .highlighted-border {
   border-color: var(--primary-color) !important;
 }
+
+body.game .sheet.app header.sheet-header img {
+  flex: 0 0 200px;
+  height: auto;
+  max-height: 264px;
+  object-fit: contain;
+  margin-right: 6px;
+}
