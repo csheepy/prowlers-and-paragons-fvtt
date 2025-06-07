@@ -27,7 +27,7 @@ const test = base.extend({
                         rank: 20,
                         rank_type: 'power',
                         source: 'psychic',
-                        cost: 5
+                        cost: 0
                     }
                 }]);
                 actor.items.getName('Test Power').createEmbeddedDocuments('ActiveEffect', [{
@@ -42,8 +42,12 @@ const test = base.extend({
                 actor.createEmbeddedDocuments('Item', [{
                     name: 'Test Power',
                     type: 'power',
-                    rank: 20,
-                    rank_type: 'power',
+                    system: {
+                        cost: 0,
+                        rank: 20,
+                        rank_type: 'power',
+                        source: 'psychic',
+                    }
                 }]);
             }
         }, actorName);
