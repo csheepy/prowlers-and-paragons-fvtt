@@ -773,7 +773,8 @@
   color: var(--text-color);
 }
 
-.apply-damage-menu-container {
+.apply-damage-menu-container,
+.apply-condition-menu-container {
   position: relative; /* Allows dropdown to position absolutely relative to this container */
   order: 2
 }

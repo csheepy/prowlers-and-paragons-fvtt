@@ -238,17 +238,55 @@ export const runDiceHooks = () => {
     const button = event.target;
     const dropdown = button.nextElementSibling;
     if (dropdown && dropdown.classList.contains('apply-condition-dropdown')) {
+      const chatMessageIdElement = button.closest('.message');
+      const chatMessageId = chatMessageIdElement ? chatMessageIdElement.dataset.messageId : null;
+      const chatMessage = game.messages.get(chatMessageId);
+      if (!chatMessage) return ui.notifications.warn('Chat message not found!');
+      const roll = chatMessage.rolls?.[0];
+      if (!roll || !roll.options.conditionsToApply || roll.options.conditionsToApply.length === 0) {
+        dropdown.innerHTML = `<ul><li>${game.i18n.localize('PROWLERS_AND_PARAGONS.Chat.NoConditionsToApply')}</li></ul>`;
+        dropdown.style.display = 'block';
+        return;
+      }
+
       const selectedActor = getControlledCharacter();
       const targetedTokens = Array.from(game.user.targets);
       const selectedName = selectedActor ? selectedActor.name : 'None';
       const targetName = targetedTokens.length > 0 ? targetedTokens[0].name : 'None';
-      dropdown.innerHTML = `
-        <ul>
-          <li class="apply-condition-option" data-option="selected">Apply to Selected Token (${selectedName})</li>
-          <li class="apply-condition-option" data-option="target">Apply to Target (${targetName})</li>
-        </ul>
-      `;
+
+      let conditionsHtml = '<ul>';
+      for (const condition of roll.options.conditionsToApply) {
+        console.log(condition)
+        const conditionLabel = condition.label || condition.name;
+        conditionsHtml += `
+          <li class="apply-condition-item" data-condition-name="${condition.name}">
+            <span class="condition-label">${conditionLabel}</span>
+            <ul class="apply-condition-target-dropdown" style="display: none;">
+              <li class="apply-condition-option" data-option="selected" data-condition-id="${condition._id}">Apply to Selected Token (${selectedName})</li>
+              <li class="apply-condition-option" data-option="target" data-condition-id="${condition._id}">Apply to Target (${targetName})</li>
+            </ul>
+          </li>
+        `;
+      }
+      conditionsHtml += '</ul>';
+      dropdown.innerHTML = conditionsHtml;
       dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+
+      // Add mouseover/mouseout listeners for nested dropdowns
+      const conditionItems = dropdown.querySelectorAll('.apply-condition-item');
+      conditionItems.forEach(item => {
+        item.addEventListener('mouseover', () => {
+          const targetDropdown = item.querySelector('.apply-condition-target-dropdown');
+          if (targetDropdown) targetDropdown.style.display = 'block';
+        });
+        item.addEventListener('mouseout', (event) => {
+            // Check if the mouse is still within the parent li or its children
+            if (!item.contains(event.relatedTarget)) {
+                const targetDropdown = item.querySelector('.apply-condition-target-dropdown');
+                if (targetDropdown) targetDropdown.style.display = 'none';
+            }
+        });
+      });
     }
   };
 
@@ -260,9 +298,12 @@ export const runDiceHooks = () => {
         optionElement = optionElement[0];  // Convert jQuery object to plain DOM element
     }
     const option = optionElement.dataset.option;
-    if (!option) return;
+    const conditionId = optionElement.dataset.conditionId;
+    if (!option || !conditionId) return;
+
     const dropdown = optionElement.closest('.apply-condition-dropdown');
     if (dropdown) dropdown.style.display = 'none';
+
     const chatMessageIdElement = optionElement.closest('.message');
     const chatMessageId = chatMessageIdElement ? chatMessageIdElement.dataset.messageId : null;
     const chatMessage = game.messages.get(chatMessageId);
@@ -270,6 +311,10 @@ export const runDiceHooks = () => {
     if (!chatMessage) return ui.notifications.warn('Chat message not found!');
 
     const roll = chatMessage.rolls?.[0];
+    if (!roll || !roll.options.conditionsToApply) return ui.notifications.warn('No conditions found on roll!');
+
+    const conditionToApply = roll.options.conditionsToApply.find(c => c._id === conditionId);
+    if (!conditionToApply) return ui.notifications.warn(`Condition '${conditionId}' not found on roll.`);
 
     let damagedActor;
     if (option === 'selected') {
@@ -284,24 +329,23 @@ export const runDiceHooks = () => {
       }
     }
 
+    if (!damagedActor) return;
+
     const durationRounds = Math.ceil(roll.netSuccess / 2);
-    for (const condition of roll.options.conditionsToApply) {
-      const updatedCondition = foundry.utils.mergeObject(condition, { duration: { rounds: durationRounds } });
-      // if the condition is already active, update the duration
-      const existingCondition = damagedActor.conditions.find(c => c.name === updatedCondition.name);
-      if (existingCondition) {
-        await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
-      } else {
-        updatedCondition.changes.forEach(change => {
-          if (change.key === 'opposedTrait') { // this is a special key that will be replaced by the trait that opposed this roll
-            const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessageId));
-            if (opposedMessage) {
-              change.key = opposedMessage.rolls?.[0]?.options.trait;
-            }
+    const updatedCondition = foundry.utils.mergeObject(conditionToApply, { duration: { rounds: durationRounds } });
+    const existingCondition = damagedActor.conditions.find(c => c.name === updatedCondition.name);
+    if (existingCondition) {
+      await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
+    } else {
+      updatedCondition.changes.forEach(change => {
+        if (change.key === 'opposedTrait') {
+          const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessageId));
+          if (opposedMessage) {
+            change.key = opposedMessage.rolls?.[0]?.options.trait;
           }
-        });
-        await damagedActor.createEmbeddedDocuments('ActiveEffect', [updatedCondition]);
-      }
+        }
+      });
+      await damagedActor.createEmbeddedDocuments('ActiveEffect', [updatedCondition]);
     }
   }
   const chatApplyDamage = async (event) => {
