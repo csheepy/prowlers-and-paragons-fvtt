@@ -11,7 +11,11 @@ export class ProwlersRoll extends Roll {
 
   constructor(formula, data = {}, options = {}) {
     if (!formula) {
-      const total_dice_number = ProwlersRoll.initialNumberOfDice(options) + options.modifier
+      let conditionModifier = 0
+      for (const condition of options.appliedConditions) {
+        conditionModifier += parseInt(condition.changes.find(c => c.key === 'rollModifier')?.value || 0)
+      }
+      const total_dice_number = Math.max(0, ProwlersRoll.initialNumberOfDice(options) + conditionModifier + options.modifier)
       formula = `(${total_dice_number})dp`
     }
     super(formula, data, options);
@@ -86,6 +90,18 @@ export class ProwlersRoll extends Roll {
     options.halveToughness = buttonHtml.find('[name="halveToughness"]').is(":checked")
     options.offense = buttonHtml.find('[name="offense"]').is(":checked")
 
+    const conditionCheckboxes = buttonHtml.find('input[name^="condition-"]');
+    options.appliedConditions = [];
+    conditionCheckboxes.each((index, element) => {
+      if (element.checked) {
+        const conditionId = element.name.replace('condition-', '');
+        const condition = options.conditionsAffectingRoll.find(c => c._id === conditionId);
+        if (condition) {
+          options.appliedConditions.push(condition);
+        }
+      }
+    });
+
     return options
   }
 
@@ -111,6 +127,28 @@ export class ProwlersRoll extends Roll {
   }
 
   static rollDialogData(options) {
+    const processedConditions = (options.conditionsAffectingRoll || []).map(condition => {
+      const modifierValue = condition.changes.find(c => c.key === 'rollModifier')?.value;
+      const rollModifierValue = modifierValue !== undefined ? parseInt(modifierValue) : 'N/A';
+      
+      let formattedRollModifierValue;
+      if (typeof rollModifierValue === 'number') {
+        if (rollModifierValue > 0) {
+          formattedRollModifierValue = '+' + rollModifierValue;
+        } else {
+          formattedRollModifierValue = rollModifierValue.toString();
+        }
+      } else {
+        formattedRollModifierValue = rollModifierValue;
+      }
+      
+      return {
+        ...condition,
+        id: condition.id,
+        rollModifierValue: rollModifierValue,
+        formattedRollModifierValue: formattedRollModifierValue,
+      };
+    });
     let label = 'Roll';
     if (options.originatingActorName) {
       label = `Roll against ${options.originatingActorName}`
@@ -130,7 +168,8 @@ export class ProwlersRoll extends Roll {
       rollDifficulties: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties,
       rollDifficultiesLeveled: CONFIG.PROWLERS_AND_PARAGONS.roll_difficulties_leveled,
       type: options.type,
-      label: label
+      label: label,
+      conditionsAffectingRoll: processedConditions,
     }
   }
 
