@@ -41,6 +41,17 @@ const showTraitSelectionDialog = async (traits, rollingAgainst, rollingAgainstNa
   }
 };
 
+// helper function to get the chat message closest to an element
+const getChatMessage = (element) => {
+  const closestElement = element.closest('.message');
+  const chatMessageId = closestElement ? closestElement.dataset.messageId : null;
+  const chatMessage = game.messages.get(chatMessageId);
+
+  if (!chatMessage) return ui.notifications.warn('Chat message not found!');
+
+  return chatMessage;
+}
+
 // Helper function to execute a trait roll
 const executeTraitRoll = async (actor, selectedTrait, traits, options) => {
   const [type, id] = selectedTrait.split(':');
@@ -142,10 +153,7 @@ export const runDiceHooks = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    const closestElement = event.target.closest('.message');
-    const chatMessageId = closestElement ? closestElement.dataset.messageId : null;
-    const chatMessage = game.messages.get(chatMessageId);
-    if (!chatMessage) return ui.notifications.warn('Chat message not found!');
+    const chatMessage = getChatMessage(event.target);
     const controlledCharacter = getControlledCharacter();
     if (!controlledCharacter) {
       return ui.notifications.warn('You must select or control a character!');
@@ -167,7 +175,7 @@ export const runDiceHooks = () => {
     return await executeTraitRoll(controlledCharacter, selectedTrait, traits, options);
   };
 
-  Hooks.on('renderChatLog', (_app, html, _data) => {
+  const _registerChatEventListeners = (html) => {
     addEventListener(html, 'click', chatOpposedRoll, '.opposed-roll');
     addEventListener(html, 'click', toggleApplyDamageMenu, '.apply-damage-btn');
     addEventListener(html, 'click', toggleApplyConditionMenu, '.apply-condition-btn');
@@ -186,29 +194,13 @@ export const runDiceHooks = () => {
     
     document.removeEventListener('mousedown', mousedownHandler);
     document.addEventListener('mousedown', mousedownHandler);
+  }
+  Hooks.on('renderChatLog', (_app, html, _data) => {
+    _registerChatEventListeners(html);
   });
 
   Hooks.on('renderChatPopout', (_app, html, _data) => {
-    addEventListener(html, 'click', chatOpposedRoll, '.opposed-roll');
-    addEventListener(html, 'click', toggleApplyDamageMenu, '.apply-damage-btn');
-    addEventListener(html, 'click', toggleApplyConditionMenu, '.apply-condition-btn');
-    addEventListener(html, 'click', chatApplyDamage, '.apply-damage-option');
-    addEventListener(html, 'click', chatApplyCondition, '.apply-condition-option');
-
-    const mousedownHandler = (ev) => {
-      if (!ev.target.closest('.apply-condition-menu-container')) {
-        const dropdowns = document.querySelectorAll('.apply-condition-dropdown');
-        dropdowns.forEach(dropdown => dropdown.style.display = 'none');
-      }
-
-      if (!ev.target.closest('.apply-damage-menu-container')) {
-        const dropdowns = document.querySelectorAll('.apply-damage-dropdown');
-        dropdowns.forEach(dropdown => dropdown.style.display = 'none');
-      }
-    };
-    
-    document.removeEventListener('mousedown', mousedownHandler);
-    document.addEventListener('mousedown', mousedownHandler);
+    _registerChatEventListeners(html);
   });
 
   // Add the new functions below the existing ones
@@ -238,10 +230,7 @@ export const runDiceHooks = () => {
     const button = event.target;
     const dropdown = button.nextElementSibling;
     if (dropdown && dropdown.classList.contains('apply-condition-dropdown')) {
-      const chatMessageIdElement = button.closest('.message');
-      const chatMessageId = chatMessageIdElement ? chatMessageIdElement.dataset.messageId : null;
-      const chatMessage = game.messages.get(chatMessageId);
-      if (!chatMessage) return ui.notifications.warn('Chat message not found!');
+      const chatMessage = getChatMessage(button);
       const roll = chatMessage.rolls?.[0];
       if (!roll || !roll.options.conditionsToApply || roll.options.conditionsToApply.length === 0) {
         dropdown.innerHTML = `<ul><li>${game.i18n.localize('PROWLERS_AND_PARAGONS.Chat.NoConditionsToApply')}</li></ul>`;
@@ -256,7 +245,6 @@ export const runDiceHooks = () => {
 
       let conditionsHtml = '<ul>';
       for (const condition of roll.options.conditionsToApply) {
-        console.log(condition)
         const conditionLabel = condition.label || condition.name;
         conditionsHtml += `
           <li class="apply-condition-item" data-condition-name="${condition.name}">
@@ -290,6 +278,23 @@ export const runDiceHooks = () => {
     }
   };
 
+  // helper function to get the actor according to the option selected
+  const getActorFromOption = (option) => {
+    let damagedActor;
+    if (option === 'selected') {
+      damagedActor = getControlledCharacter();
+      if (!damagedActor) return ui.notifications.warn('You must select or control a character!');
+    } else if (option === 'target') {
+      const targetedTokens = Array.from(game.user.targets);
+      if (targetedTokens.length > 0) {
+        damagedActor = targetedTokens[0].actor;
+      } else {
+        return ui.notifications.warn('No target selected!');
+      }
+    }
+    return damagedActor;
+  }
+
   const chatApplyCondition = async (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -304,11 +309,7 @@ export const runDiceHooks = () => {
     const dropdown = optionElement.closest('.apply-condition-dropdown');
     if (dropdown) dropdown.style.display = 'none';
 
-    const chatMessageIdElement = optionElement.closest('.message');
-    const chatMessageId = chatMessageIdElement ? chatMessageIdElement.dataset.messageId : null;
-    const chatMessage = game.messages.get(chatMessageId);
-
-    if (!chatMessage) return ui.notifications.warn('Chat message not found!');
+    const chatMessage = getChatMessage(optionElement);
 
     const roll = chatMessage.rolls?.[0];
     if (!roll || !roll.options.conditionsToApply) return ui.notifications.warn('No conditions found on roll!');
@@ -316,18 +317,7 @@ export const runDiceHooks = () => {
     const conditionToApply = roll.options.conditionsToApply.find(c => c._id === conditionId);
     if (!conditionToApply) return ui.notifications.warn(`Condition '${conditionId}' not found on roll.`);
 
-    let damagedActor;
-    if (option === 'selected') {
-      damagedActor = getControlledCharacter();
-      if (!damagedActor) return ui.notifications.warn('You must select or control a character!');
-    } else if (option === 'target') {
-      const targetedTokens = Array.from(game.user.targets);
-      if (targetedTokens.length > 0) {
-        damagedActor = targetedTokens[0].actor;
-      } else {
-        return ui.notifications.warn('No target selected!');
-      }
-    }
+    const damagedActor = getActorFromOption(option);
 
     if (!damagedActor) return;
 
@@ -339,7 +329,7 @@ export const runDiceHooks = () => {
     } else {
       updatedCondition.changes.forEach(change => {
         if (change.key === 'opposedTrait') {
-          const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessageId));
+          const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessage.id));
           if (opposedMessage) {
             change.key = opposedMessage.rolls?.[0]?.options.trait;
           }
@@ -348,6 +338,7 @@ export const runDiceHooks = () => {
       await damagedActor.createEmbeddedDocuments('ActiveEffect', [updatedCondition]);
     }
   }
+
   const chatApplyDamage = async (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -359,24 +350,12 @@ export const runDiceHooks = () => {
     if (!option) return;
     const dropdown = optionElement.closest('.apply-damage-dropdown');
     if (dropdown) dropdown.style.display = 'none';
-    const chatMessageIdElement = optionElement.closest('.message');
-    const chatMessageId = chatMessageIdElement ? chatMessageIdElement.dataset.messageId : null;
-    const chatMessage = game.messages.get(chatMessageId);
-    if (!chatMessage) return ui.notifications.warn('Chat message not found!');
+    const chatMessage = getChatMessage(optionElement);
+    
     const roll = chatMessage.rolls?.[0];
     if (!roll || roll.netSuccess <= 0) return ui.notifications.warn('No valid roll to apply damage!');
-    let damagedActor;
-    if (option === 'selected') {
-      damagedActor = getControlledCharacter();
-      if (!damagedActor) return ui.notifications.warn('You must select or control a character!');
-    } else if (option === 'target') {
-      const targetedTokens = Array.from(game.user.targets);
-      if (targetedTokens.length > 0) {
-        damagedActor = targetedTokens[0].actor;
-      } else {
-        return ui.notifications.warn('No target selected!');
-      }
-    }
+
+    const damagedActor = getActorFromOption(option);
     if (damagedActor && damagedActor.system.health) {
       const currentHealth = damagedActor.system.health.value || 0;
       const newHealth = Math.max(currentHealth - roll.netSuccess, 0);
