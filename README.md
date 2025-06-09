@@ -22,6 +22,8 @@ There is another special ActiveEffect key 'opposedTrait' that will be replaced b
 
 Targeting powers with this is partially implemented - the value will be overriden no matter what the ActiveEffect's mode is set to.
 
+If you need to set up conditions for multiple powers, like adding a blind effect to a blind power plus some flexible powers like omni-power, create a condition item with the condition you want and drop it onto the power's sheet.
+
 ## Thanks
 
 https://github.com/asacolips-projects/boilerplate/ this was a great starting point
