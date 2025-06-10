@@ -18,5 +18,9 @@ teardown('delete actors and tokens', async ({ page }) => {
             await token.delete();
         }
 
+        for (const item of game.items) {
+            await item.delete();
+        }
+
     });
 });
