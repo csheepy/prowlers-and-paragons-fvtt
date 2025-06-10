@@ -2,7 +2,6 @@ import { test as base, expect } from '@playwright/test';
 import { login } from './login-helper';
 
 const navigateToItemTab = async (page) => {
-    await login(page);
     await page.getByRole('tab', { name: 'Items' }).click();
 };
 
@@ -14,6 +13,8 @@ const navigateToItem = async (page, itemName) => {
 
 const test = base.extend({
     powerTest: async ({ page }, use) => {
+        await page.goto('http://localhost:30000/game');
+
         await navigateToItemTab(page);
         const powerName = `Test Power ${crypto.randomUUID()}`;
         

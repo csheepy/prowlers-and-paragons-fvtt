@@ -3,7 +3,6 @@ import { login } from './login-helper';
 import localizations from '../lang/en.json';
 
 const navigateToActorTab = async (page) => {
-    await login(page);
     await page.getByRole('tab', { name: 'Actors' }).click();
 };
 
@@ -14,6 +13,8 @@ const navigateToActorSheet = async (page, actorName) => {
 
 const test = base.extend({
     actor: async ({ page }, use) => {
+        await page.goto('http://localhost:30000/game');
+
         let actorName;
         actorName = crypto.randomUUID();
         await navigateToActorTab(page);

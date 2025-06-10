@@ -1,7 +1,7 @@
 import { test as teardown } from '@playwright/test';
 import { login } from './login-helper';
 
-teardown('delete actors and tokens', async ({ page }) => {
+teardown('delete actors, tokens, and items', async ({ page }) => {
     await login(page);
     await page.getByRole('tab', { name: 'Actors' }).click();
     await page.evaluate(async () => {
