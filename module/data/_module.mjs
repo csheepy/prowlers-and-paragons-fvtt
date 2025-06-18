@@ -8,7 +8,6 @@ export {default as ProwlersParagonsGMSheet} from './actor-gm-sheet.mjs';
 
 // Export Items
 export {default as ProwlersParagonsItemBase} from "./base-item.mjs";
-export {default as ProwlersParagonsItem} from "./item-item.mjs";
 export {default as ProwlersParagonsFeature} from "./item-feature.mjs";
 export {default as ProwlersParagonsPower} from "./item-power.mjs";
 export {default as ProwlersParagonsProCon} from "./item-procon.mjs";
@@ -16,3 +15,4 @@ export {default as ProwlersParagonsPerk} from "./item-perk.mjs";
 export {default as ProwlersParagonsFlaw} from "./item-flaw.mjs";
 export {default as ProwlersParagonsWeapon} from "./item-weapon.mjs";
 export {default as ProwlersParagonsArmor} from "./item-armor.mjs";
+export {default as ProwlersParagonsCondition} from "./item-condition.mjs";

@@ -429,12 +429,12 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     event.preventDefault();
     const element = event.currentTarget;
     const dataset = element.dataset;
-
+    const conditionsAffectingRoll = this.actor.conditionsAffectingRoll;
     // Handle item rolls.
     if (dataset.rollType) {
       const itemId = element.closest('.item').dataset.itemId;
       const item = this.actor.items.get(itemId);
-      if (item) return item.roll({doOpposedRoll: true});
+      if (item) return item.roll({doOpposedRoll: true, conditionsAffectingRoll});
     }
 
     // Handle nested ability / talent / etc rolls
@@ -444,6 +444,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
         flavor: label,
         rollMode: game.settings.get('core', 'rollMode'),
         doOpposedRoll: true,
+        conditionsAffectingRoll,
         type: dataset.label
       }
       return this.actor.roll(dataset.key, options)
@@ -451,7 +452,7 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
 
     // minion Threat rolls
     if (dataset.threat) {
-      return this.actor.threatRoll({offense: true, doOpposedRoll: true})
+      return this.actor.threatRoll({offense: true, doOpposedRoll: true, conditionsAffectingRoll})
     }
   }
 

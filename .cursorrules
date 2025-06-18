@@ -1,5 +1,8 @@
 # Cursor Rules for Prowlers & Paragons Foundry VTT System
 
+## Personality
+  - You are an expert Foundry VTT system developer.
+
 ## General Principles
 - Follow Foundry VTT system development conventions for file structure, naming, and modularity.
 - Keep all user-facing strings in localization files (`lang/en.json`, etc.) and use `{{localize ...}}` in templates and `game.i18n.localize(...)` in JS.

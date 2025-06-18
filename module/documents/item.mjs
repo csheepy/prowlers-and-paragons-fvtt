@@ -62,6 +62,7 @@ export class ProwlersParagonsItem extends Item {
       rollMode,
       type: this.name,
       num_dice: this.actor.derived_power_ranks[this.id],
+      conditionsToApply: this.effects.filter(e => e.isCondition()).map(e => e.toObject()),
       ...options
     }
     return ProwlersRoll.rollDialog(powerOptions);
@@ -113,6 +114,8 @@ export class ProwlersParagonsItem extends Item {
     const speaker = ChatMessage.getSpeaker({ actor: this.actor });
     const rollMode = game.settings.get('core', 'rollMode');
     const label = `[${item.type}] ${item.name}`;
+
+    options.trait = `powers.${item.id}`;
 
     if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
       const opposedRoll = await setupOpposedRoll(this.actor, this.name);

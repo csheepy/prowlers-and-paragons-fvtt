@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 export async function login(page) {
   // Navigate to the FoundryVTT login page

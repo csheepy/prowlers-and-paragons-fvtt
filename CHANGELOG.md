@@ -1,8 +1,19 @@
 # CHANGELOG
 
+## 1.5.0
+- fix minion description not persisting
+
+- removed unused 'item' type of item
+
+- add 'conditions' active effects to powers that can be applied to targets.
+
+    - these can be added under the effects tab on powers
+    - the 'opposedTrait' key will be replaced with the trait from an opposed roll
+    - the 'rollModifier' key will apply a modifier to rolls (for penalties like Blind)
+
 ## 1.4.0
 
-    - Sheet portrait is now larger and respects aspect ratio
+- Sheet portrait is now larger and respects aspect ratio
 
 ## 1.3.0
 

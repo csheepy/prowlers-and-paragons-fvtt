@@ -112,14 +112,14 @@ Hooks.once('init', function () {
   }
   CONFIG.Item.documentClass = ProwlersParagonsItem;
   CONFIG.Item.dataModels = {
-    item: models.ProwlersParagonsItem,
     feature: models.ProwlersParagonsFeature,
     power: models.ProwlersParagonsPower,
     procon: models.ProwlersParagonsProCon,
     perk: models.ProwlersParagonsPerk,
     flaw: models.ProwlersParagonsFlaw,
     weapon: models.ProwlersParagonsWeapon,
-    armor: models.ProwlersParagonsArmor
+    armor: models.ProwlersParagonsArmor,
+    condition: models.ProwlersParagonsCondition
   }
 
   CONFIG.Dice.terms[ProwlersDie.DENOMINATION] = ProwlersDie;

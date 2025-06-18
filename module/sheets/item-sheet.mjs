@@ -178,5 +178,19 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
         }])
     }
 
+    if (this.item.type === 'power' && draggedItem.type === 'condition') {
+      // copy the conditions on the condition item to the power
+      let conditions = [];
+
+      for (const effect of draggedItem.effects) {
+        if (effect.changes.some(c => c.key === 'kind' && c.value === 'condition')) {
+          conditions.push(effect);
+        }
+      }
+
+      if (conditions.length > 0) {
+        this.item.createEmbeddedDocuments('ActiveEffect', conditions);
+      }
+    }
   }
 }

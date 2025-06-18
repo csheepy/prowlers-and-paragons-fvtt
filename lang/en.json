@@ -62,8 +62,7 @@
           "ranged": "Ranged",
           "zone": "Zone",
           "special": "Special"
-        }
-      }
+        }      }
     },
     "Effect": {
       "Source": "Source",
@@ -71,7 +70,9 @@
       "Temporary": "Temporary Effects",
       "Passive": "Passive Effects",
       "Inactive": "Inactive Effects",
-      "Procon": "Pros and Cons (create as an item and drag here)"
+      "Conditions": "Conditions",
+      "Procon": "Pros and Cons (create as an item and drag here)",
+      "Duration": "Duration"
     },
     "Packages": {
       "hero": "Hero",
@@ -172,6 +173,9 @@
       "PartialFailure": "Failure with Silver Lining",
       "PartialSuccess": "Success with Complication",
       "CompleteSuccess": "Complete Success"
+    },
+    "Chat": {
+      "NoConditionsToApply": "No conditions to apply"
     }
   },
   "Errors": {
@@ -194,7 +198,8 @@
       "perk": "Perk",
       "flaw": "Flaw",
       "weapon": "Weapon",
-      "armor": "Armor"
+      "armor": "Armor",
+      "condition": "Condition"
     }
   }
 }
