@@ -24,6 +24,8 @@ Targeting powers with this is partially implemented - the value will be override
 
 If you need to set up conditions for multiple powers, like adding a blind effect to a blind power plus some flexible powers like omni-power, create a condition item with the condition you want and drop it onto the power's sheet.
 
+![image](https://github.com/user-attachments/assets/cfbb14ee-36e9-4c84-b57e-9e11ef38576c)
+
 ## Thanks
 
 https://github.com/asacolips-projects/boilerplate/ this was a great starting point
