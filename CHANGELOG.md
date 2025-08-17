@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.6.0
+- add toggle to display power description in play tab; clicking power description sends it to chat
+
+- update item feature schema to allow negative cost
+
+- add miscellaneous gear section to actor sheet
+
 ## 1.5.0
 - fix minion description not persisting
 
