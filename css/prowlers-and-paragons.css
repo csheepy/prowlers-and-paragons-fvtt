@@ -836,3 +836,24 @@ body.game .sheet.app header.sheet-header img {
   object-fit: contain;
   margin-right: 6px;
 }
+
+.prowlers-and-paragons .power-description {
+  max-height: 0;
+  overflow: hidden;
+  padding-left: 30px;
+  display: none;
+}
+
+.prowlers-and-paragons .power-description.expanded {
+  max-height: 500px; /* Adjust as needed for maximum possible content */
+  display: block;
+}
+
+.prowlers-and-paragons .power-description-toggle {
+  cursor: pointer;
+  flex: 0 0 20px;
+}
+
+.prowlers-and-paragons .power-description-toggle i {
+  font-size: 16px;
+}

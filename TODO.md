@@ -15,7 +15,6 @@ send power description to chat
 
 appv2 migration for foundry 13
 
-apply conditions menu to targets
 
 ## might do
 

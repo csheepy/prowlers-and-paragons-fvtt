@@ -117,6 +117,14 @@ export class ProwlersParagonsItem extends Item {
 
     options.trait = `powers.${item.id}`;
 
+    if (options?.description) {
+      return ChatMessage.create({
+        speaker: speaker,
+        rollMode: rollMode,
+        flavor: label,
+        content: item.system.description ?? '',
+      });
+    }
     if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
       const opposedRoll = await setupOpposedRoll(this.actor, this.name);
       if (!opposedRoll) return;
