@@ -1,6 +1,12 @@
-<div>
+<div data-test-id="gear-tab">
     <section class="grid grid-2col">
         <div class="grid-span-1">{{> "systems/prowlers-and-paragons/templates/actor/parts/actor-weapons.hbs"}}</div>
         <div class="grid-span-1">{{> "systems/prowlers-and-paragons/templates/actor/parts/actor-armor.hbs"}}</div>
+    </section>
+    <section class="misc-gear">
+        <div class="form-group">
+            <label>{{localize "PROWLERS_AND_PARAGONS.Gear.Misc"}}</label>
+            <textarea name="system.gear.misc" rows="4">{{system.gear.misc}}</textarea>
+        </div>
     </section>
 </div>
