@@ -7,6 +7,7 @@
   </li>
     {{#each powers as |item id|}}
       <li class='item flexrow' data-item-id='{{item._id}}'>
+        <a class="power-description-toggle" data-item-id="{{item._id}}"><i class="fas fa-caret-right"></i></a>
         <div class='item-name flexrow rollable' data-roll-type='power'>
           <div class='item-image'>
             <a ><img
@@ -42,6 +43,11 @@
         {{else}}
          <div></div>
         {{/if}}
+      </li>
+      <li class="item flexrow power-description" data-item-id="{{item._id}}">
+        <div class="item-description-content rollable" data-roll-type="powerDescription" data-item-id="{{item._id}}">
+          {{{item.system.description}}}
+        </div>
       </li>
     {{/each}}
 </ol>

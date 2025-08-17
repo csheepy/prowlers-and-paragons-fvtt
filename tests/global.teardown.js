@@ -1,8 +1,16 @@
-import { test as teardown } from '@playwright/test';
+import { test as teardown, expect } from '@playwright/test';
 import { login } from './login-helper';
 
 teardown('delete actors, tokens, and items', async ({ page }) => {
-    await login(page);
+  // Navigate to the FoundryVTT login page
+  await page.goto('http://localhost:30000/join');  // Replace with your actual FoundryVTT URL
+    
+  await expect(page.getByText('prowlers-playwright')).toBeVisible();
+  // Additional steps for selecting role and joining session
+  await page.getByRole('combobox').selectOption('Gamemaster');  // Adjust selector if the label differs
+  await page.getByRole('button', { name: 'Join Game Session' }).click();  
+
+
     await page.getByRole('tab', { name: 'Actors' }).click();
     await page.evaluate(async () => {
         if (window.game && window.game.actors) {

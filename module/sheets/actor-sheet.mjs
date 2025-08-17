@@ -382,6 +382,31 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
       }
     });
 
+    // Handle power description toggle
+    html.on('click', '.power-description-toggle', this._onPowerDescriptionToggle.bind(this));
+
+  }
+
+  /**
+   * Handle clicks on the power description toggle.
+   * @param {Event} ev The click event.
+   * @private
+   */
+  _onPowerDescriptionToggle(ev) {
+    const listItem = ev.currentTarget.closest('.item');
+    const itemId = listItem.dataset.itemId;
+    const descriptionRow = this.element[0].querySelector(`.power-description[data-item-id="${itemId}"]`);
+    const caretIcon = ev.currentTarget.querySelector('i');
+
+    if (descriptionRow.classList.contains('expanded')) {
+      descriptionRow.classList.remove('expanded');
+      caretIcon.classList.remove('fa-caret-down');
+      caretIcon.classList.add('fa-caret-right');
+    } else {
+      descriptionRow.classList.add('expanded');
+      caretIcon.classList.remove('fa-caret-right');
+      caretIcon.classList.add('fa-caret-down');
+    }
   }
 
   /**
@@ -434,6 +459,9 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     if (dataset.rollType) {
       const itemId = element.closest('.item').dataset.itemId;
       const item = this.actor.items.get(itemId);
+      if (item &&dataset.rollType === 'powerDescription') {
+        return item.roll({description: true})
+      }
       if (item) return item.roll({doOpposedRoll: true, conditionsAffectingRoll});
     }
 

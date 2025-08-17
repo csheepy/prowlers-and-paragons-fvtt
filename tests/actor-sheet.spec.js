@@ -28,6 +28,7 @@ const test = base.extend({
                         rank: 20,
                         rank_type: 'power',
                         source: 'psychic',
+                        description: 'Some test description',
                         cost: 0
                     }
                 }]);
@@ -46,6 +47,7 @@ const test = base.extend({
                     system: {
                         cost: 0,
                         rank: 20,
+                        description: 'Some test description',
                         rank_type: 'power',
                         source: 'psychic',
                     }
@@ -390,6 +392,35 @@ test.describe('Character Sheet Functionality', () => {
             await page.locator('.dialog-button.one').click();
             
             
+        });
+    });
+    test.describe('power description toggle', () => {
+        test('should toggle description visibility and send to chat', async ({ page, characterSheet }) => {
+            const powerToggle = characterSheet.locator('.power-description-toggle').first();
+            const powerDescription = characterSheet.locator('.power-description').first();
+            const initialIcon = powerToggle.locator('i');
+
+            // Initially, description should be hidden and icon should be fa-caret-right
+            await expect(powerDescription).not.toHaveClass('expanded');
+            await expect(initialIcon).toHaveClass(/fa-caret-right/);
+
+            // Click to expand description
+            await powerToggle.click();
+            await expect(powerDescription).toHaveClass('item flexrow power-description expanded');
+            await expect(initialIcon).toHaveClass(/fa-caret-down/);
+
+            // Click description to send to chat
+            const actorName = await characterSheet.locator('input[name="name"]').inputValue();
+            await powerDescription.locator('.item-description-content').click();
+            await page.getByRole('tab', { name: 'Chat Messages' }).click();
+            const chatMessage = page.locator(`.chat-message:has-text("${actorName}")`);
+            await expect(chatMessage).toContainText('Test Power');
+            await expect(chatMessage).toContainText('Some test description'); // Assuming default description. Update if needed.
+
+            // Click to collapse description
+            await powerToggle.click();
+            await expect(powerDescription).not.toHaveClass('expanded');
+            await expect(initialIcon).toHaveClass(/fa-caret-right/);
         });
     });
 })

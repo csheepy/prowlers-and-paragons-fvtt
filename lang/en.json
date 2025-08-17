@@ -36,6 +36,9 @@
       },
       "weapons": "Weapons"
     },
+    "Gear": {
+      "Misc": "Miscellaneous Gear"
+    },
     "SheetLabels": {
       "Actor": "ProwlersParagons Actor Sheet",
       "Item": "ProwlersParagons Item Sheet"
