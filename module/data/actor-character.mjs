@@ -37,6 +37,10 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
       max: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 })
     });
 
+    schema.gear = new fields.SchemaField({
+      misc: new fields.StringField({ required: false, blank: true })
+    })
+
     schema.biography = new fields.SchemaField({
       misc: new fields.StringField({ required: true, blank: true }),
       alias: new fields.StringField({ required: true, blank: true }),

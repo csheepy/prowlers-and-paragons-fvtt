@@ -7,7 +7,7 @@ export default class ProwlersParagonsFeature extends ProwlersParagonsItemBase {
         const fields = foundry.data.fields;
         const schema = super.defineSchema();
     
-        schema.cost = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 1, min: 1});
+        schema.cost = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 1});
         schema.for = new fields.StringField({ choices: ['vehicle','hq'] })  
         
         return schema
