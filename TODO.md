@@ -11,8 +11,6 @@ add perks to compendium module
 
 add flaws to compendium module
 
-send power description to chat
-
 appv2 migration for foundry 13
 
 

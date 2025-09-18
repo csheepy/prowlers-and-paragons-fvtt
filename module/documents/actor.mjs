@@ -94,35 +94,47 @@ export class ProwlersParagonsActor extends Actor {
     return derived_power_ranks
   }
 
-  calculateSpentPoints() {
+  /**
+   * Calculate the total spent hero points for a character.
+   *
+   * @param {boolean} [verbose=false] When true, logs each addition step with the
+   * current total, what is being added, and the amount added.
+   * @returns {number} Total spent points
+   */
+  calculateSpentPoints(verbose = false) {
     const actorData = this;
     if (actorData.type !== 'character') {
       return;
     }
 
     let pointsSpent = 0;
+    const addPoints = (amount, what) => {
+      const numericAmount = Number(amount) || 0;
+      pointsSpent += numericAmount;
+      if (verbose) console.log(`[SpentPoints] total=${pointsSpent} +${numericAmount} from ${what}`);
+    };
 
     const calculateTrait = (trait, adjustment) => {
       for (const [key, {value}] of Object.entries(actorData.system._source[trait])) { // use _source to get values unmodified by effects
         const adjustedValue = value - adjustment
         if (adjustedValue > 0) {
-          pointsSpent += adjustedValue
+          addPoints(adjustedValue, `${trait}.${key} (base ${value} - adj ${adjustment})`)
         }
       }
     }
 
     if (actorData.system.package_applied === 'superhero') {
-      pointsSpent += 50
+      addPoints(50, 'package.superhero')
       
       calculateTrait('abilities', 3)
       calculateTrait('talents', 3)
     } else if (actorData.system.package_applied === 'hero') {
-      pointsSpent += 40
+      addPoints(40, 'package.hero')
 
       calculateTrait('abilities', 3)
       calculateTrait('talents', 2)
     } else if (actorData.system.package_applied === 'civilian') {
-      pointsSpent += 35
+      addPoints(35, 'package.civilian')
 
       calculateTrait('abilities', 2)
       calculateTrait('talents', 2)
@@ -132,18 +144,20 @@ export class ProwlersParagonsActor extends Actor {
     }
 
     actorData.items.contents.filter(i => i.type === 'perk').forEach(perk => {
-      pointsSpent += perk.system.cost;
+      addPoints(perk.system.cost, `perk:${perk.name}`);
     })
 
 
     // add powers cost
     actorData.items.contents.filter(i => i.type === 'power').forEach(power => {
-      pointsSpent += (power.system.rank * power.system.cost)
+      addPoints((power.system.rank * power.system.cost), `power:${power.name} (rank ${power.system.rank} * cost ${power.system.cost})`)
 
       // pros and cons
       power.effects.contents.forEach(effect => {
-        pointsSpent += parseInt(effect.changes.find((e) => e.key === 'cost_flat')?.value ?? 0)
-        pointsSpent += parseInt(effect.changes.find((e) => e.key === 'cost_per_rank')?.value ?? 0) * power.system.rank
+        const flat = parseInt(effect.changes.find((e) => e.key === 'cost_flat')?.value ?? 0)
+        const perRank = parseInt(effect.changes.find((e) => e.key === 'cost_per_rank')?.value ?? 0)
+        if (flat) addPoints(flat, `effect:${effect.name} cost_flat`)
+        if (perRank) addPoints(perRank * power.system.rank, `effect:${effect.name} cost_per_rank (${perRank} * rank ${power.system.rank})`)
       })
     })
       
