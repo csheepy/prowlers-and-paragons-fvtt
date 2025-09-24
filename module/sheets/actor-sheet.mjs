@@ -161,6 +161,24 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
         } else {
           i.displayName = i.name
         }
+        // Gather pro/con effects for display under the power description
+        try {
+          const doc = this.actor.items.get(i._id);
+          const proConEffects = (doc?.effects?.contents ?? [])
+            .filter((e) => e.isProCon?.() === true)
+            .map((e) => {
+              const kindChange = e.changes.find((c) => c.key === 'kind');
+              return {
+                name: e.name,
+                _id: e.id,
+                description: e.description ?? '',
+                kind: kindChange?.value ?? ''
+              };
+            });
+          i.prosCons = proConEffects;
+        } catch (err) {
+          i.prosCons = [];
+        }
         powers.push(i);
       }
       // Append to weapons.
@@ -455,6 +473,17 @@ export class ProwlersParagonsActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const dataset = element.dataset;
     const conditionsAffectingRoll = this.actor.conditionsAffectingRoll;
+    if (dataset.rollType === 'procon') {
+      const speaker = ChatMessage.getSpeaker({ actor: this.actor });
+      const rollMode = game.settings.get('core', 'rollMode');
+      const label = `${dataset.label}`;
+      return ChatMessage.create({
+        speaker: speaker,
+        rollMode: rollMode,
+        flavor: label,
+        content: dataset.description ?? '',
+      });
+    }
     // Handle item rolls.
     if (dataset.rollType) {
       const itemId = element.closest('.item').dataset.itemId;

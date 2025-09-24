@@ -857,3 +857,16 @@ body.game .sheet.app header.sheet-header img {
 .prowlers-and-paragons .power-description-toggle i {
   font-size: 16px;
 }
+
+.prowlers-and-paragons .power-pros-cons .section-title {
+  font-family: "Bangers", cursive;
+  font-size: 1em;
+  color: var(--secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+.prowlers-and-paragons .power-pros-cons .procon-list {
+  list-style: none;
+}
