@@ -870,3 +870,31 @@ body.game .sheet.app header.sheet-header img {
 .prowlers-and-paragons .power-pros-cons .procon-list {
   list-style: none;
 }
+
+/* Ensure ability name, optional original value, and current value align consistently */
+.prowlers-and-paragons .abilities .ability {
+  display: grid;
+  grid-template-columns: 1fr 20px 56px;
+  column-gap: 5px;
+  align-items: center;
+}
+
+.prowlers-and-paragons .abilities .ability label {
+  grid-column: 1;
+  justify-self: start;
+  text-align: left;
+}
+
+.prowlers-and-paragons .abilities .ability span {
+  grid-column: 2;
+  justify-self: end;
+  text-align: right;
+  opacity: 0.8;
+}
+
+.prowlers-and-paragons .abilities .ability input[type="text"],
+.prowlers-and-paragons .abilities .ability input[type="number"] {
+  grid-column: 3;
+  width: 56px;
+  text-align: center;
+}
