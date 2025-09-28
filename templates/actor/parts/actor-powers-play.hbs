@@ -48,6 +48,26 @@
         <div class="item-description-content rollable" data-roll-type="powerDescription" data-item-id="{{item._id}}">
           {{{item.system.description}}}
         </div>
+        {{#if item.prosCons}}
+          {{#if (gt item.prosCons.length 0)}}
+          <div class="power-pros-cons">
+            <div class="section-title"><b>{{localize 'PROWLERS_AND_PARAGONS.Effect.ProConList'}}</b></div>
+            <ul class="procon-list">
+              {{#each item.prosCons as |pc idx|}}
+                <li class="procon-entry">
+                  <span class="procon-name">{{pc.name}}</span>
+                  {{#if pc.kind}}
+                    <span class="procon-kind">({{pc.kind}})</span>
+                  {{/if}}
+                  {{#if pc.description}}
+                    <div class="procon-description rollable" data-roll-type="procon" data-item-id="{{pc._id}}" data-description="{{pc.description}}" data-label="{{pc.name}}">{{{pc.description}}}</div>
+                  {{/if}}
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+          {{/if}}
+        {{/if}}
       </li>
     {{/each}}
 </ol>

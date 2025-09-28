@@ -97,7 +97,11 @@
             {{#each system.abilities as |ability key|}}
             <div class="ability flexrow flex-group-center">
               <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-key="system.abilities.{{key}}.value" data-label="{{localize (lookup @root.config.abilities key)}}">{{localize (lookup @root.config.abilities key)}}</label>
-              <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number" {{#if (lookup @root.temporaryModeTraits key)}}class="highlighted-border"{{/if}}>
+              {{#if (ne (lookup (lookup @root.actor.system._source.abilities key) "value") ability.value)}}
+                <span>{{lookup (lookup @root.actor.system._source.abilities key) "value"}}</span>
+              {{/if}}
+              <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number" {{#if (ne (lookup (lookup @root.actor.system._source.abilities key) "value") ability.value)}}class="highlighted-border"{{/if}}>
+
             </div>
             {{/each}}
           </div>
@@ -107,7 +111,10 @@
             {{#each system.talents as |talent key|}}
             <div class="ability flexrow flex-group-center">
               <label for="system.talents.{{key}}.value" class="resource-label rollable flexlarge align-left" data-key="system.talents.{{key}}.value" data-label="{{localize (lookup @root.config.talents key)}}">{{localize (lookup @root.config.talents key)}}</label>
-              <input type="text" name="system.talents.{{key}}.value" value="{{talent.value}}" data-dtype="Number" {{#if (lookup @root.temporaryModeTraits key)}}class="highlighted-border"{{/if}}>
+              {{#if (ne (lookup (lookup @root.actor.system._source.talents key) "value") talent.value)}}
+                <span>{{lookup (lookup @root.actor.system._source.talents key) "value"}}</span>
+              {{/if}}
+              <input type="text" name="system.talents.{{key}}.value" value="{{talent.value}}" data-dtype="Number" {{#if (ne (lookup (lookup @root.actor.system._source.talents key) "value") talent.value)}}class="highlighted-border"{{/if}}>
             </div>
             {{/each}}
           </div>

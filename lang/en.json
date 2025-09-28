@@ -75,6 +75,7 @@
       "Inactive": "Inactive Effects",
       "Conditions": "Conditions",
       "Procon": "Pros and Cons (create as an item and drag here)",
+      "ProConList": "Pros and Cons affecting this power",
       "Duration": "Duration"
     },
     "Packages": {
