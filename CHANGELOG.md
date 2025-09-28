@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.7.0
+
+- the sheet will now display the original unmodified value of an ability or talent that has been modified (like by an effect)
+
+- the sheet will now highlight any ability or talent that has been modified (like by an effect)
+
+- the inline description of a power on the play tab will now additionally display any pros and cons the power has
+
+- added a verbose mode to calculating power costs that can be accessed through the console `game.actors.getName('Herald').calculateSpentPoints(verbose=true)`
+
+
 ## 1.6.0
 - add toggle to display power description in play tab; clicking power description sends it to chat
 
