@@ -332,7 +332,7 @@ export class ProwlersParagonsActor extends Actor {
 
     const template = 'systems/prowlers-and-paragons/templates/please-hold.hbs'
 
-    const html = await renderTemplate(template, {});
+    const html = await foundry.applications.handlebars.renderTemplate(template, {});
 
     const holdPlease =  new foundry.applications.api.DialogV2({
       window: {title:'Please Hold'},
