@@ -1,4 +1,4 @@
-export class ProwlersDie extends Die {
+export class ProwlersDie extends foundry.dice.terms.Die {
     constructor(termData = {}) {
         termData.faces = 6;
         super(termData);
