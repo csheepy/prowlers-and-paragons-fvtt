@@ -67,7 +67,7 @@
 
 - fix temporary outline for talents not appearing in temp. buffs mode
 
-- foundry 13 compatability changes: refactor hooks, fix activeeffect creation. this version should work with both 12 and 13
+- foundry 13 compatibility changes: refactor hooks, fix activeeffect creation. this version should work with both 12 and 13
 
 - add Playwright and start adding test cases
 
