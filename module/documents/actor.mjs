@@ -1,6 +1,6 @@
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
- * @extends {Actor}
+ * @extends {foundry.documents.Actor}
  */
 
 import { ProwlersRoll } from "../dice/prowlers-roll.mjs";
@@ -8,7 +8,7 @@ import { socket } from "../prowlers-and-paragons.mjs";
 import { getActorsFromTargetedTokens } from '../helpers/tokens.mjs'
 import { setupOpposedRoll } from '../helpers/rolls.mjs';
 
-export class ProwlersParagonsActor extends Actor {
+export class ProwlersParagonsActor extends foundry.documents.Actor {
   /** @override */
   prepareData() {
     // Prepare data for the actor. Calling the super version of this executes
@@ -16,12 +16,6 @@ export class ProwlersParagonsActor extends Actor {
     // prepareBaseData(), prepareEmbeddedDocuments() (including active effects),
     // prepareDerivedData().
     super.prepareData();
-  }
-
-  /** @override */
-  prepareBaseData() {
-    // Data modifications in this step occur before processing embedded
-    // documents or derived data.
   }
 
   getVehicleTraits() {
