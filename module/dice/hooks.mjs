@@ -327,7 +327,7 @@ export const runDiceHooks = () => {
     if (existingCondition) {
       await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
     } else {
-      updatedCondition.changes.forEach(change => {
+      updatedCondition.system.changes.forEach(change => {
         if (change.key === 'opposedTrait') {
           const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessage.id));
           if (opposedMessage) {

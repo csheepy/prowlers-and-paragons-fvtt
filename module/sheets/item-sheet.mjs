@@ -183,7 +183,7 @@ export class ProwlersParagonsItemSheet extends foundry.appv1.sheets.ItemSheet {
       let conditions = [];
 
       for (const effect of draggedItem.effects) {
-        if (effect.changes.some(c => c.key === 'kind' && c.value === 'condition')) {
+        if (effect.system.changes.some(c => c.key === 'kind' && c.value === 'condition')) {
           conditions.push(effect);
         }
       }
