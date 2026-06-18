@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.0.0
+
+- fixes for compatibility with Foundry v14
+
+- the system will no longer run on v12
+
 ## 1.7.0
 
 - the sheet will now display the original unmodified value of an ability or talent that has been modified (like by an effect)
