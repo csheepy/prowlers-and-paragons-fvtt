@@ -24,7 +24,7 @@ export class ProwlersRoll extends Roll {
   async render({ flavor, template = this.constructor.CHAT_TEMPLATE, isPrivate = false } = {}) {
     if (!this._evaluated) await this.evaluate({ allowInteractive: !isPrivate });
     const chatData = await this._prepareContext({ flavor, isPrivate });
-    return renderTemplate(template, chatData);
+    return foundry.applications.handlebars.renderTemplate(template, chatData);
   }
 
   /**
@@ -189,7 +189,7 @@ export class ProwlersRoll extends Roll {
       data.offense = options.offense
     }
 
-    const html = await renderTemplate(template, data);
+    const html = await foundry.applications.handlebars.renderTemplate(template, data);
 
     return new Promise((resolve) => {
       new Dialog({

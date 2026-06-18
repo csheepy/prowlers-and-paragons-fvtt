@@ -130,17 +130,17 @@ Hooks.once('init', function () {
   CONFIG.ActiveEffect.legacyTransferral = false;
 
   // Register sheet application classes
-  Actors.unregisterSheet('core', ActorSheet);
-  Actors.registerSheet('prowlers-and-paragons', ProwlersParagonsActorSheet, {
+  foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
+  foundry.documents.collections.Actors.registerSheet('prowlers-and-paragons', ProwlersParagonsActorSheet, {
     makeDefault: true,
     label: 'PROWLERS_AND_PARAGONS.SheetLabels.Actor',
   });
-  Items.unregisterSheet('core', ItemSheet);
-  Items.registerSheet('prowlers-and-paragons', ProwlersParagonsItemSheet, {
+  foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
+  foundry.documents.collections.Items.registerSheet('prowlers-and-paragons', ProwlersParagonsItemSheet, {
     makeDefault: true,
     label: 'PROWLERS_AND_PARAGONS.SheetLabels.Item',
   });
-  Actors.registerSheet('prowlers-and-paragons', ProwlersParagonsGMSheet, {
+  foundry.documents.collections.Actors.registerSheet('prowlers-and-paragons', ProwlersParagonsGMSheet, {
     types: ['gm-sheet'],
     makeDefault: true,
     label: 'PROWLERS_AND_PARAGONS.Actor.gm-sheet',

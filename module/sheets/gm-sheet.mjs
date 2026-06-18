@@ -1,7 +1,7 @@
 import { socket } from "../prowlers-and-paragons.mjs";
 import { setupSpendResourceMenuListeners } from '../helpers/spend-resource-menu.mjs';
 
-export class ProwlersParagonsGMSheet extends ActorSheet {
+export class ProwlersParagonsGMSheet extends foundry.appv1.sheets.ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["prowlers-and-paragons", "sheet", "gm-sheet"],

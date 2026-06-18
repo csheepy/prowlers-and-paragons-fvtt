@@ -25,7 +25,7 @@ const showTraitSelectionDialog = async (traits, rollingAgainst, rollingAgainstNa
     chosen: ''
   };
 
-  const html = await renderTemplate(template, data);
+  const html = await foundry.applications.handlebars.renderTemplate(template, data);
 
   try {
     return await foundry.applications.api.DialogV2.prompt({
@@ -327,7 +327,7 @@ export const runDiceHooks = () => {
     if (existingCondition) {
       await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
     } else {
-      updatedCondition.changes.forEach(change => {
+      updatedCondition.system.changes.forEach(change => {
         if (change.key === 'opposedTrait') {
           const opposedMessage = game.messages.find(m => m.getFlag('prowlers-and-paragons', 'opposedRolls')?.includes(chatMessage.id));
           if (opposedMessage) {

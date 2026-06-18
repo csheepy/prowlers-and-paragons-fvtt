@@ -5,9 +5,9 @@ import {
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
- * @extends {ItemSheet}
+ * @extends {foundry.appv1.sheets.ItemSheet}
  */
-export class ProwlersParagonsItemSheet extends ItemSheet {
+export class ProwlersParagonsItemSheet extends foundry.appv1.sheets.ItemSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -47,7 +47,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
 
     // Enrich description info for display
     // Enrichment turns text like `[[/r 1d20]]` into buttons
-    context.enrichedDescription = await TextEditor.enrichHTML(
+    context.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
       this.item.system.description,
       {
         // Whether to show secret blocks in the finished html
@@ -183,7 +183,7 @@ export class ProwlersParagonsItemSheet extends ItemSheet {
       let conditions = [];
 
       for (const effect of draggedItem.effects) {
-        if (effect.changes.some(c => c.key === 'kind' && c.value === 'condition')) {
+        if (effect.system.changes.some(c => c.key === 'kind' && c.value === 'condition')) {
           conditions.push(effect);
         }
       }
