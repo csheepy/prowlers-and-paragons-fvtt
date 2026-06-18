@@ -898,3 +898,8 @@ body.game .sheet.app header.sheet-header img {
   width: 56px;
   text-align: center;
 }
+
+.trait-selection-dialog input[type="radio"] {
+  appearance: auto;
+  -webkit-appearance: radio;
+}
