@@ -25,7 +25,7 @@ const showTraitSelectionDialog = async (traits, rollingAgainst, rollingAgainstNa
     chosen: ''
   };
 
-  const html = await renderTemplate(template, data);
+  const html = await foundry.applications.handlebars.renderTemplate(template, data);
 
   try {
     return await foundry.applications.api.DialogV2.prompt({
