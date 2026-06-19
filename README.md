@@ -20,7 +20,7 @@ If you want a power to apply an effect to an enemy, you can go to the effects ta
 
 There is another special ActiveEffect key 'opposedTrait' that will be replaced by the trait that opposed your roll (for example, if someone rolled Agility defending against Drain, it can automatically drain their Agility).
 
-Targeting powers with this is partially implemented - the value will be overriden no matter what the ActiveEffect's mode is set to.
+Targeting powers with this is partially implemented - the value will be overridden no matter what the ActiveEffect's mode is set to.
 
 If you need to set up conditions for multiple powers, like adding a blind effect to a blind power plus some flexible powers like omni-power, create a condition item with the condition you want and drop it onto the power's sheet.
 

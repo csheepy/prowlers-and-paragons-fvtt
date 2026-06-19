@@ -108,9 +108,9 @@ export class ProwlersRoll extends Roll {
   static insertSelfIntoOpposedRolls(options, message) {
     if (options.difficulty === 'opposed' && options.originatingMessageId) {
       const originalMessage = game.messages.get(options.originatingMessageId);
-      const oppposedRolls = originalMessage.getFlag('prowlers-and-paragons', 'opposedRolls') ?? [];
+      const opposedRolls = originalMessage.getFlag('prowlers-and-paragons', 'opposedRolls') ?? [];
       if (originalMessage) {
-        originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', [...oppposedRolls, message.id]);
+        originalMessage.setFlag('prowlers-and-paragons', 'opposedRolls', [...opposedRolls, message.id]);
       }
     }
   }

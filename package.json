@@ -4,7 +4,8 @@
   "description": "CSS compiler for the ProwlersParagons system",
   "scripts": {
     "build": "sass src/scss/prowlers-and-paragons.scss css/prowlers-and-paragons.css --style=expanded --no-source-map",
-    "watch": "sass src/scss/prowlers-and-paragons.scss css/prowlers-and-paragons.css --style=expanded --source-map --watch"
+    "watch": "sass src/scss/prowlers-and-paragons.scss css/prowlers-and-paragons.css --style=expanded --source-map --watch",
+    "spellcheck": "cspell \"**/*.{mjs,js,md,hbs,scss,json}\" --no-progress"
   },
   "browserslist": [
     "last 3 versions"
@@ -15,6 +16,7 @@
   "devDependencies": {
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.15.21",
+    "cspell": "^10.0.1",
     "sass": "^1.53.0"
   }
 }
