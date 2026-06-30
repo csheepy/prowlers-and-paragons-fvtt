@@ -129,6 +129,8 @@ Hooks.once('init', function () {
   // if the transfer property on the Active Effect is true.
   CONFIG.ActiveEffect.legacyTransferral = false;
 
+  CONFIG.ActiveEffect.expiryAction = "delete" 
+
   // Register sheet application classes
   foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
   foundry.documents.collections.Actors.registerSheet('prowlers-and-paragons', ProwlersParagonsActorSheet, {

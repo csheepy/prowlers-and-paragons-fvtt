@@ -19,8 +19,12 @@ export function onManageActiveEffect(event, owner) {
           }),
           icon: 'icons/svg/aura.svg',
           origin: owner.uuid,
-          'duration.rounds':
-            (li.dataset.effectType === 'temporary') ? 1 : undefined,
+          'duration.value':
+            (li.dataset.effectType === 'temporary') ? 1 : null,
+          'duration.units':
+            (li.dataset.effectType === 'temporary') ? 'turns' : null,
+          'duration.expiry':
+            (li.dataset.effectType === 'temporary') ? 'turnEnd' : null,
           transfer: li.dataset.effectType === 'conditions' ? false : undefined,
           disabled: li.dataset.effectType === 'inactive',
           changes: li.dataset.effectType === 'conditions' ? [{ mode: 0, key: 'kind', value: 'condition' }] : undefined,
@@ -96,16 +100,3 @@ Hooks.once('init', () => {
 });
 
 
-Hooks.on('updateCombat', (combat, update, options, user) => {
-  for (let combatant of combat.turns) {
-    if (combatant.actor) {
-      let actor = combatant.actor;
-      for (let effect of actor.effects) {
-        if (effect.duration.type === 'turns' && effect.duration.remaining <= 0) {
-          ui.notifications.info(`${actor.name}'s condition ${effect.name} has expired.`);
-          effect.delete();
-        }
-      }
-    }
-  }
-});

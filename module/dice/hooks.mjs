@@ -322,10 +322,11 @@ export const runDiceHooks = () => {
     if (!damagedActor) return;
 
     const durationRounds = Math.ceil(roll.netSuccess / 2);
-    const updatedCondition = foundry.utils.mergeObject(conditionToApply, { duration: { rounds: durationRounds } });
+    const updatedCondition = foundry.utils.mergeObject(conditionToApply, { duration: { value: durationRounds, units: 'turns', expiry: 'turnEnd' } });
     const existingCondition = damagedActor.conditions.find(c => c.name === updatedCondition.name);
+    console.log(updatedCondition, existingCondition);
     if (existingCondition) {
-      await existingCondition.update({ 'duration.rounds': durationRounds + existingCondition.duration.rounds });
+      await existingCondition.update({ 'duration.value': durationRounds + (existingCondition.duration.value ?? 0), 'duration.expiry': 'turnEnd' });
     } else {
       updatedCondition.system.changes.forEach(change => {
         if (change.key === 'opposedTrait') {
