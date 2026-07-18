@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.0.1
+
+    - fix power rolls with dice so nice
+
+
 ## 2.0.0
 
 - fixes for compatibility with Foundry v14
