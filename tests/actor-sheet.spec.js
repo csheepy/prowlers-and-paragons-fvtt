@@ -313,7 +313,7 @@ test.describe('Character Sheet Functionality', () => {
             await expect(characterSheet.locator('input[name="system.edge.value"]')).toHaveValue('20');
         });
 
-        test('max health should not update when health overrride is enabled', async ({ characterSheet }) => {    
+        test('max health should not update when health override is enabled', async ({ characterSheet }) => {
             await characterSheet.locator('input[name="system.abilities.might.value"]').fill('10');
             await characterSheet.locator('input[name="system.abilities.might.value"]').blur();
             await expect(characterSheet.locator('input[name="system.health.max"]')).toHaveValue('5');
