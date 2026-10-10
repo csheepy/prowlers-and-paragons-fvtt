@@ -492,12 +492,12 @@ export class ProwlersParagonsActorSheet extends foundry.appv1.sheets.ActorSheet 
         var message = item.system.description;
         for(var itr=0; itr < item.effects.contents.length; itr++)
         {
-          message += "<br>\t" + item.effects.contents[itr].description
+          var effect = item.effects.contents[itr];
+          message += `<br><h5>${effect.name} [${(effect.changes.find((e) => e.key === 'kind')?.value ?? 'effect').toUpperCase()}]</h5><hr><br>${effect.description}`
         }
         const speaker = ChatMessage.getSpeaker({ actor: this.actor });
         const rollMode = game.settings.get('core', 'rollMode');
-        const label = `${dataset.label}`;
-        console.log(message);
+        const label = `(${item.type}) ${item.name}`;
         return ChatMessage.create({
           speaker: speaker,
           rollMode: rollMode,
