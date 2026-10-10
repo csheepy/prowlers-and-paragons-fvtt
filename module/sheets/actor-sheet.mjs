@@ -489,7 +489,21 @@ export class ProwlersParagonsActorSheet extends foundry.appv1.sheets.ActorSheet 
       const itemId = element.closest('.item').dataset.itemId;
       const item = this.actor.items.get(itemId);
       if (item &&dataset.rollType === 'powerDescription') {
-        return item.roll({description: true})
+        var message = item.system.description;
+        for(var itr=0; itr < item.effects.contents.length; itr++)
+        {
+          message += "<br>\t" + item.effects.contents[itr].description
+        }
+        const speaker = ChatMessage.getSpeaker({ actor: this.actor });
+        const rollMode = game.settings.get('core', 'rollMode');
+        const label = `${dataset.label}`;
+        console.log(message);
+        return ChatMessage.create({
+          speaker: speaker,
+          rollMode: rollMode,
+          flavor: label,
+          content: message ?? '',
+        });
       }
       if (item) return item.roll({doOpposedRoll: true, conditionsAffectingRoll});
     }
