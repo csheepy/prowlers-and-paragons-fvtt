@@ -109,14 +109,29 @@
         />
     </div>
     <div class='resource'>
-        <label class='resource-label'>Zero Cost</label>
+        <label class='resource-label'>Allow Non-positive</label>
         <input type="checkbox" name='system.free' {{checked system.free}}></input>
+    </div>
+    <div style="display: flex; flex-direction: row" class='grid grid-2col'>
+        <label class='resource-label'>Override Cost</label>
+        <input type="checkbox" name='system.override_cost' {{checked system.override_cost}}></input>
+        {{#if system.override_cost}}
+        <label class='resource-label'>Overriden Cost</label>
+          <input
+          type='text'
+          name='system.final_cost'
+          value='{{system.final_cost}}'
+          data-dtype='Number'
+          placeholder="Flat Final Cost"
+          style="width: 300px, margin-left: auto;"
+        />
+        {{/if}}
     </div>
     <div class='resource'>
         <label class='resource-label'>Toggleable</label>
         <input type="checkbox" name='system.toggleable' {{checked system.toggleable}}></input>
     </div>
-        <div class='grid grid-2col' style="width:30%;">
+    <div class='grid grid-2col' style="width:30%;">
         <label class='resource-label'>Charges</label>
         <input type="checkbox" name='system.hasCharges' {{checked system.hasCharges}}></input>
         {{#if system.hasCharges}}

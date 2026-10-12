@@ -13,10 +13,12 @@ export default class ProwlersParagonsPower extends ProwlersParagonsItemBase {
     schema.baseline_scaling_options = new fields.ObjectField(); // half_scaling, exact_override
     schema.source = new fields.StringField({ choices: CONFIG.PROWLERS_AND_PARAGONS.power_sources});
     schema.range = new fields.StringField({ choices: CONFIG.PROWLERS_AND_PARAGONS.power_ranges});
-    schema.cost = new fields.NumberField({ required: true, nullable: false, integer: false, initial: 0, min: 0});
-    schema.free = new fields.BooleanField({initial: false})
-    schema.toggleable = new fields.BooleanField({initial: false})
-    schema.toggleActive = new fields.BooleanField({initial: false})
+    schema.cost = new fields.NumberField({ required: true, nullable: false, integer: false, initial: 0});
+    schema.free = new fields.BooleanField({initial: false});
+    schema.override_cost = new fields.BooleanField({initial: false});
+    schema.final_cost = new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0});
+    schema.toggleable = new fields.BooleanField({initial: false});
+    schema.toggleActive = new fields.BooleanField({initial: false});
     schema.shortDescription = new fields.StringField({ required: false });
 
     schema.hasCharges = new fields.BooleanField({initial: false})

@@ -149,18 +149,40 @@ export class ProwlersParagonsActor extends foundry.documents.Actor {
 
     // add powers cost
     actorData.items.contents.filter(i => i.type === 'power').forEach(power => {
-      var perRankMod = 0
+      if(power.system.override_cost)
+      {
+        addPoints(power.system.final_cost, `power:${power.name} flat_cost ${power.system.final_cost}`);
+      }
+      else
+      {
+        var perRankMod = 0;
+        var costDelta = 0;
 
-      // pros and cons
-      power.effects.contents.forEach(effect => {
-        const flat = parseInt(effect.changes.find((e) => e.key === 'cost_flat')?.value ?? 0)
-        const effectPerRank = parseFloat(effect.changes.find((e) => e.key === 'cost_per_rank')?.value ?? 0)
-        if (flat) addPoints(flat, `effect:${effect.name} cost_flat`)
-        if (effectPerRank) perRankMod += effectPerRank
-        logMisc(`[PowerCost] ${power.name} : Max(0.5, effect_mod ${perRankMod} + delta ${effectPerRank})`)
-      })
+        // pros and cons
+        power.effects.contents.forEach(effect => {
+          const flat = parseInt(effect.changes.find((e) => e.key === 'cost_flat')?.value ?? 0);
+          const effectPerRank = parseFloat(effect.changes.find((e) => e.key === 'cost_per_rank')?.value ?? 0);
+          if (flat)
+          {
+            costDelta += flat;
+            logMisc(`[PowerCost Flat] effect:${effect.name} cost_flat`);
+          }
+          if (effectPerRank)
+          {
+            perRankMod += effectPerRank;
+            logMisc(`[PowerCost] ${power.name} : Max(0.5, effect_mod ${perRankMod} + delta ${effectPerRank})`);
+          }
+        })
 
-      if(!power.system.free) addPoints(Math.ceil(power.system.rank * Math.max(0.5, power.system.cost + perRankMod)), `power:${power.name} rank ${power.system.rank} * Max(0.5, cost ${power.system.cost} + effect_mod ${perRankMod})`)
+        if(power.system.free)
+        {
+          addPoints(Math.ceil(costDelta + (power.system.rank * power.system.cost + perRankMod)), `power:${power.name} effect_mod_flat {$costDelta} + (rank ${power.system.rank} * cost ${power.system.cost} + effect_mod ${perRankMod})`);
+        }
+        else
+        {
+          addPoints(Math.ceil(Math.max(1, costDelta + (power.system.rank * Math.max(0.5, power.system.cost + perRankMod)))), `power:${power.name} Max(1, effect_mod_flat {$costDelta} + (rank ${power.system.rank} * Max(0.5, cost ${power.system.cost} + effect_mod ${perRankMod})))`);
+        }
+      }
     })
       
     return pointsSpent
