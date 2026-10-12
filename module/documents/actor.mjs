@@ -64,17 +64,26 @@ export class ProwlersParagonsActor extends foundry.documents.Actor {
     const derived_power_ranks = {}
     actorData.items.contents.filter(i => i.type === 'power').forEach(power => {
       let rr = power.system.rank
+      let connectedTrait = 0
+      if(Object.hasOwn(CONFIG.PROWLERS_AND_PARAGONS.abilities, power.system.connected_ability))
+      {
+        connectedTrait = actorData.system.abilities[power.system.connected_ability].value;
+      }
+      else if(Object.hasOwn(CONFIG.PROWLERS_AND_PARAGONS.talents, power.system.connected_ability))
+      {
+        connectedTrait = actorData.system.talents[power.system.connected_ability].value;
+      }
 
       if (power.system.rank_type === 'default') {
-        rr = actorData.system.abilities[power.system.connected_ability].value
+        rr = connectedTrait
       }
       if (power.system.rank_type === 'baseline') {
         if (power.system.baseline_scaling_options.half_rank) {
-          rr += Math.round((actorData.system.abilities[power.system.connected_ability].value)/2)
+          rr += Math.round((connectedTrait)/2)
         } else if (power.system.baseline_scaling_options.special) {
           rr += power.system.baseline_scaling_options.special_value
         } else {
-          rr += actorData.system.abilities[power.system.connected_ability].value
+          rr += connectedTrait
         }
       }
 

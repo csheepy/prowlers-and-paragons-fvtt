@@ -71,7 +71,12 @@
         {{/if}}
         {{#if (needsConnectedAbility system)}}
           <select name='system.connected_ability'>
-           {{selectOptions abilities selected=system.connected_ability localize=true}}
+            <optgroup label="Abilities">
+              {{selectOptions abilities selected=system.connected_ability localize=true}}
+            </optgroup>
+            <optgroup label="Talents">
+              {{selectOptions talents selected=system.connected_ability localize=true}}
+            </optgroup>
           </select>
         {{/if}}
         {{#if (needsBaselineOptions system)}}
