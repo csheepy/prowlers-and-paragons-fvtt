@@ -70,7 +70,7 @@ export class ProwlersParagonsActor extends foundry.documents.Actor {
       }
       if (power.system.rank_type === 'baseline') {
         if (power.system.baseline_scaling_options.half_rank) {
-          rr += Math.round((actorData.system.abilities[power.system.connected_ability].value)/2)
+          rr += Math.ceil((actorData.system.abilities[power.system.connected_ability].value)/2)
         } else if (power.system.baseline_scaling_options.special) {
           rr += power.system.baseline_scaling_options.special_value
         } else {
