@@ -358,12 +358,15 @@ export class ProwlersParagonsActor extends foundry.documents.Actor {
   async roll(trait, options) {
     const pathArray = trait.split('.');
     const val = pathArray.reduce((acc, key) => acc && acc[key], this);
+    pathArray[pathArray.length - 1] = 'modifier';
+    const modifier = pathArray.reduce((acc, key) => acc && acc[key], this);
 
 
     options.num_dice = val;
     options.rollMode = game.settings.get('core', 'rollMode');
     options.speaker = ChatMessage.getSpeaker({ actor: this });
     options.trait = trait;
+    if(modifier) options.initialRollModifier = modifier;
 
     if (options?.doOpposedRoll && getActorsFromTargetedTokens().length === 1) {
       const opposedRoll = await setupOpposedRoll(this, options.flavor);

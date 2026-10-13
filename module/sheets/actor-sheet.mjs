@@ -15,7 +15,7 @@ export class ProwlersParagonsActorSheet extends foundry.appv1.sheets.ActorSheet 
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ['prowlers-and-paragons', 'sheet', 'actor'],
-      width: 600,
+      width:  900,
       height: 600,
       tabs: [
         {

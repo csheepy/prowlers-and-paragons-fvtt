@@ -8,7 +8,7 @@
         <select name="difficulty" onchange="updateDifficultyNumber(this)">
           {{selectOptions rollDifficulties selected=difficulty localize=true}}
         </select>
-        <input type="number" name="difficulty-number" value="{{modifier}}" placeholder="0" onClick="this.select();"
+        <input type="number" name="difficulty-number" value="{{difficultyModifier}}" placeholder="0" onClick="this.select();"
           style="width: 8ch;" />
       </label>
     </div>

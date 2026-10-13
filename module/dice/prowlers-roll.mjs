@@ -176,6 +176,7 @@ export class ProwlersRoll extends Roll {
   static async rollDialog(options = {}) {
     const template = this.DIALOG_TEMPLATE;
     const data = this.rollDialogData(options);
+    data.modifier += (options.initialRollModifier) ? options.initialRollModifier : 0;
 
     // show an option to halve toughness
     if (options.type === game.i18n.localize(CONFIG.PROWLERS_AND_PARAGONS.abilities.toughness)) {
@@ -193,7 +194,7 @@ export class ProwlersRoll extends Roll {
 
     return new Promise((resolve) => {
       new Dialog({
-        title: `Rolling ${options.type}`,
+        title: `Rolling ${options.type}(${options.num_dice})${(options.initialRollModifier) ? (` + ${options.initialRollModifier} = ${options.num_dice + options.initialRollModifier}`) : ''}`,
         content: html,
         buttons: {
           one: {
