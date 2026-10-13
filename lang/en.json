@@ -1,12 +1,30 @@
 {
   "PROWLERS_AND_PARAGONS": {
     "Ability": {
-      "Agi": { "long": "Agility", "abbr": "agi" },
-      "Int": { "long": "Intellect", "abbr": "int" },
-      "Mgt": { "long": "Might", "abbr": "mgt" },
-      "Per": { "long": "Perception", "abbr": "per" },
-      "Tgh": { "long": "Toughness", "abbr": "tgh" },
-      "Wil": { "long": "Willpower", "abbr": "wil" }
+      "Agi": {
+        "long": "Agility",
+        "abbr": "agi"
+      },
+      "Int": {
+        "long": "Intellect",
+        "abbr": "int"
+      },
+      "Mgt": {
+        "long": "Might",
+        "abbr": "mgt"
+      },
+      "Per": {
+        "long": "Perception",
+        "abbr": "per"
+      },
+      "Tgh": {
+        "long": "Toughness",
+        "abbr": "tgh"
+      },
+      "Wil": {
+        "long": "Willpower",
+        "abbr": "wil"
+      }
     },
     "Talent": {
       "academics": "Academics",
@@ -65,7 +83,14 @@
           "ranged": "Ranged",
           "zone": "Zone",
           "special": "Special"
-        }      }
+        }
+      },
+      "Procon": {
+        "cost": "Cost",
+        "cost-flat": "Flat Cost",
+        "kind": "Pro or Con",
+        "cost-per-rank": "Cost Per Rank"
+      }
     },
     "Effect": {
       "Source": "Source",
@@ -158,7 +183,7 @@
           "Flaws": "Flaws",
           "Misfortune": "Misfortune",
           "Villainy": "Villainy"
-        }   
+        }
       },
       "Characters": "Characters",
       "AwardResolve": "Award Resolve",

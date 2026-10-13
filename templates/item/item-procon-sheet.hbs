@@ -9,12 +9,16 @@
       title='{{item.name}}'
     />
     <div class='header-fields'>
+      <h2 class='kind' style='text-transform: uppercase;'><strong>{{system.kind}}</strong></h2>
       <h1 class='charname'><input
           name='name'
           type='text'
           value='{{item.name}}'
           placeholder='Name'
         /></h1>
+      <div class="resource flex-group-center flex-column">
+        <h4 class="cost">{{localize "PROWLERS_AND_PARAGONS.Item.Procon.cost"}}: <strong>{{system.cost_flat}}</strong> flat | <strong>{{system.cost_per_rank}}</strong>/rank </h4>
+      </div>
     </div>
   </header>
 
@@ -42,7 +46,7 @@
     {{! Attributes Tab }}
     <div class='tab attributes' data-group='primary' data-tab='attributes'>
         <div class='resource'>
-            <label class='resource-label'>Flat Cost</label>
+            <label class='resource-label'>{{localize "PROWLERS_AND_PARAGONS.Item.Procon.cost-flat"}}</label>
             <input
                 type='text'
                 name='system.cost_flat'
@@ -51,7 +55,7 @@
                 />
        </div>
         <div class='resource'>
-            <label class='resource-label'>Cost Per Rank</label>
+            <label class='resource-label'>{{localize "PROWLERS_AND_PARAGONS.Item.Procon.cost-per-rank"}}</label>
             <input
                 type='text'
                 name='system.cost_per_rank'
@@ -60,7 +64,7 @@
                 />
         </div>
         <div class='resource'>
-            <label class='resource-label'>Pro or Con</label>
+            <label class='resource-label'>{{localize "PROWLERS_AND_PARAGONS.Item.Procon.kind"}}</label>
             <select name='system.kind'>
                 {{selectOptions pro_con_choices selected=system.kind}}
             </select>
