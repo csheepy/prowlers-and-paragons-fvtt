@@ -230,6 +230,26 @@ export class ProwlersParagonsActor extends foundry.documents.Actor {
     return updates;
   }
 
+  augmentMinimumAbilities(n) {
+    const updates = {};
+    for (const key in this.system.abilities) {
+      const baseValue = this.system._source.abilities[key].value;
+      const newValue = Math.max(baseValue, n);
+      updates[`system.abilities.${key}.value`] = newValue;
+    }
+    return updates;
+  }
+
+  augmentMinimumTalents(n) {
+    const updates = {};
+    for (const key in this.system.talents) {
+      const baseValue = this.system._source.talents[key].value;
+      const newValue = Math.max(baseValue, n);
+      updates[`system.talents.${key}.value`] = newValue;
+    }
+    return updates;
+  }
+
   async clearPackage() {
     let updates = {};
     if (this.system.package_applied === 'hero') {
@@ -263,22 +283,22 @@ export class ProwlersParagonsActor extends foundry.documents.Actor {
     let updates = {};
     if (pp === 'hero') {
       updates = {
-        ...this.increaseAllAbilities(3),
-        ...this.increaseAllTalents(2),
+        ...this.augmentMinimumAbilities(3),
+        ...this.augmentMinimumTalents(2),
         'system.package_applied': 'hero'
       }
     }
     if (pp === 'superhero') {
       updates = {
-        ...this.increaseAllAbilities(3),
-        ...this.increaseAllTalents(3),
+        ...this.augmentMinimumAbilities(3),
+        ...this.augmentMinimumTalents(3),
         'system.package_applied': 'superhero'
       }
     }
     if (pp === 'civilian') {
       updates = {
-        ...this.increaseAllAbilities(2),
-        ...this.increaseAllTalents(2),
+        ...this.augmentMinimumAbilities(2),
+        ...this.augmentMinimumTalents(2),
         'system.package_applied': 'civilian'
       }
     }
