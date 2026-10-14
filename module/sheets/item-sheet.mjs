@@ -72,6 +72,7 @@ export class ProwlersParagonsItemSheet extends foundry.appv1.sheets.ItemSheet {
     context.effects = prepareActiveEffectCategories(this.item.effects, true);
 
     context.abilities = CONFIG.PROWLERS_AND_PARAGONS.abilities
+    context.talents = CONFIG.PROWLERS_AND_PARAGONS.talents
     context.power_rank_types = CONFIG.PROWLERS_AND_PARAGONS.power_rank_types
     context.power_sources = CONFIG.PROWLERS_AND_PARAGONS.power_sources
     context.power_ranges = CONFIG.PROWLERS_AND_PARAGONS.power_ranges
