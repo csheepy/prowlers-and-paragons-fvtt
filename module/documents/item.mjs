@@ -118,6 +118,24 @@ export class ProwlersParagonsItem extends Item {
     options.trait = `powers.${item.id}`;
 
     if (options?.description) {
+      if(item.type === 'power')
+      {
+        var message = item.system.description ?? '';
+        message += (item.effects.contents.length > 0) ? '<br><hr>' : '';
+        for(var itr=0; itr < item.effects.contents.length; itr++)
+        {
+          var effect = item.effects.contents[itr];
+          var kind = effect.changes.find((e) => e.key === 'kind')?.value ?? 'effect';
+          var effectColor = (kind === 'pro') ? "aaffaa" : (kind === 'con') ? "ffaaaa" : (kind === 'effect') ? "aaaaff" : "c6c6c6";
+          message += `<h6 style="padding: 4px; background: #${effectColor};">${effect.name} [<strong>${kind.toUpperCase()}</strong>]</h6>${effect.description ?? ''}`
+        }
+        return ChatMessage.create({
+          speaker: speaker,
+          rollMode: rollMode,
+          flavor: label,
+          content: message ?? '',
+        });
+      }
       return ChatMessage.create({
         speaker: speaker,
         rollMode: rollMode,

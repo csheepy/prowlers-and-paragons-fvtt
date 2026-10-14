@@ -489,7 +489,7 @@ export class ProwlersParagonsActorSheet extends foundry.appv1.sheets.ActorSheet 
       const itemId = element.closest('.item').dataset.itemId;
       const item = this.actor.items.get(itemId);
       if (item &&dataset.rollType === 'powerDescription') {
-        return item.roll({description: true})
+        return item.roll({description: true});
       }
       if (item) return item.roll({doOpposedRoll: true, conditionsAffectingRoll});
     }
