@@ -16,7 +16,8 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     // Iterate over ability names and create a new SchemaField for each.
     schema.abilities = new fields.SchemaField(Object.keys(CONFIG.PROWLERS_AND_PARAGONS.abilities).reduce((obj, ability) => {
       obj[ability] = new fields.SchemaField({
-        value: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+        value: new fields.NumberField({ ...requiredInteger, initial: 1, min: 0 }),
+        modifier: new fields.NumberField({ ...requiredInteger, initial: 0 }),
       });
       return obj;
     }, {}));
@@ -24,7 +25,8 @@ export default class ProwlersParagonsCharacter extends ProwlersParagonsActorBase
     // Iterate over talent names and create a new SchemaField for each.
     schema.talents = new fields.SchemaField(Object.keys(CONFIG.PROWLERS_AND_PARAGONS.talents).reduce((obj, talent) => {
       obj[talent] = new fields.SchemaField({
-        value: new fields.NumberField({ ...requiredInteger, initial: 0, min: 0 }),
+        value: new fields.NumberField({ ...requiredInteger, initial: 1, min: 0 }),
+        modifier: new fields.NumberField({ ...requiredInteger, initial: 0 }),
       });
       return obj;
     }, {}));
